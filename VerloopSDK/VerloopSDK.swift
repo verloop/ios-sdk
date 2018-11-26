@@ -20,7 +20,7 @@ open class VerloopSDK: VLJSInterface {
     private var bgColor: UIColor
     private var textColor: UIColor
     
-    public init(controller uiController: UIViewController, config vlConfig: VLConfig) {
+    public init(config vlConfig: VLConfig) {
         config = vlConfig
         config.save()
         
