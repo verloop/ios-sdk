@@ -9,7 +9,7 @@
 import Foundation
 import WebKit
 
-class VLWebViewManager: NSObject, WKScriptMessageHandler {
+class VLWebViewManager: NSObject, WKScriptMessageHandler, WKUIDelegate {
     var webView: WKWebView
     private var hasTriedToStartRoom = false
     private var jsInterface: VLJSInterface? = nil
@@ -41,7 +41,19 @@ class VLWebViewManager: NSObject, WKScriptMessageHandler {
             urlComponents.queryItems?.append(URLQueryItem(name: "custom_fields", value: config.getCustomFieldsJSON()!))
         }
         
-        NSLog("Starting chat. " + urlComponents.string!)
+        if config.userName != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "name", value: config.userName!))
+        }
+        
+        if config.userEmail != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "email", value: config.userEmail!))
+        }
+        
+        if config.userPhone != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "phone", value: config.userPhone!))
+        }
+        
+        print("Starting chat. " + urlComponents.string!)
         
         let url = URL(string: urlComponents.string!)
         let request = URLRequest(url: url!)
@@ -49,8 +61,11 @@ class VLWebViewManager: NSObject, WKScriptMessageHandler {
         webView =  WKWebView()
         super.init()
         
+        
+        webView.uiDelegate = self
         webView.load(request)
         webView.configuration.userContentController.add(self, name: "VerloopMobile")
+        webView.isOpaque = true
     }
     
     func jsDelegate(delegate: VLJSInterface) {
@@ -72,5 +87,18 @@ class VLWebViewManager: NSObject, WKScriptMessageHandler {
         if (hasTriedToStartRoom) {
             startRoom()
         }
+    }
+    
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        guard let url = navigationAction.request.url else {
+            return nil
+        }
+        
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.openURL(url)
+        }
+        return nil
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE21DA5E21DF4C17004B8A24 /* VLNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */; };
 		EE300EA021AA89EF00FDEA21 /* VerloopSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = EE300E9E21AA89EF00FDEA21 /* VerloopSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EE300EAB21AA8A2C00FDEA21 /* VLWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE300EA621AA8A2C00FDEA21 /* VLWebViewManager.swift */; };
 		EE300EAC21AA8A2C00FDEA21 /* VLJSInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE300EA721AA8A2C00FDEA21 /* VLJSInterface.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLNavViewController.swift; sourceTree = "<group>"; };
 		EE300E9B21AA89EF00FDEA21 /* VerloopSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VerloopSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE300E9E21AA89EF00FDEA21 /* VerloopSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VerloopSDK.h; sourceTree = "<group>"; };
 		EE300E9F21AA89EF00FDEA21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				EE300EA621AA8A2C00FDEA21 /* VLWebViewManager.swift */,
 				EE300E9E21AA89EF00FDEA21 /* VerloopSDK.h */,
 				EE300E9F21AA89EF00FDEA21 /* Info.plist */,
+				EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */,
 			);
 			path = VerloopSDK;
 			sourceTree = "<group>";
@@ -150,6 +153,7 @@
 				EE300EAE21AA8A2C00FDEA21 /* VerloopSDK.swift in Sources */,
 				EE300EAC21AA8A2C00FDEA21 /* VLJSInterface.swift in Sources */,
 				EE300EAD21AA8A2C00FDEA21 /* VLViewController.swift in Sources */,
+				EE21DA5E21DF4C17004B8A24 /* VLNavViewController.swift in Sources */,
 				EE300EAB21AA8A2C00FDEA21 /* VLWebViewManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,6 +295,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = VerloopSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -317,6 +322,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = VerloopSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

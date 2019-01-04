@@ -10,17 +10,20 @@ import WebKit
 import UIKit
 import Foundation
 
-open class VerloopSDK: VLJSInterface {
+@objc open class VerloopSDK: NSObject, VLJSInterface {
     private var config: VLConfig
     private var manager: VLWebViewManager
     private var verloopController: VLViewController? = nil
     private var verloopNavigationController: UINavigationController? = nil
     
+    private var previousWindow: UIWindow? = nil
+    private var window = UIWindow()
+    
     private var title = "Chat"
     private var bgColor: UIColor
     private var textColor: UIColor
     
-    public init(config vlConfig: VLConfig) {
+    @objc public init(config vlConfig: VLConfig) {
         config = vlConfig
         config.save()
         
@@ -28,10 +31,12 @@ open class VerloopSDK: VLJSInterface {
         textColor = VerloopSDK.hexStringToUIColor(hex: "#ffffff")
         
         manager = VLWebViewManager(config: config)
+        
+        super.init()
         manager.jsDelegate(delegate: self)
     }
     
-    public func getNavController() -> UINavigationController {
+    @objc public func getNavController() -> UINavigationController {
         if verloopNavigationController != nil {
             return verloopNavigationController!
         }
@@ -39,8 +44,9 @@ open class VerloopSDK: VLJSInterface {
         verloopController = VLViewController.init()
         verloopController!.setWebView(webView: manager)
         verloopController!.title = title
+        verloopController!.setSDK(verloopSDK: self)
         
-        verloopNavigationController = UINavigationController.init(rootViewController: verloopController!)
+        verloopNavigationController = VLNavViewController.init(rootViewController: verloopController!)
         
         refreshClientInfo()
         
@@ -48,6 +54,7 @@ open class VerloopSDK: VLJSInterface {
         
         verloopNavigationController!.navigationItem.hidesBackButton = false
         verloopNavigationController!.navigationItem.backBarButtonItem?.isEnabled = true
+    
         
         return verloopNavigationController!
     }
@@ -88,7 +95,7 @@ open class VerloopSDK: VLJSInterface {
         let str = message as! String
         let data = str.data(using: String.Encoding.utf8)!
         guard let m =  try? JSONDecoder().decode(ClientInfo.self, from: data) else {
-            NSLog("Problem retreiving client Info")
+            print("Problem retreiving client Info")
             return
         }
         
@@ -97,6 +104,32 @@ open class VerloopSDK: VLJSInterface {
         textColor = VerloopSDK.hexStringToUIColor(hex: m.textColor)
         
         refreshClientInfo()
+    }
+    
+    @objc public func start() {
+        previousWindow = UIApplication.shared.keyWindow
+        
+        window.isOpaque = true
+        window.backgroundColor = UIColor.white
+        window.frame = UIScreen.main.bounds//UIApplication.shared.keyWindow!.frame
+        window.windowLevel = UIWindow.Level.normal + 1
+        window.rootViewController = getNavController()
+        window.makeKeyAndVisible()
+    }
+    
+    func onChatClose() {
+        if previousWindow != nil {
+            
+            previousWindow!.makeKeyAndVisible()
+            previousWindow = nil
+            
+            window.windowLevel = UIWindow.Level.normal - 1
+        }
+    }
+    
+    func onTransition() {
+        NSLog("onTransiotion")
+        
     }
     
     private struct ClientInfo: Decodable {

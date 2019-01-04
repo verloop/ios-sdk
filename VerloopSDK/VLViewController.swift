@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 
 class VLViewController: UIViewController, WKUIDelegate {
+    private var verloopSDK: VerloopSDK? = nil
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -24,6 +25,9 @@ class VLViewController: UIViewController, WKUIDelegate {
         super.init(coder: aDecoder)
     }
     
+    
+
+    
     var webView: VLWebViewManager?
     
     func setWebView(webView v: VLWebViewManager) {
@@ -36,19 +40,26 @@ class VLViewController: UIViewController, WKUIDelegate {
         }
     }
     
+    func setSDK(verloopSDK sdk: VerloopSDK) {
+        verloopSDK = sdk
+    }
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSLog("viewDidLoad")
         
         if webView != nil {
             webView!.startRoom()
         }
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "×", style: .done, target: self, action: #selector(back(_:)))
-    
+        
     }
     
     @objc func back(_ sender : AnyObject?) {
+        if verloopSDK != nil {
+            verloopSDK!.onChatClose()
+        }
         self.dismiss(animated: true, completion: nil)
     }
 }

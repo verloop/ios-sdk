@@ -8,19 +8,22 @@
 
 import Foundation
 
-public class VLConfig {
-    public enum SCOPE {
-        case ROOM
-        case USER
+@objc public class VLConfig : NSObject {
+    @objc public enum SCOPE : Int {
+        case ROOM = 0
+        case USER = 1
     }
     
     var clientId: String
     var userId: String?
+    var userName: String?
+    var userEmail: String?
+    var userPhone: String?
     var isStaging: Bool = false
     var notificationToken: String? = nil
     private var customFields: [CustomField] = []
     
-    public init(clientId cid: String, userId uid: String?) {
+    @objc public init(clientId cid: String, userId uid: String?) {
         var userId = uid
         
         if uid == nil {
@@ -31,7 +34,7 @@ public class VLConfig {
         self.userId = userId
     }
     
-    public convenience init(clientId cid: String) {
+    @objc public convenience init(clientId cid: String) {
         let uid = UserDefaults.standard.string(forKey: "VERLOOP_USER_ID")
         
         if uid != nil {
@@ -41,15 +44,28 @@ public class VLConfig {
         }
     }
     
-    public func setNotificationToken(notificationToken token: String?) {
+    @objc public func setNotificationToken(notificationToken token: String?) {
         notificationToken = token
     }
     
-    public func setStaging(isStaging staging: Bool) {
+    @objc public func setStaging(isStaging staging: Bool) {
         isStaging = staging
     }
     
-    public func addCustomField(key: String, value: String, scope: SCOPE) {
+    @objc public func setUserName(userName name: String?) {
+        userName = name
+    }
+    
+    @objc public func setUserEmail(userEmail email: String?) {
+        userEmail = email
+    }
+    
+    
+    @objc public func setUserPhone(userPhone phone: String?) {
+        userPhone = phone
+    }
+    
+    @objc public func putCustomField(key: String, value: String, scope: SCOPE) {
         
         switch scope {
         case .USER:
@@ -59,11 +75,11 @@ public class VLConfig {
         }
     }
     
-    func getCustomFieldsJSON() -> String? {
+    @objc func getCustomFieldsJSON() -> String? {
         let ret = UserDefaults.standard.string(forKey: "VERLOOP_CUSTOM_FIELDS")
-        if ret != nil {
-            NSLog(ret!)
-        }
+//        if ret != nil {
+//            print(ret!)
+//        }
         return ret
     }
     
@@ -71,6 +87,9 @@ public class VLConfig {
         let defaults = UserDefaults.standard
         defaults.set(clientId, forKey: "VERLOOP_CLIENT_ID")
         defaults.set(userId, forKey: "VERLOOP_USER_ID")
+        defaults.set(userName, forKey: "VERLOOP_USER_NAME")
+        defaults.set(userEmail, forKey: "VERLOOP_USER_EMAIL")
+        defaults.set(userPhone, forKey: "VERLOOP_USER_PHONE")
         defaults.set(isStaging, forKey: "VERLOOP_IS_STAGING")
         defaults.set(notificationToken, forKey: "VERLOOP_NOTIFICATION_TOKEN")
         
@@ -98,10 +117,15 @@ public class VLConfig {
     static func getConfig() -> VLConfig {
         let defaults = UserDefaults.standard
         let config = VLConfig(clientId: defaults.string(forKey: "VERLOOP_CLIENT_ID")!, userId: defaults.string(forKey: "VERLOOP_USER_ID"))
+        
         config.setStaging(isStaging: defaults.bool(forKey: "VERLOOP_IS_STAGING"))
-        if (defaults.string(forKey: "VERLOOP_NOTIFICATION_TOKEN") != nil) {
-            config.setNotificationToken(notificationToken: "VERLOOP_NOTIFICATION_TOKEN")
-        }
+        
+        config.setNotificationToken(notificationToken: defaults.string(forKey: "VERLOOP_NOTIFICATION_TOKEN"))
+        
+        config.setUserName(userName: defaults.string(forKey: "VERLOOP_USER_NAME"))
+        config.setUserEmail(userEmail: defaults.string(forKey: "VERLOOP_USER_EMAIL"))
+        config.setUserPhone(userPhone: defaults.string(forKey: "VERLOOP_USER_PHONE"))
+        
         
         return config
     }
