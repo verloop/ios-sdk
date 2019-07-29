@@ -119,11 +119,11 @@ import Foundation
     
     func onChatClose() {
         if previousWindow != nil {
-            
+            window.resignKey()
             previousWindow!.makeKeyAndVisible()
             previousWindow = nil
             
-            window.windowLevel = UIWindow.Level.normal - 1
+            window.windowLevel = UIWindow.Level.normal - 30
         }
     }
     
