@@ -53,6 +53,10 @@ class VLWebViewManager: NSObject, WKScriptMessageHandler, WKUIDelegate {
             urlComponents.queryItems?.append(URLQueryItem(name: "phone", value: config.userPhone!))
         }
         
+        if config.recipeId != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "recipe_id", value: config.recipeId!))
+        }
+        
         print("Starting chat. " + urlComponents.string!)
         
         let url = URL(string: urlComponents.string!)

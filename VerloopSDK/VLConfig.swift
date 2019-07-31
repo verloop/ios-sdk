@@ -21,6 +21,7 @@ import Foundation
     var userPhone: String?
     var isStaging: Bool = false
     var notificationToken: String? = nil
+    var recipeId: String? = nil
     private var customFields: [CustomField] = []
     
     @objc public init(clientId cid: String, userId uid: String?) {
@@ -65,6 +66,10 @@ import Foundation
         userPhone = phone
     }
     
+    @objc public func setRecipeId(recipeId id: String?) {
+        recipeId = id
+    }
+    
     @objc public func putCustomField(key: String, value: String, scope: SCOPE) {
         
         switch scope {
@@ -91,6 +96,7 @@ import Foundation
         defaults.set(userEmail, forKey: "VERLOOP_USER_EMAIL")
         defaults.set(userPhone, forKey: "VERLOOP_USER_PHONE")
         defaults.set(isStaging, forKey: "VERLOOP_IS_STAGING")
+        defaults.set(recipeId, forKey: "VERLOOP_RECIPE_ID")
         defaults.set(notificationToken, forKey: "VERLOOP_NOTIFICATION_TOKEN")
         
         var jsonDictionary: [String: Any] = [:]
@@ -125,6 +131,7 @@ import Foundation
         config.setUserName(userName: defaults.string(forKey: "VERLOOP_USER_NAME"))
         config.setUserEmail(userEmail: defaults.string(forKey: "VERLOOP_USER_EMAIL"))
         config.setUserPhone(userPhone: defaults.string(forKey: "VERLOOP_USER_PHONE"))
+        config.setRecipeId(recipeId: defaults.string(forKey: "VERLOOP_RECIPE_ID"))
         
         
         return config
