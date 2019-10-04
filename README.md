@@ -1,3 +1,6 @@
+NOTE:\
+now, you can install using cocoapod - `pod install VerloopSDKiOS`
+ 
 **For Swift**\
 After importing the Framework like any other framework you do, import the SDK in controller as :-
 

@@ -15,9 +15,9 @@ Pod::Spec.new do |spec|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  spec.name         = "VerloopSDK"
+  spec.name         = "VerloopSDKiOS"
   spec.version      = "0.1.2"
-  spec.summary      = "VerloopSDK - client side livechat"
+  spec.summary      = "VerloopSDKiOS - client side iOS livechat"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
