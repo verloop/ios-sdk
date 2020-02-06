@@ -8,12 +8,14 @@
 
 import Foundation
 
+public typealias LiveChatButtonClickListener = (_ title : String?, _ type : String?, _ payload : String?)  -> Void
+
 @objc public class VLConfig : NSObject {
     @objc public enum SCOPE : Int {
         case ROOM = 0
         case USER = 1
     }
-    
+
     var clientId: String
     var userId: String?
     var userName: String?
@@ -22,56 +24,60 @@ import Foundation
     var isStaging: Bool = false
     var notificationToken: String? = nil
     var recipeId: String? = nil
+    var onButtonClicked: LiveChatButtonClickListener? = nil
     private var customFields: [CustomField] = []
-    
+
     @objc public init(clientId cid: String, userId uid: String?) {
         var userId = uid
-        
+
         if uid == nil {
             userId = UUID().uuidString
         }
-        
+
         clientId = cid
         self.userId = userId
     }
-    
+
     @objc public convenience init(clientId cid: String) {
         let uid = UserDefaults.standard.string(forKey: "VERLOOP_USER_ID")
-        
+
         if uid != nil {
             self.init(clientId: cid, userId: uid!)
         } else {
             self.init(clientId: cid, userId: UUID().uuidString)
         }
     }
-    
+
     @objc public func setNotificationToken(notificationToken token: String?) {
         notificationToken = token
     }
-    
+
     @objc public func setStaging(isStaging staging: Bool) {
         isStaging = staging
     }
-    
+
     @objc public func setUserName(userName name: String?) {
         userName = name
     }
-    
+
     @objc public func setUserEmail(userEmail email: String?) {
         userEmail = email
     }
-    
-    
+
     @objc public func setUserPhone(userPhone phone: String?) {
         userPhone = phone
     }
-    
+
     @objc public func setRecipeId(recipeId id: String?) {
         recipeId = id
     }
-    
+
+    @objc public func setButtonOnClickListener(onButtonClicked buttonClicked: LiveChatButtonClickListener?) {
+        onButtonClicked = buttonClicked
+    }
+
     @objc public func putCustomField(key: String, value: String, scope: SCOPE) {
-        
+
         switch scope {
         case .USER:
             customFields.append(CustomField(key: key, value: value, scope: "user"))
@@ -79,7 +85,7 @@ import Foundation
             customFields.append(CustomField(key: key, value: value, scope: "room"))
         }
     }
-    
+
     @objc func getCustomFieldsJSON() -> String? {
         let ret = UserDefaults.standard.string(forKey: "VERLOOP_CUSTOM_FIELDS")
 //        if ret != nil {
@@ -87,7 +93,7 @@ import Foundation
 //        }
         return ret
     }
-    
+
     func save() {
         let defaults = UserDefaults.standard
         defaults.set(clientId, forKey: "VERLOOP_CLIENT_ID")
@@ -98,45 +104,45 @@ import Foundation
         defaults.set(isStaging, forKey: "VERLOOP_IS_STAGING")
         defaults.set(recipeId, forKey: "VERLOOP_RECIPE_ID")
         defaults.set(notificationToken, forKey: "VERLOOP_NOTIFICATION_TOKEN")
-        
+
         var jsonDictionary: [String: Any] = [:]
-        
+
         customFields.forEach { (field: VLConfig.CustomField) in
             let optionsJson: [String: String] = ["scope": "user"]
-            
+
             let innerJson: [String: Any] = [
                 "value": field.value,
                 "options": optionsJson
             ]
             jsonDictionary[field.key] = innerJson
         }
-        
-        
+
+
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
             let json = NSString(data: jsonData as Data, encoding: String.Encoding.utf8.rawValue)! as String
             defaults.set(json, forKey: "VERLOOP_CUSTOM_FIELDS")
         } catch { print(error) }
-        
+
     }
-    
+
     static func getConfig() -> VLConfig {
         let defaults = UserDefaults.standard
         let config = VLConfig(clientId: defaults.string(forKey: "VERLOOP_CLIENT_ID")!, userId: defaults.string(forKey: "VERLOOP_USER_ID"))
-        
+
         config.setStaging(isStaging: defaults.bool(forKey: "VERLOOP_IS_STAGING"))
-        
+
         config.setNotificationToken(notificationToken: defaults.string(forKey: "VERLOOP_NOTIFICATION_TOKEN"))
-        
+
         config.setUserName(userName: defaults.string(forKey: "VERLOOP_USER_NAME"))
         config.setUserEmail(userEmail: defaults.string(forKey: "VERLOOP_USER_EMAIL"))
         config.setUserPhone(userPhone: defaults.string(forKey: "VERLOOP_USER_PHONE"))
         config.setRecipeId(recipeId: defaults.string(forKey: "VERLOOP_RECIPE_ID"))
-        
-        
+
+
         return config
     }
-    
+
     struct CustomField : Codable {
         public let key: String
         public let value: String
