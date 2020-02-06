@@ -31,6 +31,14 @@ To set a Recipe :-
 ```
 config.setRecipeId("RECIPE ID")
 ```
+
+Adding a callback for Button Click\
+```
+config.setButtonOnClickListener(onButtonClicked:{ (title, type, d) in
+     print(title)
+})
+```
+
 Notifications
 When you get a notification from Verloop, simply create the verloop variable and present it's navigation controller.
 
