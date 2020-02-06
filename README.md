@@ -34,7 +34,7 @@ config.setRecipeId("RECIPE ID")
 
 Adding a callback for Button Click\
 ```
-config.setButtonOnClickListener(onButtonClicked:{ (title, type, d) in
+config.setButtonOnClickListener(onButtonClicked:{ (title, type, payload) in
      print(title)
 })
 ```
