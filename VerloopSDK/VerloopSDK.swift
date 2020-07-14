@@ -94,7 +94,7 @@ import Foundation
     func jsCallback(message: Any) {
         let str = message as! String
         let data = str.data(using: String.Encoding.utf8)!
-        print("button clicked 1")
+        print("event listener called")
         do {
             let clientInfo =  try JSONDecoder().decode(ClientInfo.self, from: data)
             title = clientInfo.title
@@ -116,6 +116,16 @@ import Foundation
             }
         }catch {
             print("Problem retreiving button Info")
+        }
+        do {
+            let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
+            let url = urlInfo.url
+
+            if config.onUrlClicked != nil{
+                config.onUrlClicked?(url)
+            }
+        }catch {
+            print("Problem retreiving url Info")
         }
     }
 
@@ -155,5 +165,9 @@ import Foundation
         public let title: String
         public let type: String
         public let payload: String
+    }
+    
+    private struct OnURLClick: Decodable {
+        public let url: String
     }
 }
