@@ -139,6 +139,10 @@ import Foundation
         window.rootViewController = getNavController()
         window.makeKeyAndVisible()
     }
+    
+    @objc public func hide() {
+        onChatClose()
+    }
 
     func onChatClose() {
         if previousWindow != nil {
