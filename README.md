@@ -90,7 +90,9 @@ To open the chat -
 [verloop start]; 
 ```
 
-# Manual Build SDK
+# Build SDK manually
+
+Note: you need this if the compiled sdk provided is not compatible with the swift version
 
 https://github.com/Carthage/Carthage
 
