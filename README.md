@@ -89,3 +89,17 @@ To open the chat -
 ```
 [verloop start]; 
 ```
+
+# Manual Build SDK
+
+https://github.com/Carthage/Carthage
+
+
+- Open the VerloopSDK project in the xcode (https://github.com/verloop/ios-sdk)
+- Set the swift version from the build settings
+- Run the following command to build the archive- make sure that you are in the VerloopSDK folder
+
+`carthage build --archive`
+
+- Once this command is executed successfully, a carthage folder will be created
+- You will find the framework in Carthage/build/iOS
