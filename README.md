@@ -92,7 +92,7 @@ To open the chat -
 
 # Build SDK manually
 
-Note: you need this if the compiled sdk provided is not compatible with the swift version
+Note: you need this if the compiled sdk provided is not compatible with the swift version / Xcode version
 
 https://github.com/Carthage/Carthage
 
