@@ -9,19 +9,60 @@
 import Foundation
 import WebKit
 
-class VLWebViewManager: NSObject, WKScriptMessageHandler, WKUIDelegate {
-    var webView: WKWebView
+class VLWebViewManager: NSObject, WKScriptMessageHandler, WKUIDelegate, WKNavigationDelegate {
+    var webView: WKWebView!
     private var hasTriedToStartRoom = false
     private var jsInterface: VLJSInterface? = nil
+    private var config: VLConfig!
     
     init(config: VLConfig) {
+        
+        self.config = config
+
+        super.init()
+        
+        webView =  WKWebView()
+        webView.uiDelegate = self
+        webView.navigationDelegate = self
+        webView.configuration.userContentController.add(self, name: "VerloopMobile")
+        webView.isOpaque = true
+
+        self.loadWebView()
+    }
+    
+    func setConfig(config: VLConfig){
+        
+        self.config = config
+        self.loadWebView()
+    }
+    
+    func clearLocalStorage(){
+        let script = "localStorage.removeItem(\"visitorToken\")"
+        webView.evaluateJavaScript(script) { (token, error) in
+            if let error = error {
+                print ("localStorage.removingitem('visitorToken') failed due to \(error)")
+                assertionFailure()
+            }
+        }
+    }
+    
+    
+    func clearConfig(config: VLConfig){
+        self.config = config
+        let url = URL(string: "about:blank")
+        let request = URLRequest(url: url!)
+        webView.load(request)
+    }
+    
+    private func loadWebView(){
+        
         let urlComponents = NSURLComponents()
         urlComponents.scheme = "https";
         
-        if config.isStaging {
-            urlComponents.host =  config.clientId + ".stage.verloop.io";
+        if self.config.isStaging {
+            urlComponents.host =  self.config.clientId + ".stage.verloop.io";
         } else {
-            urlComponents.host =  config.clientId + ".verloop.io";
+            urlComponents.host =  self.config.clientId + ".verloop.io";
         }
         
         urlComponents.path = "/livechat";
@@ -29,32 +70,35 @@ class VLWebViewManager: NSObject, WKScriptMessageHandler, WKUIDelegate {
         urlComponents.queryItems = [
             URLQueryItem(name: "mode", value: "sdk"),
             URLQueryItem(name: "sdk", value: "ios"),
-            URLQueryItem(name: "user_id", value: config.userId)
         ]
         
-        if config.notificationToken != nil {
-            urlComponents.queryItems?.append(URLQueryItem(name: "device_token", value: config.notificationToken!))
+        if self.config.userId != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "user_id", value: self.config.userId!))
+        }
+        
+        if self.config.notificationToken != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "device_token", value: self.config.notificationToken!))
             urlComponents.queryItems?.append(URLQueryItem(name: "device_type", value: "ios"))
         }
         
-        if config.getCustomFieldsJSON() != nil {
-            urlComponents.queryItems?.append(URLQueryItem(name: "custom_fields", value: config.getCustomFieldsJSON()!))
+        if self.config.getCustomFieldsJSON() != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "custom_fields", value: self.config.getCustomFieldsJSON()!))
         }
         
-        if config.userName != nil {
-            urlComponents.queryItems?.append(URLQueryItem(name: "name", value: config.userName!))
+        if self.config.userName != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "name", value: self.config.userName!))
         }
         
-        if config.userEmail != nil {
-            urlComponents.queryItems?.append(URLQueryItem(name: "email", value: config.userEmail!))
+        if self.config.userEmail != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "email", value: self.config.userEmail!))
         }
         
-        if config.userPhone != nil {
+        if self.config.userPhone != nil {
             urlComponents.queryItems?.append(URLQueryItem(name: "phone", value: config.userPhone!))
         }
         
-        if config.recipeId != nil {
-            urlComponents.queryItems?.append(URLQueryItem(name: "recipe_id", value: config.recipeId!))
+        if self.config.recipeId != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "recipe_id", value: self.config.recipeId!))
         }
         
         print("Starting chat. " + urlComponents.string!)
@@ -62,16 +106,9 @@ class VLWebViewManager: NSObject, WKScriptMessageHandler, WKUIDelegate {
         let url = URL(string: urlComponents.string!)
         let request = URLRequest(url: url!)
         
-        webView =  WKWebView()
-        super.init()
-        
-        
-        webView.uiDelegate = self
         webView.load(request)
-        webView.configuration.userContentController.add(self, name: "VerloopMobile")
-        webView.isOpaque = true
     }
-    
+        
     func jsDelegate(delegate: VLJSInterface) {
         jsInterface = delegate
     }
@@ -104,5 +141,18 @@ class VLWebViewManager: NSObject, WKScriptMessageHandler, WKUIDelegate {
             UIApplication.shared.openURL(url)
         }
         return nil
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        
+        //you might want to edit the script, with the escape characters
+        let script = "localStorage.getItem(\"visitorToken\")"
+        webView.evaluateJavaScript(script) { (token, error) in
+            if let error = error {
+                print ("localStorage.getitem('visitorToken') failed due to \(error)")
+                assertionFailure()
+            }
+            print("token = \(token)")
+        }
     }
 }
