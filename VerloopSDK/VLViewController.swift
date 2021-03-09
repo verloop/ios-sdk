@@ -26,7 +26,7 @@ class VLViewController: UIViewController, WKUIDelegate {
     }
 
     var webView: VLWebViewManager?
-    var loader : UIView!   // Check
+    //var loader : UIView!   // Check
 
     func setWebView(webView v: VLWebViewManager) {
         webView = v
