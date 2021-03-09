@@ -150,6 +150,16 @@ import Foundation
         }catch {
            print("Problem retreiving button Info")
         }
+        do {
+           let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
+           let url = urlInfo.url
+
+           if config.onUrlClicked != nil{
+               config.onUrlClicked?(url)
+           }
+       }catch {
+           print("Problem retreiving url Info")
+       }
     }
     
     @objc public func start() {
@@ -188,6 +198,10 @@ import Foundation
         public let title: String
         public let type: String
         public let payload: String
+    }
+    
+    private struct OnURLClick: Decodable {
+        public let url: String
     }
 }
 

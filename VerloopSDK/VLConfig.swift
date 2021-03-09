@@ -10,7 +10,7 @@ import Foundation
 import WebKit
 
 public typealias LiveChatButtonClickListener = (_ title : String?, _ type : String?, _ payload : String?)  -> Void
-
+public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
 
 @objc public class VLConfig : NSObject {
     @objc public enum SCOPE : Int {
@@ -27,6 +27,7 @@ public typealias LiveChatButtonClickListener = (_ title : String?, _ type : Stri
     var notificationToken: String? = nil
     var recipeId: String? = nil
     var onButtonClicked: LiveChatButtonClickListener? = nil
+    var onUrlClicked: LiveChatUrlClickListener? = nil
     private var customFields: [CustomField] = []
     
     @objc public init(clientId cid: String, userId uid: String?) {
@@ -82,6 +83,11 @@ public typealias LiveChatButtonClickListener = (_ title : String?, _ type : Stri
     @objc public func setButtonOnClickListener(onButtonClicked buttonClicked: LiveChatButtonClickListener?) {
         onButtonClicked = buttonClicked
     }
+    
+    @objc public func setUrlClickListener(onUrlClicked urlClicked: LiveChatUrlClickListener?) {
+        onUrlClicked = urlClicked
+    }
+
     
     @objc public func putCustomField(key: String, value: String, scope: SCOPE) {
         
