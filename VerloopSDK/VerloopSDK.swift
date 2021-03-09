@@ -173,6 +173,11 @@ import Foundation
         window.makeKeyAndVisible()
     }
     
+    
+    @objc public func hide() {
+        onChatClose()
+    }
+    
     func onChatClose() {
         if previousWindow != nil {
             window.resignKey()
