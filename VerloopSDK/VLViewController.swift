@@ -26,6 +26,7 @@ class VLViewController: UIViewController, WKUIDelegate {
     }
 
     var webView: VLWebViewManager?
+    //var loader : UIView!   // Check
 
     func setWebView(webView v: VLWebViewManager) {
         webView = v
@@ -35,6 +36,7 @@ class VLViewController: UIViewController, WKUIDelegate {
         if isViewLoaded {
             webView!.startRoom()
         }
+        
     }
 
     func setSDK(verloopSDK sdk: VerloopSDK) {
@@ -43,6 +45,14 @@ class VLViewController: UIViewController, WKUIDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+//
+//
+//        loaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 100, height: 100))
+//        loaderView.backgroundColor = UIColor.black
+//        view.addSubview(loaderView)
+//        loaderView.bringSubviewToFront(view)
+        
+
 
         if webView != nil {
             webView!.startRoom()
@@ -50,6 +60,15 @@ class VLViewController: UIViewController, WKUIDelegate {
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "×", style: .done, target: self, action: #selector(back(_:)))
 
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(animated)
+        // TODO: The navigationBar's display (UI Color and frame), according to the client, needs to be changed everytime user comes back to the ChatBot window.
+        verloopSDK?.refreshClientInfo()
+        webView?.webView.frame = view.bounds
+        
     }
 
     @objc func back(_ sender : AnyObject?) {
