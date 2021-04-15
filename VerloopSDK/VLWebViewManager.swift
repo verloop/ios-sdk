@@ -152,7 +152,21 @@ class VLWebViewManager: NSObject, WKScriptMessageHandler, WKUIDelegate, WKNaviga
                 print ("localStorage.getitem('visitorToken') failed due to \(error)")
                 assertionFailure()
             }
-            print("token = \(token)")
+            print("token = \(String(describing: token))")
+        }
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if navigationAction.targetFrame == nil {
+            if self.config.urlRedirection {
+                decisionHandler(.allow)
+            }
+            else {
+                decisionHandler(.cancel)
+            }
+        }
+        else {
+            decisionHandler(.allow)
         }
     }
 }
