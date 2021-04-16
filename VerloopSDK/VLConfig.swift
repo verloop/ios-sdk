@@ -28,7 +28,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     var recipeId: String? = nil
     var onButtonClicked: LiveChatButtonClickListener? = nil
     var onUrlClicked: LiveChatUrlClickListener? = nil
-    var urlRedirection : Bool = false
+    var urlRedirection : Bool = true
 
     private var customFields: [CustomField] = []
     
