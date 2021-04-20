@@ -28,6 +28,8 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     var recipeId: String? = nil
     var onButtonClicked: LiveChatButtonClickListener? = nil
     var onUrlClicked: LiveChatUrlClickListener? = nil
+    var urlRedirection : Bool = true
+
     private var customFields: [CustomField] = []
     
     @objc public init(clientId cid: String, userId uid: String?) {
@@ -86,6 +88,10 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     
     @objc public func setUrlClickListener(onUrlClicked urlClicked: LiveChatUrlClickListener?) {
         onUrlClicked = urlClicked
+    }
+    
+    @objc public func setUrlRedirectionFlag(canRedirect flag: Bool){
+        urlRedirection = flag
     }
 
     
