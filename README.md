@@ -49,6 +49,14 @@ config.setButtonOnClickListener(onButtonClicked:{ (title, type, payload) in
 ```
 
 Notifications
+
+Add the BundleID, APNS Certificate file(.p12) and it's corresponding password on the dashboard's setting page. Homepage > Settings > Chat (under product settings) > iOS SDK / Android SDK
+
+Before initiating the SDK, pass the device token onto our configuration object. 
+```
+ config.setNotificationToken(notificationToken: token) 
+```
+
 When you get a notification from Verloop, simply create the verloop variable and present it's navigation controller.
 
 The notification from Verloop will have a key _by with value verloop. Something like this -
