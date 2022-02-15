@@ -63,7 +63,7 @@ class VLViewController: UIViewController, WKUIDelegate {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        
+                
         super.viewWillAppear(animated)
         // TODO: The navigationBar's display (UI Color and frame), according to the client, needs to be changed everytime user comes back to the ChatBot window.
         verloopSDK?.refreshClientInfo()

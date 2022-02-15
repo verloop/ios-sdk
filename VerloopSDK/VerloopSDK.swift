@@ -33,7 +33,21 @@ import Foundation
         super.init()
         manager = VLWebViewManager(config: config)
         manager.jsDelegate(delegate: self)
-
+        config.didUpdateConfiguration = {[weak self] config,configParam in
+            self?.config = config
+            print("forceWebViewToReloadConfiguration")
+            self?.forceWebViewToReloadConfiguration(configParam: configParam)
+        }
+    }
+    
+    @objc public func observeLiveChatEventsOn(vlEventDelegate delegate:VLEventDelegate) {
+        if manager != nil {
+            manager.addEventChangeDelegate(delegate)
+        }
+    }
+    
+    private func forceWebViewToReloadConfiguration(configParam:VLConfig.ConfigParam) {
+        manager.updateWebviewConfiguration(config,param: configParam)
     }
     
     @objc public func updateConfig(config vlConfig: VLConfig){
@@ -63,7 +77,6 @@ import Foundation
         config.clear()
         manager.clearConfig(config: config)
     }
-    
     
     @objc public func getNavController() -> UINavigationController {
         
@@ -100,7 +113,6 @@ import Foundation
         verloopController?.navigationItem.leftBarButtonItem?.tintColor = textColor
         verloopNavigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: textColor]
     }
-    
     
     static func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
@@ -143,9 +155,9 @@ import Foundation
            let title = buttonInfo.title
            let type = buttonInfo.type
            let payload = buttonInfo.payload
-
-           if config.onButtonClicked != nil{
-               config.onButtonClicked?(title, type, payload)
+            
+           if config.getButtonClickListener() != nil{
+               config.getButtonClickListener()?(title, type, payload)
            }
         }catch {
            print("Problem retreiving button Info")
@@ -154,12 +166,14 @@ import Foundation
            let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
            let url = urlInfo.url
 
-           if config.onUrlClicked != nil{
-               config.onUrlClicked?(url)
+           if config.getURLClickListener() != nil{
+               config.getURLClickListener()?(url)
            }
        }catch {
            print("Problem retreiving url Info")
        }
+       //other call backs
+        
     }
     
     @objc public func start() {
@@ -209,4 +223,3 @@ import Foundation
         public let url: String
     }
 }
-

@@ -13,24 +13,35 @@ public typealias LiveChatButtonClickListener = (_ title : String?, _ type : Stri
 public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
 
 @objc public class VLConfig : NSObject {
+    
+    enum ConfigParam {
+        case userId
+        case recepie
+        case department
+        case userParams
+        case customFields
+        case clearDepartment
+    }
+    
     @objc public enum SCOPE : Int {
         case ROOM = 0
         case USER = 1
     }
     
-    var clientId: String
-    var userId: String?
-    var userName: String?
-    var userEmail: String?
-    var userPhone: String?
-    var isStaging: Bool = false
-    var notificationToken: String? = nil
-    var recipeId: String? = nil
-    var onButtonClicked: LiveChatButtonClickListener? = nil
-    var onUrlClicked: LiveChatUrlClickListener? = nil
-    var urlRedirection : Bool = true
-
-    private var customFields: [CustomField] = []
+   private var clientId: String
+   private var userId: String?
+   private var userName: String?
+   private var userEmail: String?
+   private var userPhone: String?
+   private var isStaging: Bool = false
+   private var notificationToken: String? = nil
+   private var recipeId: String? = nil
+   private var onButtonClicked: LiveChatButtonClickListener? = nil
+   private var onUrlClicked: LiveChatUrlClickListener? = nil
+   private var urlRedirection : Bool = true
+   private var mEventChangeDelegate:VLEventDelegate?
+   private var customFields: [CustomField] = []
+    var didUpdateConfiguration:((_ configuration:VLConfig,_ configParam:ConfigParam) -> Void)?
     
     @objc public init(clientId cid: String, userId uid: String?) {
         var userId = uid
@@ -80,6 +91,10 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     
     @objc public func setRecipeId(recipeId id: String?) {
         recipeId = id
+    }
+    
+    @objc public func setOnEventChangeListener(_ delegate:VLEventDelegate?) {
+        mEventChangeDelegate = delegate
     }
     
     @objc public func setButtonOnClickListener(onButtonClicked buttonClicked: LiveChatButtonClickListener?) {
@@ -136,7 +151,6 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             jsonDictionary[field.key] = innerJson
         }
         
-        
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
             let json = NSString(data: jsonData as Data, encoding: String.Encoding.utf8.rawValue)! as String
@@ -179,9 +193,6 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         defaults.removeObject(forKey: "VERLOOP_CUSTOM_FIELDS")
         
         if #available(iOS 9.0, *) {
-            
-            
-            
             let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
             
             WKWebsiteDataStore.default().fetchDataRecords(ofTypes: websiteDataTypes as! Set<String>, completionHandler: { (data) -> Void in
@@ -230,5 +241,41 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         public let key: String
         public let value: String
         public let scope: String
+    }
+}
+
+extension VLConfig {
+    func getUserID() -> String? {
+        return userId
+    }
+    func getClientID() -> String {
+        return clientId
+    }
+    func getUsername() -> String? {
+        return userName
+    }
+    func getUserEmail() -> String? {
+        return userEmail
+    }
+    func getUserPhone() -> String? {
+        return userPhone
+    }
+    func isStagingEnvironment() -> Bool {
+        return isStaging
+    }
+    func getNotificationToken() -> String? {
+        return notificationToken
+    }
+    func getRecepieId() -> String? {
+        return recipeId
+    }
+    func isURLRedirection() -> Bool {
+        return urlRedirection
+    }
+    func getButtonClickListener() -> LiveChatButtonClickListener? {
+        return onButtonClicked
+    }
+    func getURLClickListener() -> LiveChatUrlClickListener? {
+        return onUrlClicked
     }
 }
