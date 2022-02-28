@@ -56,10 +56,10 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         self.loadWebView()
     }
     
-    func updateWebviewConfiguration(_ config:VLConfig,param:VLConfig.ConfigParam) {
+    func updateWebviewConfiguration(_ config:VLConfig,param:[VLConfig.ConfigParam]) {
         print("updateWebviewConfiguration")
         self.config = config
-        configParams.append(param)
+        configParams = param
     }
     
     func clearLocalStorage(){
@@ -147,6 +147,12 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         webView.evaluateJavaScript("VerloopLivechat.start();")
     }
     
+    func logoutSession() {
+        webView.evaluateJavaScript(String.getLogoutEvaluationJS()) { _, error in
+            print("logout error \(error)")
+        }
+    }
+    
 //    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
 //        if (message.name == "VerloopMobile") {
 //            if jsInterface != nil {
@@ -175,14 +181,15 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         
         //you might want to edit the script, with the escape characters
-        let script = "localStorage.getItem(\"visitorToken\")"
-        webView.evaluateJavaScript(script) { (token, error) in
-            if let error = error {
-                print ("localStorage.getitem('visitorToken') failed due to \(error)")
-                assertionFailure()
-            }
-            print("token = \(String(describing: token))")
-        }
+//        let script = "localStorage.getItem(\"visitorToken\")"
+//        webView.evaluateJavaScript(script) { (token, error) in
+//            if let error = error {
+//                print ("localStorage.getitem('visitorToken') failed due to \(error)")
+//                assertionFailure()
+//            }
+//            print("token = \(String(describing: token))")
+//        }
+        cleaerCookies()
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -201,24 +208,68 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
 }
 
 extension VLWebViewManager {
+    
+    private func cleaerCookies() {
+        let script = "localStorage.getItem(\"visitorToken\")"
+        webView.evaluateJavaScript(script) { (token, error) in
+            if let error = error {
+                print ("localStorage.getitem('visitorToken') failed due to \(error)")
+                assertionFailure()
+            }
+            print("token = \(String(describing: token))")
+        }
+    }
+    
     private func processConfigurations() {
         print("processConfigurations \(configParams)")
         for parameter in configParams {
+            print("parameter \(parameter)")
             switch parameter {
-                case .userId:
-                if let unwrapped = config.getUserID() {
-                    webView.evaluateJavaScript(String.getUserIdEvaluationJS(unwrapped, optionArgument: nil)) { _, error in
-                        print("set user id error \(error?.localizedDescription ?? "NIL")")
+                case .userParams:
+                if !config.getUserParams().isEmpty {
+                    for userParam in config.getUserParams() {
+                        print("userParam \(userParam)")
+                        webView.evaluateJavaScript(String.getUserParamEvaluationJS(key: userParam.key, value: userParam.value)) { _, error in
+                                print("set custom field error \(error?.localizedDescription ?? "NIL")")
+                        }
                     }
                 }
+                case .userId:
+                    if let unwrapped = config.getUserID() {
+                        webView.evaluateJavaScript(String.getUserIdEvaluationJS(unwrapped, optionArgument: nil)) { _, error in
+                            print("set user id error \(error?.localizedDescription ?? "NIL")")
+                        }
+                        webView.evaluateJavaScript(String.getUserParamEvaluationJS(key: "name", value: "sreedeep")) { _, error in
+                                print("set user param field error \(error?.localizedDescription ?? "NIL")")
+                        }
+                    }
                 case .recepie:
-//                if let unwrapped = mvlConfiguration.getRecipie(),!unwrapped.isEmpty {
-//                    print("unwrapped recepie \(unwrapped)")
-//                    self.evaluateJavaScript(String.getRecepieEvaluationJS(unwrapped)) { _, error in
-//                        print("set recepie error \(error?.localizedDescription ?? "NIL")")
-//                    }
-//                }
-                break
+                    if let unwrapped = config.getRecepieId(),!unwrapped.isEmpty {
+                        print("unwrapped recepie \(unwrapped)")
+                        webView.evaluateJavaScript(String.getRecepieEvaluationJS(unwrapped)) { _, error in
+                            print("set recepie error \(error?.localizedDescription ?? "NIL")")
+                        }
+                    }
+                case .customFields:
+                    if !config.getCustomFields().isEmpty {
+                        for field in config.getCustomFields() {
+                            webView.evaluateJavaScript(String.getCustomFieldEvaluationJS(field)) { _, error in
+                                print("set custom field error \(error?.localizedDescription ?? "NIL")")
+                            }
+                        }
+                    }
+                case .department:
+                    if let unwrapped = config.getDepartment(),!unwrapped.isEmpty {
+                        print("unwrapped recepie \(unwrapped)")
+                        webView.evaluateJavaScript(String.getDepartmentEvaluationJS(dept: unwrapped)) { _, error in
+                            print("set department error \(error?.localizedDescription ?? "NIL")")
+                        }
+                    }
+                case .clearDepartment:
+                    webView.evaluateJavaScript(String.getClearDepartmentEvaluationJS()) { _, error in
+                        print("set clear department error \(error?.localizedDescription ?? "NIL")")
+
+                    }
                 default : break
             }
         }
@@ -242,7 +293,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
         if let bodyString = msg as? String,let bodyData = bodyString.data(using: .utf8) {
             do {
                 let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0))
-                print("expectedModelData \(expectedModelData)")
+//                print("expectedModelData \(expectedModelData)")
                 let expectedData = try JSONSerialization.data(withJSONObject: expectedModelData, options: .prettyPrinted)
                 let model = try JSONDecoder().decode(ExpectedEventPayload.self, from: expectedData)
                 if let _modelType = model.type {
@@ -259,6 +310,11 @@ extension VLWebViewManager:ScriptMessageDelegate {
                     switch _function {
                         case .FunctionSetUserIdComplete:
                             _eventDelegate?.didEventOccurOnLiveChat(.setUserIdComplete)
+                        case .FunctionSetUserParamComplete:
+                            _eventDelegate?.didEventOccurOnLiveChat(.setUserParamComplete)
+                        case .FunctionCloseWidget:
+                            cleaerCookies()
+                            _eventDelegate?.didEventOccurOnLiveChat(.onWidgetClosed)
                         case .FunctionOnRoomReady:
                             print("FunctionOnRoomReady")
                         case .FunctionCallBack:
@@ -266,6 +322,9 @@ extension VLWebViewManager:ScriptMessageDelegate {
                         case .FunctionReady:
                             print("FunctionReady")
                             processConfigurations()
+                        case .FunctionCloseComplete:
+                            cleaerCookies()
+                            _eventDelegate?.didEventOccurOnLiveChat(.onLogoutComplete)
                     }
                 }
             } catch {

@@ -33,10 +33,14 @@ import Foundation
         super.init()
         manager = VLWebViewManager(config: config)
         manager.jsDelegate(delegate: self)
-        config.didUpdateConfiguration = {[weak self] config,configParam in
-            self?.config = config
-            print("forceWebViewToReloadConfiguration")
-            self?.forceWebViewToReloadConfiguration(configParam: configParam)
+//        config.didUpdateConfiguration = {[weak self] config,configParam in
+//            self?.config = config
+//            print("forceWebViewToReloadConfiguration")
+//            self?.forceWebViewToReloadConfiguration(configParam: configParam)
+//        }
+        if !config.getUpdatedConfigParams().isEmpty {
+            print("params \(config.getUpdatedConfigParams())")
+            forceWebViewToReloadConfiguration(configParam: config.getUpdatedConfigParams())
         }
     }
     
@@ -46,7 +50,7 @@ import Foundation
         }
     }
     
-    private func forceWebViewToReloadConfiguration(configParam:VLConfig.ConfigParam) {
+    private func forceWebViewToReloadConfiguration(configParam:[VLConfig.ConfigParam]) {
         manager.updateWebviewConfiguration(config,param: configParam)
     }
     
@@ -70,7 +74,8 @@ import Foundation
     @objc public func logout() {
         config.clearUserDetails()
         manager.clearLocalStorage()
-        manager.setConfig(config: config)
+        manager.logoutSession()
+//        manager.setConfig(config: config)
     }
     
     @objc public func clearConfig(){
@@ -95,7 +100,8 @@ import Foundation
         print("Updating Client Info")
         refreshClientInfo()
         print("Updated Client Info")
-
+        verloopNavigationController?.navigationBar.backgroundColor = .red
+        
         verloopNavigationController!.navigationItem.leftItemsSupplementBackButton = true
         
         verloopNavigationController!.navigationItem.hidesBackButton = false
@@ -112,6 +118,8 @@ import Foundation
         // TODO: In VLViewController, the leftBarButtonItem is set on controller's navigationItem and here it was being set on verloopNavigationController's navigationItem that was creating issue and leftBarItem's tint color was nil
         verloopController?.navigationItem.leftBarButtonItem?.tintColor = textColor
         verloopNavigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: textColor]
+        forceWebViewToReloadConfiguration(configParam: config.getUpdatedConfigParams())
+        manager.setConfig(config: config)
     }
     
     static func hexStringToUIColor (hex:String) -> UIColor {

@@ -14,13 +14,36 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
 
 @objc public class VLConfig : NSObject {
     
+    struct CustomField : Codable {
+        public let key: String
+        public let value: String
+        public let scope: String
+    }
+    
+    struct UserParam {
+        public let key: String
+        public let value: String
+    }
+    
+    enum UserParamType:String {
+        case email
+        case phone
+        case name
+    }
+    
     enum ConfigParam {
         case userId
+        case userName
+        case email
+        case phoneNumber
         case recepie
         case department
         case userParams
         case customFields
         case clearDepartment
+        case openWidget
+        case closeWidget
+        case widgetColor
     }
     
     @objc public enum SCOPE : Int {
@@ -33,6 +56,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
    private var userName: String?
    private var userEmail: String?
    private var userPhone: String?
+   private var department:String?
    private var isStaging: Bool = false
    private var notificationToken: String? = nil
    private var recipeId: String? = nil
@@ -41,7 +65,11 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
    private var urlRedirection : Bool = true
    private var mEventChangeDelegate:VLEventDelegate?
    private var customFields: [CustomField] = []
-    var didUpdateConfiguration:((_ configuration:VLConfig,_ configParam:ConfigParam) -> Void)?
+   private var userParams: [UserParam] = []
+    private var widgetColor:String?
+   
+   var didUpdateConfiguration:((_ configuration:VLConfig,_ configParam:ConfigParam) -> Void)?
+   private var updatedConfigParams:[ConfigParam] = []
     
     @objc public init(clientId cid: String, userId uid: String?) {
         var userId = uid
@@ -52,6 +80,8 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         
         clientId = cid
         self.userId = userId
+        print("reset config params")
+        self.updatedConfigParams = []
     }
     
     @objc public convenience init(clientId cid: String) {
@@ -62,6 +92,8 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         } else {
             self.init(clientId: cid, userId: UUID().uuidString)
         }
+        print("reset config params")
+        self.updatedConfigParams = []
     }
     
     @objc public func setNotificationToken(notificationToken token: String?) {
@@ -70,27 +102,64 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     
     @objc public func setUserId(userId uid: String) {
         userId = uid
+        updatedConfigParams.append(.userId)
     }
     
     @objc public func setStaging(isStaging staging: Bool) {
         isStaging = staging
     }
     
+    @objc public func setDepartment(_ dept:String) {
+        self.department = dept
+        updatedConfigParams.append(.department)
+    }
+    @objc public func clearDepartment() {
+        self.department = nil
+        updatedConfigParams.append(.clearDepartment)
+    }
+    @objc public func setWidgetOpened() {
+        updatedConfigParams.append(.openWidget)
+    }
+    @objc public func setWidgetClose() {
+        updatedConfigParams.append(.closeWidget)
+    }
+    @objc public func setWidgetColor(_ color:String) {
+        self.widgetColor = color
+        updatedConfigParams.append(.widgetColor)
+    }
+    
     @objc public func setUserName(userName name: String?) {
-        userName = name
+        if let _name = name {
+            setUserParam(key: UserParamType.name.rawValue, value: _name)
+        }
     }
     
     @objc public func setUserEmail(userEmail email: String?) {
-        userEmail = email
+//        userEmail = email
+//        updatedConfigParams.append(.email)
+        if let _email = email {
+            setUserParam(key: UserParamType.email.rawValue, value: _email)
+        }
     }
     
-    
     @objc public func setUserPhone(userPhone phone: String?) {
-        userPhone = phone
+//        userPhone = phone
+        if let _phone = phone {
+            setUserParam(key: UserParamType.phone.rawValue, value: _phone)
+        }
+//        updatedConfigParams.append(.phoneNumber)
     }
     
     @objc public func setRecipeId(recipeId id: String?) {
         recipeId = id
+        updatedConfigParams.append(.recepie)
+    }
+    
+    @objc public func setUserParam(key:String,value:String) {
+        userParams.append(VLConfig.UserParam(key: key, value: value))
+        if !updatedConfigParams.contains(.userParams) {
+            updatedConfigParams.append(.userParams)
+        }
     }
     
     @objc public func setOnEventChangeListener(_ delegate:VLEventDelegate?) {
@@ -111,12 +180,12 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
 
     
     @objc public func putCustomField(key: String, value: String, scope: SCOPE) {
-        
+        updatedConfigParams.append(.customFields)
         switch scope {
-        case .USER:
-            customFields.append(CustomField(key: key, value: value, scope: "user"))
-        case .ROOM:
-            customFields.append(CustomField(key: key, value: value, scope: "room"))
+            case .USER:
+                customFields.append(CustomField(key: key, value: value, scope: "user"))
+            case .ROOM:
+                customFields.append(CustomField(key: key, value: value, scope: "room"))
         }
     }
     
@@ -169,7 +238,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         recipeId = nil
         onButtonClicked = nil
         customFields.removeAll()
-        
+        userParams.removeAll()
         
         if let bundleID = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: bundleID)
@@ -183,6 +252,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         userEmail = nil
         userPhone = nil
         customFields.removeAll()
+        userParams.removeAll()
 
         
         let defaults = UserDefaults.standard
@@ -236,12 +306,6 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         
         return config
     }
-    
-    struct CustomField : Codable {
-        public let key: String
-        public let value: String
-        public let scope: String
-    }
 }
 
 extension VLConfig {
@@ -252,13 +316,28 @@ extension VLConfig {
         return clientId
     }
     func getUsername() -> String? {
-        return userName
+        for param in userParams {
+            if param.key == UserParamType.name.rawValue {
+                return param.value
+            }
+        }
+        return nil
     }
     func getUserEmail() -> String? {
-        return userEmail
+        for param in userParams {
+            if param.key == UserParamType.email.rawValue {
+                return param.value
+            }
+        }
+        return nil
     }
     func getUserPhone() -> String? {
-        return userPhone
+        for param in userParams {
+            if param.key == UserParamType.phone.rawValue {
+                return param.value
+            }
+        }
+        return nil
     }
     func isStagingEnvironment() -> Bool {
         return isStaging
@@ -269,6 +348,12 @@ extension VLConfig {
     func getRecepieId() -> String? {
         return recipeId
     }
+    func getCustomFields() -> [CustomField] {
+        return customFields
+    }
+    func getUserParams() -> [UserParam] {
+        return userParams
+    }
     func isURLRedirection() -> Bool {
         return urlRedirection
     }
@@ -278,4 +363,11 @@ extension VLConfig {
     func getURLClickListener() -> LiveChatUrlClickListener? {
         return onUrlClicked
     }
+    func getUpdatedConfigParams() -> [ConfigParam] {
+        return updatedConfigParams
+    }
+    func getDepartment() -> String? {
+        return self.department
+    }
+    
 }

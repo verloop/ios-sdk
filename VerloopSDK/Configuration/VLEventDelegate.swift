@@ -25,9 +25,12 @@ struct ExpectedEventPayload:Codable {
 
 internal enum FunctionType:String,Codable {
     case FunctionSetUserIdComplete = "setUserIdComplete"
+    case FunctionSetUserParamComplete = "setUserParamComplete"
     case FunctionCallBack = "callback"
     case FunctionOnRoomReady = "roomReady"
     case FunctionReady = "ready"
+    case FunctionCloseWidget = "closeWidget"
+    case FunctionCloseComplete = "closeComplete"
 }
 
 internal enum MessageType:String,Codable {
@@ -44,8 +47,10 @@ internal enum MessageType:String,Codable {
     case onChatEnded
     case onLogoutComplete
     case onWidgetLoaded
+    case onWidgetClosed
 //    case onIncomingMessage(_ message:VLMessage)
     case setUserIdComplete
+    case setUserParamComplete
 }
 
 @objc public protocol VLEventDelegate {
