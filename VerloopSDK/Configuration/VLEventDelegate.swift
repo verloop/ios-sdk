@@ -31,6 +31,10 @@ internal enum FunctionType:String,Codable {
     case FunctionReady = "ready"
     case FunctionCloseWidget = "closeWidget"
     case FunctionCloseComplete = "closeComplete"
+    case FunctionChatMaximized = "chat-maximized"
+    case FunctionChatMinimized = "chat-minimized"
+    case FunctionChatStarted = "chat-started"
+    case FunctionChatEnded = "chat-ended"
 }
 
 internal enum MessageType:String,Codable {

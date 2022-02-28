@@ -325,6 +325,14 @@ extension VLWebViewManager:ScriptMessageDelegate {
                         case .FunctionCloseComplete:
                             cleaerCookies()
                             _eventDelegate?.didEventOccurOnLiveChat(.onLogoutComplete)
+                        case .FunctionChatMinimized:
+                            _eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
+                        case .FunctionChatMaximized:
+                            _eventDelegate?.didEventOccurOnLiveChat(.onChatMaximized)
+                        case .FunctionChatEnded:
+                            _eventDelegate?.didEventOccurOnLiveChat(.onChatEnded)
+                        case .FunctionChatStarted:
+                            _eventDelegate?.didEventOccurOnLiveChat(.onChatStarted)
                     }
                 }
             } catch {
