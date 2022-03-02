@@ -143,19 +143,6 @@ class VLWebViewManager: NSObject, WKScriptMessageHandler, WKUIDelegate, WKNaviga
         return nil
     }
     
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        
-        //you might want to edit the script, with the escape characters
-        let script = "localStorage.getItem(\"visitorToken\")"
-        webView.evaluateJavaScript(script) { (token, error) in
-            if let error = error {
-                print ("localStorage.getitem('visitorToken') failed due to \(error)")
-                assertionFailure()
-            }
-            print("token = \(String(describing: token))")
-        }
-    }
-    
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if navigationAction.targetFrame == nil {
             if self.config.urlRedirection {
