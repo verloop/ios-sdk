@@ -1,8 +1,17 @@
 NOTE:\
 Now, you can install using cocoapod - `pod install VerloopSDKiOS`
 
-Or Download the iOS using this link - 
+Or Download the iOS using this link:
+
 `https://drive.google.com/file/d/1qi3_Kq42eRu487rjGRTD5gX9-2-U2Ia5/view?usp=sharing`
+
+**Version 0.1.3**
+
+`https://drive.google.com/file/d/18UUCTqxLqCSybMiK3aUJhZ87aAkM_pO2/view?usp=sharing`
+
+**Version 0.1.4**
+
+`https://drive.google.com/file/d/172R2OaMygDXjYPMj4zUgIKWurV8NDyaO/view?usp=sharing`
  
 **For Swift**\
 After importing the Framework like any other framework you do, import the SDK in controller as :-
@@ -40,6 +49,14 @@ config.setButtonOnClickListener(onButtonClicked:{ (title, type, payload) in
 ```
 
 Notifications
+
+Add the BundleID, APNS Certificate file(.p12) and it's corresponding password on the dashboard's setting page. Homepage > Settings > Chat (under product settings) > iOS SDK / Android SDK
+
+Before initiating the SDK, pass the device token onto our configuration object. 
+```
+ config.setNotificationToken(notificationToken: token) 
+```
+
 When you get a notification from Verloop, simply create the verloop variable and present it's navigation controller.
 
 The notification from Verloop will have a key _by with value verloop. Something like this -
