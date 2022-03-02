@@ -94,8 +94,21 @@ import Foundation
     
     func refreshClientInfo() {
         verloopController?.title = title
-        verloopNavigationController?.navigationBar.barTintColor = bgColor
-        verloopNavigationController?.navigationBar.tintColor = textColor
+        if #available(iOS 13.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = bgColor
+            appearance.titleTextAttributes = [
+                NSAttributedString.Key.foregroundColor: textColor]
+            verloopNavigationController?.navigationBar.standardAppearance = appearance;
+            verloopNavigationController?.navigationBar.scrollEdgeAppearance = verloopNavigationController?.navigationBar.standardAppearance
+            
+        } else {
+            verloopNavigationController?.navigationBar.barTintColor = bgColor
+            verloopNavigationController?.navigationBar.tintColor = textColor
+
+        }
+
         // TODO: In VLViewController, the leftBarButtonItem is set on controller's navigationItem and here it was being set on verloopNavigationController's navigationItem that was creating issue and leftBarItem's tint color was nil
         verloopController?.navigationItem.leftBarButtonItem?.tintColor = textColor
         verloopNavigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: textColor]
