@@ -43,6 +43,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         case clearDepartment
         case openWidget
         case closeWidget
+        case close
         case widgetColor
     }
     
@@ -50,7 +51,6 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         case ROOM = 0
         case USER = 1
     }
-    
    private var clientId: String
    private var userId: String?
    private var userName: String?
@@ -82,6 +82,9 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         self.userId = userId
         print("reset config params")
         self.updatedConfigParams = []
+        if let ud = userId,!ud.isEmpty {
+            self.updatedConfigParams.append(.userId)
+        }
     }
     
     @objc public convenience init(clientId cid: String) {
@@ -102,7 +105,9 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     
     @objc public func setUserId(userId uid: String) {
         userId = uid
-        updatedConfigParams.append(.userId)
+        if !updatedConfigParams.contains(.userId) {
+            updatedConfigParams.append(.userId)
+        }
     }
     
     @objc public func setStaging(isStaging staging: Bool) {
@@ -111,17 +116,21 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     
     @objc public func setDepartment(_ dept:String) {
         self.department = dept
-        updatedConfigParams.append(.department)
+        if !updatedConfigParams.contains(.department) {
+            updatedConfigParams.append(.department)
+        }
     }
     @objc public func clearDepartment() {
         self.department = nil
-        updatedConfigParams.append(.clearDepartment)
+        if !updatedConfigParams.contains(.clearDepartment) {
+            updatedConfigParams.append(.clearDepartment)
+        }
     }
-    @objc public func setWidgetOpened() {
+    @objc public func openWidget() {
         updatedConfigParams.append(.openWidget)
     }
-    @objc public func setWidgetClose() {
-        updatedConfigParams.append(.closeWidget)
+    @objc public func closeWidget() {
+//        updatedConfigParams.append(.closeWidget)
     }
     @objc public func setWidgetColor(_ color:String) {
         self.widgetColor = color
@@ -152,7 +161,9 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     
     @objc public func setRecipeId(recipeId id: String?) {
         recipeId = id
-        updatedConfigParams.append(.recepie)
+        if !updatedConfigParams.contains(.recepie) {
+            updatedConfigParams.append(.recepie)
+        }
     }
     
     @objc public func setUserParam(key:String,value:String) {

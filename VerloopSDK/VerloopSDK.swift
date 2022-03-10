@@ -33,15 +33,41 @@ import Foundation
         super.init()
         manager = VLWebViewManager(config: config)
         manager.jsDelegate(delegate: self)
-//        config.didUpdateConfiguration = {[weak self] config,configParam in
-//            self?.config = config
-//            print("forceWebViewToReloadConfiguration")
-//            self?.forceWebViewToReloadConfiguration(configParam: configParam)
-//        }
         if !config.getUpdatedConfigParams().isEmpty {
             print("params \(config.getUpdatedConfigParams())")
             forceWebViewToReloadConfiguration(configParam: config.getUpdatedConfigParams())
         }
+    }
+    
+    deinit {
+        verloopNavigationController = nil
+        verloopController = nil
+        previousWindow = nil
+    }
+    
+    @objc public func closeWidget() {
+            onChatClose()
+//        self.verloopNavigationController?.dismiss(animated: true, completion: {
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {[weak self] in
+                self?.manager.closeWidget()
+            }
+//        })
+    }
+    
+    @objc public func openWidget(rootController:UIViewController) {
+    
+//        start()
+        verloopNavigationController = getNavController()
+        print("widget opened")
+        rootController.present(verloopNavigationController!, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {[weak self] in
+                self?.manager.openWidget()
+            }
+        }
+    }
+    
+    @objc public func close() {
+        self.manager.close()
     }
     
     @objc public func observeLiveChatEventsOn(vlEventDelegate delegate:VLEventDelegate) {
@@ -72,6 +98,7 @@ import Foundation
     }
     
     @objc public func logout() {
+        clearConfig()
         config.clearUserDetails()
         manager.clearLocalStorage()
         manager.logoutSession()
@@ -81,6 +108,11 @@ import Foundation
     @objc public func clearConfig(){
         config.clear()
         manager.clearConfig(config: config)
+        self.config = VLConfig(clientId: "")
+    }
+    
+    public func getConfig() -> VLConfig {
+        return config
     }
     
     @objc public func getNavController() -> UINavigationController {
@@ -118,8 +150,7 @@ import Foundation
         // TODO: In VLViewController, the leftBarButtonItem is set on controller's navigationItem and here it was being set on verloopNavigationController's navigationItem that was creating issue and leftBarItem's tint color was nil
         verloopController?.navigationItem.leftBarButtonItem?.tintColor = textColor
         verloopNavigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: textColor]
-        forceWebViewToReloadConfiguration(configParam: config.getUpdatedConfigParams())
-        manager.setConfig(config: config)
+//        manager.setConfig(config: config)
     }
     
     static func hexStringToUIColor (hex:String) -> UIColor {
@@ -144,44 +175,93 @@ import Foundation
         )
     }
     
-    func jsCallback(message: Any) {
-        let str = message as! String
-        let data = str.data(using: String.Encoding.utf8)!
-        print("button clicked 1")
-        do {
-           let clientInfo =  try JSONDecoder().decode(ClientInfo.self, from: data)
-           title = clientInfo.title
-           bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
-           textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
-
-           refreshClientInfo()
-        }catch {
-           print("Problem retreiving client Info")
-        }
-        do {
-           let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
-           let title = buttonInfo.title
-           let type = buttonInfo.type
-           let payload = buttonInfo.payload
-            
-           if config.getButtonClickListener() != nil{
-               config.getButtonClickListener()?(title, type, payload)
-           }
-        }catch {
-           print("Problem retreiving button Info")
-        }
-        do {
-           let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
-           let url = urlInfo.url
-
-           if config.getURLClickListener() != nil{
-               config.getURLClickListener()?(url)
-           }
-       }catch {
-           print("Problem retreiving url Info")
-       }
-       //other call backs
+    func scriptCallback(message:Any) {
+//        {"src":"verloop","fn":"ready","args":{"color":"#3a69dd"}}
         
+        if let bodyString = message as? String,let bodyData = bodyString.data(using: .utf8) {
+            do {
+                if let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0)) as? [String:Any] {
+                    if (expectedModelData["fn"] as? String ?? "") == "callback",
+                       let arguments = expectedModelData["args"] as? [Any],let firstArg = arguments.first,((firstArg as? String) != nil)  {
+                        if (firstArg as? String ?? "") == "button-clicked" {
+                            print("bttn clock")
+                        } else if (firstArg as? String ?? "") == "url-clicked" {
+                            print("url clock")
+                        }
+                    } else if (expectedModelData["fn"] as? String ?? "") == "ready",
+                              let arguments = expectedModelData["args"] as? [String:String],let colorArg = arguments["color"],!colorArg.isEmpty {
+                        print("color \(colorArg)")
+                        bgColor = VerloopSDK.hexStringToUIColor(hex: colorArg)
+                        refreshClientInfo()
+                    }
+                }
+            } catch {
+                print("didReceiveMessage decode error \(error)")
+            }
+        }
+    }
+    
+    func jsCallback(message: Any) {
+//        scriptCallback(message: message)
+//        let str = message as! String
+//        let data = str.data(using: String.Encoding.utf8)!
+////        print("button clicked 1")
+//        do {
+//           let clientInfo =  try JSONDecoder().decode(ClientInfo.self, from: data)
+//           title = clientInfo.title
+//           bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
+//           textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
+//
+//           refreshClientInfo()
+//        }catch {
+////           print("Problem retreiving client Info")
+//        }
+//        do {
+//           let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
+//           let title = buttonInfo.title
+//           let type = buttonInfo.type
+//           let payload = buttonInfo.payload
+//
+//           if config.getButtonClickListener() != nil{
+//               config.getButtonClickListener()?(title, type, payload)
+//           }
+//        }catch {
+////           print("Problem retreiving button Info")
+//        }
+//        do {
+//           let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
+//           let url = urlInfo.url
+//
+//           if config.getURLClickListener() != nil{
+//               config.getURLClickListener()?(url)
+//           }
+//       }catch {
+////           print("Problem retreiving url Info")
+//       }
+       //other call backs
+        if let bodyString = message as? String,let bodyData = bodyString.data(using: .utf8) {
+            do {
+                if let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0)) as? [String:Any] {
+                    if (expectedModelData["fn"] as? String ?? "") == "callback",
+                       let arguments = expectedModelData["args"] as? [Any],let firstArg = arguments.first,((firstArg as? String) != nil)  {
+                        if (firstArg as? String ?? "") == "button-clicked" {
+                            print("bttn clock")
+                            config.getButtonClickListener()?("Button", "callback", "NA")
+                        } else if (firstArg as? String ?? "") == "url-clicked" {
+                            print("url clock")
+                            config.getButtonClickListener()?("URL", "callback", "NA")
+                        }
+                    } else if (expectedModelData["fn"] as? String ?? "") == "ready",
+                              let arguments = expectedModelData["args"] as? [String:String],let colorArg = arguments["color"],!colorArg.isEmpty {
+                        print("color \(colorArg)")
+                        bgColor = VerloopSDK.hexStringToUIColor(hex: colorArg)
+                        refreshClientInfo()
+                    }
+                }
+            } catch {
+                print("didReceiveMessage decode error \(error)")
+            }
+        }
     }
     
     @objc public func start() {
@@ -205,7 +285,6 @@ import Foundation
             window.resignKey()
             previousWindow!.makeKeyAndVisible()
             previousWindow = nil
-            
             window.windowLevel = UIWindow.Level.normal - 30
         }
     }

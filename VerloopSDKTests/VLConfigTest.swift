@@ -2,7 +2,7 @@
 //  VLConfigTest.swift
 //  VerloopSDKTests
 //
-//  Created by Sreedeepgi on 21/02/22.
+//  Created by Sreedeep on 21/02/22.
 //  Copyright © 2022 Verloop. All rights reserved.
 //
 
@@ -17,6 +17,7 @@ class VLConfigTest: XCTestCase {
         _config.setUserName(userName: TestConstants.name)
         _config.setUserPhone(userPhone: TestConstants.phone)
         _config.putCustomField(key: TestConstants.customField.keys.first ?? "", value: TestConstants.customField.values.first ?? "", scope: .USER)
+        _config.setDepartment(TestConstants.department)
         _config.setRecipeId(recipeId: TestConstants.recepie)
     }
 
@@ -42,6 +43,12 @@ class VLConfigTest: XCTestCase {
         if let first = customField.first {
             XCTAssertTrue(first.value == TestConstants.customField.values.first)
         }
+    }
+    
+    func  testDepartment() {
+        XCTAssertEqual(_config.getDepartment(), TestConstants.department)
+        _config.clearDepartment()
+        XCTAssertNil(_config.getDepartment())
     }
     
     func testRecepie() {

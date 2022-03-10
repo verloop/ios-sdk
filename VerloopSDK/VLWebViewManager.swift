@@ -13,7 +13,9 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     var webView: WKWebView!
     private var hasTriedToStartRoom = false
     private var jsInterface: VLJSInterface? = nil
+    private var isRoomReady = false
     private var config: VLConfig!
+    private var roomReadyConfigurations:[VLConfig.ConfigParam] = []
     private lazy var contentController: WKUserContentController = {
         return webView.configuration.userContentController
     }()
@@ -32,7 +34,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         subscribeMessageHandler()
 //        webView.configuration.userContentController.add(self, name: "VerloopMobile")
         webView.isOpaque = true
-
+        isRoomReady = false
         self.loadWebView()
     }
     
@@ -67,7 +69,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         webView.evaluateJavaScript(script) { (token, error) in
             if let error = error {
                 print ("localStorage.removingitem('visitorToken') failed due to \(error)")
-                assertionFailure()
+//                assertionFailure()
             }
         }
     }
@@ -153,6 +155,39 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         }
     }
     
+    
+    func closeWidget() {
+        if isRoomReady {
+            webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
+                print("closeWidget error \(error)")
+                if error == nil {
+                    self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
+                }
+            }
+        }
+    }
+    
+    func openWidget() {
+        webView.evaluateJavaScript(String.getWidgetOpenedEvaluationJS()) {[weak self] _, error in
+            print("open error \(error)")
+            if error == nil {
+                self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMaximized)
+            }
+        }
+    }
+    
+    func close() {
+        if isRoomReady {
+            webView.evaluateJavaScript(String.getCloseEvaluateJS()) {[weak self] _, error in
+                print("getCloseEvaluateJS error \(error)")
+            }
+        } else {
+            if !roomReadyConfigurations.contains(.close) {
+                roomReadyConfigurations.append(.close)
+            }
+        }
+    }
+    
 //    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
 //        if (message.name == "VerloopMobile") {
 //            if jsInterface != nil {
@@ -214,9 +249,21 @@ extension VLWebViewManager {
         webView.evaluateJavaScript(script) { (token, error) in
             if let error = error {
                 print ("localStorage.getitem('visitorToken') failed due to \(error)")
-                assertionFailure()
+//                assertionFailure()
             }
             print("token = \(String(describing: token))")
+        }
+    }
+    
+    private func processRoomReadyConfigurations() {
+        for config in roomReadyConfigurations {
+            switch config {
+                case .close :
+                    webView.evaluateJavaScript(String.getCloseEvaluateJS()) {[weak self] _, error in
+                        print("getCloseEvaluateJS error \(error)")
+                    }
+                default: break
+            }
         }
     }
     
@@ -278,18 +325,20 @@ extension VLWebViewManager {
 
 extension VLWebViewManager:ScriptMessageDelegate {
     func handler(_ scriptMessageHandler: ScriptMessageHandler, didReceiveMessage message: WKScriptMessage) {
-            if (message.name == Constants.JS_MESSAGE_NAME) {
+            print("message.name \(message.name)")
+        if (message.name == Constants.JS_MESSAGE_NAME || message.name == Constants.SCRIPT_MESSAGE_NAME_V2) {
                 if jsInterface != nil {
                     jsInterface?.jsCallback(message: message.body)
                 }
+                if (hasTriedToStartRoom) {
+                    startRoom()
+                }
+                handleWebPostMessage(message.body)
             }
-            if (hasTriedToStartRoom) {
-                startRoom()
-            }
-        handleWebPostMessage(message.body)
     }
     
     private func handleWebPostMessage(_ msg:Any) {
+//        sdk scriptCallback(message: msg)
         if let bodyString = msg as? String,let bodyData = bodyString.data(using: .utf8) {
             do {
                 let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0))
@@ -317,6 +366,8 @@ extension VLWebViewManager:ScriptMessageDelegate {
                             _eventDelegate?.didEventOccurOnLiveChat(.onWidgetClosed)
                         case .FunctionOnRoomReady:
                             print("FunctionOnRoomReady")
+                            isRoomReady = true
+                            processRoomReadyConfigurations()
                         case .FunctionCallBack:
                             break
                         case .FunctionReady:

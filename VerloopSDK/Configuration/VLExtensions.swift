@@ -30,6 +30,9 @@ extension String {
     static func getClearDepartmentEvaluationJS() -> String {
         return "\(Constants.JS_METHOD).clearDepartment()"
     }
+    static func getCloseEvaluateJS() -> String {
+        return "\(Constants.JS_METHOD).close()"
+    }
     static func getLogoutEvaluationJS() -> String {
         let logout = "logout"
         return "\(Constants.JS_METHOD).close('\(logout)')"

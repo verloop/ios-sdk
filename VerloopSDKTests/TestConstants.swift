@@ -16,4 +16,8 @@ struct TestConstants {
     static let name = "sreedeep"
     static let recepie = "testRecepie"
     static let customField:[String:String] = ["is_beauty":"true"]
+    static let testURL = "https://www.verloop.io"
+    static let testButtonTitle = "VButton"
+    static let testClientName = "Verloop"
+    static let department = "IT"
 }

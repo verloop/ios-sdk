@@ -68,12 +68,12 @@ class VLViewController: UIViewController, WKUIDelegate {
         // TODO: The navigationBar's display (UI Color and frame), according to the client, needs to be changed everytime user comes back to the ChatBot window.
         verloopSDK?.refreshClientInfo()
         webView?.webView.frame = view.bounds
-        
     }
 
     @objc func back(_ sender : AnyObject?) {
         if verloopSDK != nil {
-            verloopSDK!.onChatClose()
+//            verloopSDK!.onChatClose()
+            verloopSDK!.closeWidget()
         }
         self.dismiss(animated: true, completion: nil)
     }
