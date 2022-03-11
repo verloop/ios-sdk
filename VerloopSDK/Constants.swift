@@ -2,12 +2,11 @@
 //  Constants.swift
 //  VerloopSDK
 //
-//  Created by Vankireddy, BharathkumarReddy on 14/02/22.
+//  Created by sreedeep on 14/02/22.
 //  Copyright © 2022 Verloop. All rights reserved.
 //
 
 import Foundation
-
 struct Constants {
     static let URL_SCHEME = "https"
     static let URL_STAGING = ".stage.verloop.io"

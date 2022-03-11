@@ -47,11 +47,11 @@ import Foundation
     
     @objc public func closeWidget() {
             onChatClose()
-//        self.verloopNavigationController?.dismiss(animated: true, completion: {
+        self.verloopNavigationController?.dismiss(animated: true, completion: {
             DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {[weak self] in
                 self?.manager.closeWidget()
             }
-//        })
+        })
     }
     
     @objc public func openWidget(rootController:UIViewController) {
