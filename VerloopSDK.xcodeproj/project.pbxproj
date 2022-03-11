@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		186AC1F027DB46890079B027 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1EC27DB46890079B027 /* Constants.swift */; };
+		186AC1F127DB46890079B027 /* VLEventDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1ED27DB46890079B027 /* VLEventDelegate.swift */; };
+		186AC1F227DB46890079B027 /* VLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1EE27DB46890079B027 /* VLExtensions.swift */; };
+		186AC1F327DB46890079B027 /* ScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1EF27DB46890079B027 /* ScriptMessageHandler.swift */; };
 		EE21DA5E21DF4C17004B8A24 /* VLNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */; };
 		EE300EA021AA89EF00FDEA21 /* VerloopSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = EE300E9E21AA89EF00FDEA21 /* VerloopSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EE300EAB21AA8A2C00FDEA21 /* VLWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE300EA621AA8A2C00FDEA21 /* VLWebViewManager.swift */; };
@@ -17,6 +21,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		186AC1EC27DB46890079B027 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		186AC1ED27DB46890079B027 /* VLEventDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLEventDelegate.swift; sourceTree = "<group>"; };
+		186AC1EE27DB46890079B027 /* VLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLExtensions.swift; sourceTree = "<group>"; };
+		186AC1EF27DB46890079B027 /* ScriptMessageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptMessageHandler.swift; sourceTree = "<group>"; };
 		EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLNavViewController.swift; sourceTree = "<group>"; };
 		EE300E9B21AA89EF00FDEA21 /* VerloopSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VerloopSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE300E9E21AA89EF00FDEA21 /* VerloopSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VerloopSDK.h; sourceTree = "<group>"; };
@@ -58,6 +66,10 @@
 		EE300E9D21AA89EF00FDEA21 /* VerloopSDK */ = {
 			isa = PBXGroup;
 			children = (
+				186AC1EC27DB46890079B027 /* Constants.swift */,
+				186AC1EF27DB46890079B027 /* ScriptMessageHandler.swift */,
+				186AC1ED27DB46890079B027 /* VLEventDelegate.swift */,
+				186AC1EE27DB46890079B027 /* VLExtensions.swift */,
 				EE300EA921AA8A2C00FDEA21 /* VerloopSDK.swift */,
 				EE300EAA21AA8A2C00FDEA21 /* VLConfig.swift */,
 				EE300EA721AA8A2C00FDEA21 /* VLJSInterface.swift */,
@@ -153,8 +165,12 @@
 				EE300EAE21AA8A2C00FDEA21 /* VerloopSDK.swift in Sources */,
 				EE300EAC21AA8A2C00FDEA21 /* VLJSInterface.swift in Sources */,
 				EE300EAD21AA8A2C00FDEA21 /* VLViewController.swift in Sources */,
+				186AC1F227DB46890079B027 /* VLExtensions.swift in Sources */,
+				186AC1F327DB46890079B027 /* ScriptMessageHandler.swift in Sources */,
+				186AC1F027DB46890079B027 /* Constants.swift in Sources */,
 				EE21DA5E21DF4C17004B8A24 /* VLNavViewController.swift in Sources */,
 				EE300EAB21AA8A2C00FDEA21 /* VLWebViewManager.swift in Sources */,
+				186AC1F127DB46890079B027 /* VLEventDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
