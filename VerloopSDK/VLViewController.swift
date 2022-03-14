@@ -26,13 +26,25 @@ class VLViewController: UIViewController, WKUIDelegate {
     }
 
     var webView: VLWebViewManager?
-    //var loader : UIView!   // Check
+    var loader : UIActivityIndicatorView?
 
     func setWebView(webView v: VLWebViewManager) {
         webView = v
         view.addSubview(webView!.webView)
         webView!.webView.frame = view.bounds
 
+        loader = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        loader?.tintColor = .black
+        if #available(iOS 13.0, *) {
+            loader?.style = .large
+        } else {
+            
+        }
+        loader?.center = self.view.center
+        loader?.startAnimating()
+        view.addSubview(loader!)
+        view.bringSubviewToFront(loader!)
+        
         if isViewLoaded {
             webView!.startRoom()
         }
@@ -45,31 +57,32 @@ class VLViewController: UIViewController, WKUIDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//
-//
-//        loaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 100, height: 100))
-//        loaderView.backgroundColor = UIColor.black
-//        view.addSubview(loaderView)
-//        loaderView.bringSubviewToFront(view)
-        
-
-
         if webView != nil {
             webView!.startRoom()
         }
-
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "×", style: .done, target: self, action: #selector(back(_:)))
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
-                
         super.viewWillAppear(animated)
         // TODO: The navigationBar's display (UI Color and frame), according to the client, needs to be changed everytime user comes back to the ChatBot window.
-        verloopSDK?.refreshClientInfo()
+//        print("n/w status \(verloopSDK?.reachability?.connection)")
+        if let sdk = verloopSDK,let status = sdk.reachability?.connection,status == .unavailable {
+            let noNetworkAlert = UIAlertController(title: "Network", message: "No network connection available. Please try again.", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                
+            }
+            noNetworkAlert.addAction(okAction)
+            self.present(noNetworkAlert, animated: true, completion: nil)
+            loader?.removeFromSuperview()
+        }
         webView?.webView.frame = view.bounds
     }
 
+    func dismissLoader() {
+        loader?.removeFromSuperview()
+    }
+    
     @objc func back(_ sender : AnyObject?) {
         if verloopSDK != nil {
 //            verloopSDK!.onChatClose()

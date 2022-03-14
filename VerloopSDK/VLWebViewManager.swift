@@ -53,7 +53,6 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     }
     
     func setConfig(config: VLConfig){
-        
         self.config = config
         self.loadWebView()
     }
@@ -157,14 +156,14 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     
     
     func closeWidget() {
-        if isRoomReady {
+
             webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
                 print("closeWidget error \(error)")
                 if error == nil {
                     self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
                 }
             }
-        }
+
     }
     
     func openWidget() {
