@@ -23,9 +23,11 @@ Two ways to install
 - Now, you can install using cocoapod 
   
   pod 'VerloopSDKiOS'
-- Manually adding the repo and adding the verloop framework and embedding the framework in Linked Binaries
+- Manually build the repo and generate the VerloopSDK framework .Embedd the framework in Linked Binaries in your project like this
 
-![](RackMultipart20220315-4-6fkqx4_html_25b1c0bec2f6de75.png)
+<img width="907" alt="Screenshot 2022-03-15 at 3 08 56 PM" src="https://user-images.githubusercontent.com/98142458/158394191-f40ef1b5-89eb-41cb-8110-dfcd54b700be.png">
+
+
 
 
 ## **SDK Usage**
