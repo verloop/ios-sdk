@@ -38,7 +38,6 @@ import Foundation
     deinit {
         verloopNavigationController = nil
         verloopController = nil
-        previousWindow = nil
         stopNotifier()
     }
     
@@ -47,7 +46,7 @@ import Foundation
         verloopNavigationController = getNavController()
         
         rootController.present(verloopNavigationController!, animated: true) {
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {[weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {[weak self] in
                 self?.manager.openWidget()
             }
         }
