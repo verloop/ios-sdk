@@ -16,8 +16,6 @@ import Foundation
     private var verloopController: VLViewController? = nil
     private var verloopNavigationController: UINavigationController? = nil
     
-    private var previousWindow: UIWindow? = nil
-    private var window = UIWindow()
     
     private var title = "Chat"
     private var bgColor: UIColor
