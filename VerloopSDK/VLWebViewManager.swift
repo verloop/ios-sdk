@@ -14,8 +14,10 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     private var hasTriedToStartRoom = false
     private var jsInterface: VLJSInterface? = nil
     private var isRoomReady = false
+    private var isReady = false
     private var config: VLConfig!
     private var roomReadyConfigurations:[VLConfig.ConfigParam] = []
+    private var networkChangesConfigurations:[VLConfig.ConfigParam] = []
     private lazy var contentController: WKUserContentController = {
         return webView.configuration.userContentController
     }()
@@ -42,6 +44,10 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         unsubscribeMessageHandler()
     }
     
+    func updateReadyState(_ isReady:Bool) {
+        self.isReady = isReady
+    }
+    
     private func subscribeMessageHandler() {
         let handler = ScriptMessageHandler()
         handler.delegate = self
@@ -63,12 +69,12 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         configParams = param
     }
     
-    func clearLocalStorage(){
+    func clearCookies(){
         let script = "localStorage.removeItem(\"visitorToken\")"
         webView.evaluateJavaScript(script) { (token, error) in
+            print("remove visitor token on logout")
             if let error = error {
-                print ("localStorage.removingitem('visitorToken') failed due to \(error)")
-//                assertionFailure()
+                print ("localStorage removingitem visitorToken failed \(error)")
             }
         }
     }
@@ -149,26 +155,32 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     }
     
     func logoutSession() {
-        webView.evaluateJavaScript(String.getLogoutEvaluationJS()) { _, error in
-            print("logout error \(error)")
+        webView.evaluateJavaScript(String.getLogoutEvaluationJS()) {[weak self] _, error in
+            print("logout error \(error?.localizedDescription ?? "NA")")
+            if error == nil {// when user is logged out, clear the local cookies
+                self?.clearCookies()
+            }
         }
     }
     
-    
-    func closeWidget() {
-
+    func closeWidget(hasInternet:Bool) {
+        if !isReady,hasInternet {
+            if !networkChangesConfigurations.contains(.closeWidget) {
+                networkChangesConfigurations.append(.closeWidget)
+            }
+        } else if isReady {
             webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
-                print("closeWidget error \(error)")
+                print("closeWidget error \(error?.localizedDescription ?? "NA")")
                 if error == nil {
                     self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
                 }
             }
-
+        }
     }
     
     func openWidget() {
         webView.evaluateJavaScript(String.getWidgetOpenedEvaluationJS()) {[weak self] _, error in
-            print("open error \(error)")
+            print("openWidget error \(error?.localizedDescription ?? "NA")")
             if error == nil {
                 self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMaximized)
             }
@@ -176,28 +188,23 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     }
     
     func close() {
-        if isRoomReady {
-            webView.evaluateJavaScript(String.getCloseEvaluateJS()) {[weak self] _, error in
-                print("getCloseEvaluateJS error \(error)")
-            }
-        } else {
+        if !isRoomReady {
             if !roomReadyConfigurations.contains(.close) {
                 roomReadyConfigurations.append(.close)
+            }
+        } else {
+            webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
+                print("close error \(error?.localizedDescription ?? "NA")")
             }
         }
     }
     
-//    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-//        if (message.name == "VerloopMobile") {
-//            if jsInterface != nil {
-//                jsInterface?.jsCallback(message: message.body)
-//            }
-//        }
-//
-//        if (hasTriedToStartRoom) {
-//            startRoom()
-//        }
-//    }
+    func executeNetworkChangeConfigurations() {
+        print("executeNetworkChangeConfigurations \(networkChangesConfigurations)")
+        if !networkChangesConfigurations.isEmpty {
+            processNetworkChangeConfigurations()
+        }
+    }
     
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard let url = navigationAction.request.url else {
@@ -223,7 +230,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
 //            }
 //            print("token = \(String(describing: token))")
 //        }
-        cleaerCookies()
+//        clearCookies()
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -243,27 +250,42 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
 
 extension VLWebViewManager {
     
-    private func cleaerCookies() {
-        let script = "localStorage.getItem(\"visitorToken\")"
-        webView.evaluateJavaScript(script) { (token, error) in
-            if let error = error {
-                print ("localStorage.getitem('visitorToken') failed due to \(error)")
-//                assertionFailure()
-            }
-            print("token = \(String(describing: token))")
-        }
-    }
-    
     private func processRoomReadyConfigurations() {
         for config in roomReadyConfigurations {
             switch config {
                 case .close :
-                    webView.evaluateJavaScript(String.getCloseEvaluateJS()) {[weak self] _, error in
-                        print("getCloseEvaluateJS error \(error)")
+                    webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
+                        print("getCloseEvaluateJS error \(error?.localizedDescription ?? "NA")")
+                    }
+                case .closeWidget:
+                    webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
+                        print("closeWidget error \(error?.localizedDescription ?? "NA")")
+                        if error == nil {
+                            self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
+                        }
                     }
                 default: break
             }
         }
+        roomReadyConfigurations = []
+    }
+    
+    private func processNetworkChangeConfigurations() {
+        print("networkChangesConfigurations")
+        for config in networkChangesConfigurations {
+            switch config {
+                case .close :
+                    webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
+                        print("getCloseEvaluateJS error \(error?.localizedDescription ?? "NA")")
+                    }
+                case .closeWidget:
+                    webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
+                        print("closeWidget error \(error?.localizedDescription ?? "NA")")
+                    }
+                default: break
+            }
+        }
+        networkChangesConfigurations = []
     }
     
     private func processConfigurations() {
@@ -324,7 +346,7 @@ extension VLWebViewManager {
 
 extension VLWebViewManager:ScriptMessageDelegate {
     func handler(_ scriptMessageHandler: ScriptMessageHandler, didReceiveMessage message: WKScriptMessage) {
-            print("message.name \(message.name)")
+//            print("message.name \(message.name)")
         if (message.name == Constants.JS_MESSAGE_NAME || message.name == Constants.SCRIPT_MESSAGE_NAME_V2) {
                 if jsInterface != nil {
                     jsInterface?.jsCallback(message: message.body)
@@ -361,7 +383,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                         case .FunctionSetUserParamComplete:
                             _eventDelegate?.didEventOccurOnLiveChat(.setUserParamComplete)
                         case .FunctionCloseWidget:
-                            cleaerCookies()
+                            clearCookies()
                             _eventDelegate?.didEventOccurOnLiveChat(.onWidgetClosed)
                         case .FunctionOnRoomReady:
                             print("FunctionOnRoomReady")
@@ -373,7 +395,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                             print("FunctionReady")
                             processConfigurations()
                         case .FunctionCloseComplete:
-                            cleaerCookies()
+                            clearCookies()
                             _eventDelegate?.didEventOccurOnLiveChat(.onLogoutComplete)
                         case .FunctionChatMinimized:
                             _eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)

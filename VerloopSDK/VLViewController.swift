@@ -26,25 +26,21 @@ class VLViewController: UIViewController, WKUIDelegate {
     }
 
     var webView: VLWebViewManager?
-    var loader : UIActivityIndicatorView?
+    private var loader : UIActivityIndicatorView?
 
     func setWebView(webView v: VLWebViewManager) {
         webView = v
         view.addSubview(webView!.webView)
-        webView!.webView.frame = view.bounds
-
-        loader = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        webView!.webView.frame = self.view.bounds
+        loader = UIActivityIndicatorView(frame: CGRect(x: view.center.x, y: view.center.y, width: 30, height: 30))
         loader?.tintColor = .black
         if #available(iOS 13.0, *) {
             loader?.style = .large
-        } else {
-            
         }
         loader?.center = self.view.center
         loader?.startAnimating()
         view.addSubview(loader!)
-        view.bringSubviewToFront(loader!)
-        
+//        view.bringSubviewToFront(loader!)
         if isViewLoaded {
             webView!.startRoom()
         }
@@ -66,7 +62,6 @@ class VLViewController: UIViewController, WKUIDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // TODO: The navigationBar's display (UI Color and frame), according to the client, needs to be changed everytime user comes back to the ChatBot window.
-//        print("n/w status \(verloopSDK?.reachability?.connection)")
         if let sdk = verloopSDK,let status = sdk.reachability?.connection,status == .unavailable {
             let noNetworkAlert = UIAlertController(title: "Network", message: "No network connection available. Please try again.", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "OK", style: .default) { _ in
@@ -76,7 +71,7 @@ class VLViewController: UIViewController, WKUIDelegate {
             self.present(noNetworkAlert, animated: true, completion: nil)
             loader?.removeFromSuperview()
         }
-        webView?.webView.frame = view.bounds
+        webView?.webView.frame = self.view.bounds
     }
 
     func dismissLoader() {
@@ -85,7 +80,6 @@ class VLViewController: UIViewController, WKUIDelegate {
     
     @objc func back(_ sender : AnyObject?) {
         if verloopSDK != nil {
-//            verloopSDK!.onChatClose()
             verloopSDK!.closeWidget()
         }
         self.dismiss(animated: true, completion: nil)

@@ -2,7 +2,7 @@
 //  ReachabilityHandler.swift
 //  VerloopSDK
 //
-//  Created by sreedeep on 14/03/22.
+//  Created by Sreedeep on 14/03/22.
 //  Copyright © 2022 Verloop. All rights reserved.
 //
 
@@ -91,74 +91,74 @@ extension VerloopSDK {
         }
     }
 
-    private func showNoNetworkBanner(isActive:Bool){
-
-        if let banner = bannerView,banner.superview != nil {
-            bannerView?.removeFromSuperview()
-        }
-        
-        // create a "container" view
-        let container = UIView()
-        
-        // create a label
-        let label = UILabel()
-        
-        // add label to container
-        container.addSubview(label)
-        
-        // color / font / text properties as desired
-        container.backgroundColor = isActive ? UIColor.green : UIColor.red
-        label.numberOfLines = 0
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.text = "No network connection is available."
-        label.textColor = .white
-        label.textAlignment = .center
-        
-        // padding on left/right of label
-        let hPadding: CGFloat = 16.0
-        
-        // padding on top of label - account for status bar?
-        let vTopPadding: CGFloat = 32.0
-        
-        // padding on bottom of label
-        let vBotPadding: CGFloat = 16.0
-
-        let width = UIScreen.main.bounds.width
-        
-        // get reference to window 0
-        let w = UIApplication.shared.windows[0]
-        
-        // add container to window
-        w.addSubview(container)
-        
-        // calculate label height
-        let labelSize = label.systemLayoutSizeFitting(CGSize(width: width - (hPadding * 2.0),
-                                                      height: UIView.layoutFittingCompressedSize.height))
-        
-        // rect for container view - start with .zero
-        var containerRect = CGRect.zero
-        // set its size to screen width x calculated label height + top/bottom padding
-        containerRect.size = CGSize(width: width, height: labelSize.height + vTopPadding + vBotPadding)
-        // set container view's frame
-        container.frame = containerRect
-        
-        // rect for label - container rect inset by padding values
-        let labelRect = containerRect.inset(by: UIEdgeInsets(top: vTopPadding, left: hPadding, bottom: vBotPadding, right: hPadding))
-        // set the label's frame
-        label.frame = labelRect
-
-        // position container view off-the-top of the screen
-        container.frame.origin.y = -container.frame.size.height
-        
-        DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveLinear, animations: {
-                container.frame.origin.y = 0
-            }) { (finished) in
-                UIView.animate(withDuration: 0.5,delay: 2.0, options: .curveLinear, animations: {
-                    container.frame.origin.y = -container.frame.size.height
-                })
-            }
-        }
-        bannerView = container
-    }
+//    private func showNoNetworkBanner(isActive:Bool){
+//
+//        if let banner = bannerView,banner.superview != nil {
+//            bannerView?.removeFromSuperview()
+//        }
+//        
+//        // create a "container" view
+//        let container = UIView()
+//        
+//        // create a label
+//        let label = UILabel()
+//        
+//        // add label to container
+//        container.addSubview(label)
+//        
+//        // color / font / text properties as desired
+//        container.backgroundColor = isActive ? UIColor.green : UIColor.red
+//        label.numberOfLines = 0
+//        label.font = UIFont.boldSystemFont(ofSize: 16)
+//        label.text = "No network connection is available."
+//        label.textColor = .white
+//        label.textAlignment = .center
+//        
+//        // padding on left/right of label
+//        let hPadding: CGFloat = 16.0
+//        
+//        // padding on top of label - account for status bar?
+//        let vTopPadding: CGFloat = 32.0
+//        
+//        // padding on bottom of label
+//        let vBotPadding: CGFloat = 16.0
+//
+//        let width = UIScreen.main.bounds.width
+//        
+//        // get reference to window 0
+//        let w = UIApplication.shared.windows[0]
+//        
+//        // add container to window
+//        w.addSubview(container)
+//        
+//        // calculate label height
+//        let labelSize = label.systemLayoutSizeFitting(CGSize(width: width - (hPadding * 2.0),
+//                                                      height: UIView.layoutFittingCompressedSize.height))
+//        
+//        // rect for container view - start with .zero
+//        var containerRect = CGRect.zero
+//        // set its size to screen width x calculated label height + top/bottom padding
+//        containerRect.size = CGSize(width: width, height: labelSize.height + vTopPadding + vBotPadding)
+//        // set container view's frame
+//        container.frame = containerRect
+//        
+//        // rect for label - container rect inset by padding values
+//        let labelRect = containerRect.inset(by: UIEdgeInsets(top: vTopPadding, left: hPadding, bottom: vBotPadding, right: hPadding))
+//        // set the label's frame
+//        label.frame = labelRect
+//
+//        // position container view off-the-top of the screen
+//        container.frame.origin.y = -container.frame.size.height
+//        
+//        DispatchQueue.main.async {
+//            UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveLinear, animations: {
+//                container.frame.origin.y = 0
+//            }) { (finished) in
+//                UIView.animate(withDuration: 0.5,delay: 2.0, options: .curveLinear, animations: {
+//                    container.frame.origin.y = -container.frame.size.height
+//                })
+//            }
+//        }
+//        bannerView = container
+//    }
 }

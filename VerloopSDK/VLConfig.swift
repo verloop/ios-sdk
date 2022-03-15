@@ -66,21 +66,17 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
    private var mEventChangeDelegate:VLEventDelegate?
    private var customFields: [CustomField] = []
    private var userParams: [UserParam] = []
-    private var widgetColor:String?
+   private var widgetColor:String?
    
-   var didUpdateConfiguration:((_ configuration:VLConfig,_ configParam:ConfigParam) -> Void)?
    private var updatedConfigParams:[ConfigParam] = []
     
     @objc public init(clientId cid: String, userId uid: String?) {
         var userId = uid
-        
         if uid == nil {
             userId = UUID().uuidString
         }
-        
         clientId = cid
         self.userId = userId
-        print("reset config params")
         self.updatedConfigParams = []
         if let ud = userId,!ud.isEmpty {
             self.updatedConfigParams.append(.userId)
@@ -89,13 +85,11 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     
     @objc public convenience init(clientId cid: String) {
         let uid = UserDefaults.standard.string(forKey: "VERLOOP_USER_ID")
-        
         if uid != nil {
             self.init(clientId: cid, userId: uid!)
         } else {
             self.init(clientId: cid, userId: UUID().uuidString)
         }
-        print("reset config params")
         self.updatedConfigParams = []
     }
     
@@ -126,12 +120,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             updatedConfigParams.append(.clearDepartment)
         }
     }
-    @objc public func openWidget() {
-        updatedConfigParams.append(.openWidget)
-    }
-    @objc public func closeWidget() {
-//        updatedConfigParams.append(.closeWidget)
-    }
+
     @objc public func setWidgetColor(_ color:String) {
         self.widgetColor = color
         updatedConfigParams.append(.widgetColor)
@@ -144,19 +133,15 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     }
     
     @objc public func setUserEmail(userEmail email: String?) {
-//        userEmail = email
-//        updatedConfigParams.append(.email)
         if let _email = email {
             setUserParam(key: UserParamType.email.rawValue, value: _email)
         }
     }
     
     @objc public func setUserPhone(userPhone phone: String?) {
-//        userPhone = phone
         if let _phone = phone {
             setUserParam(key: UserParamType.phone.rawValue, value: _phone)
         }
-//        updatedConfigParams.append(.phoneNumber)
     }
     
     @objc public func setRecipeId(recipeId id: String?) {
@@ -167,11 +152,17 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     }
     
     @objc public func setUserParam(key:String,value:String) {
-        userParams.append(VLConfig.UserParam(key: key, value: value))
-        if !updatedConfigParams.contains(.userParams) {
-            updatedConfigParams.append(.userParams)
-        }
-    }
+          if let param = UserParamType.init(rawValue: key) {
+
+              userParams.append(VLConfig.UserParam(key: param.rawValue, value: value))
+
+              if !updatedConfigParams.contains(.userParams) {
+
+                  updatedConfigParams.append(.userParams)
+
+              }
+          }
+      }
     
     @objc public func setOnEventChangeListener(_ delegate:VLEventDelegate?) {
         mEventChangeDelegate = delegate
@@ -189,7 +180,6 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         urlRedirection = flag
     }
 
-    
     @objc public func putCustomField(key: String, value: String, scope: SCOPE) {
         updatedConfigParams.append(.customFields)
         switch scope {
@@ -320,6 +310,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
 }
 
 extension VLConfig {
+    
     func getUserID() -> String? {
         return userId
     }

@@ -23,22 +23,17 @@ import Foundation
     private var bgColor: UIColor
     private var textColor: UIColor
     var reachability: Reachability?
-    var bannerView:UIView?
     var lostNetworkConnection = false
     @objc public init(config vlConfig: VLConfig) {
         config = vlConfig
         config.save()
-        
-        bgColor = VerloopSDK.hexStringToUIColor(hex: "#000000")
+        bgColor = .clear
         textColor = VerloopSDK.hexStringToUIColor(hex: "#ffffff")
         
         super.init()
         manager = VLWebViewManager(config: config)
         manager.jsDelegate(delegate: self)
-        if !config.getUpdatedConfigParams().isEmpty {
-            print("params \(config.getUpdatedConfigParams())")
-            forceWebViewToReloadConfiguration(configParam: config.getUpdatedConfigParams())
-        }
+        manager.updateWebviewConfiguration(config, param: config.getUpdatedConfigParams())
         startHost(host: "google.com")
     }
     
@@ -49,23 +44,22 @@ import Foundation
         stopNotifier()
     }
     
-    @objc public func closeWidget() {
-            onChatClose()
-        self.verloopNavigationController?.dismiss(animated: true, completion: {
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {[weak self] in
-                self?.manager.closeWidget()
-            }
-        })
-    }
-    
     @objc public func openWidget(rootController:UIViewController) {
-    
-//        start()
+        
         verloopNavigationController = getNavController()
-        print("widget opened")
+        
         rootController.present(verloopNavigationController!, animated: true) {
             DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {[weak self] in
                 self?.manager.openWidget()
+            }
+        }
+    }
+    
+    @objc public func closeWidget() {
+        onChatClose {
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {[weak self] in
+                let hasNetwork = !((self?.reachability?.connection == .unavailable) )
+                self?.manager.closeWidget(hasInternet: hasNetwork)
             }
         }
     }
@@ -78,10 +72,6 @@ import Foundation
         if manager != nil {
             manager.addEventChangeDelegate(delegate)
         }
-    }
-    
-    private func forceWebViewToReloadConfiguration(configParam:[VLConfig.ConfigParam]) {
-        manager.updateWebviewConfiguration(config,param: configParam)
     }
     
     @objc public func updateConfig(config vlConfig: VLConfig){
@@ -102,11 +92,9 @@ import Foundation
     }
     
     @objc public func logout() {
+        manager.logoutSession()
         clearConfig()
         config.clearUserDetails()
-        manager.clearLocalStorage()
-        manager.logoutSession()
-//        manager.setConfig(config: config)
     }
     
     @objc public func clearConfig(){
@@ -122,8 +110,6 @@ import Foundation
     @objc public func getNavController() -> UINavigationController {
         
         if verloopNavigationController != nil {
-            
-            print("Already initialized")
             return verloopNavigationController!
         }
         
@@ -134,16 +120,16 @@ import Foundation
         
         verloopNavigationController = VLNavViewController.init(rootViewController: verloopController!)
         verloopNavigationController!.navigationItem.leftItemsSupplementBackButton = true
-        
         verloopNavigationController!.navigationItem.hidesBackButton = false
         verloopNavigationController!.navigationItem.backBarButtonItem?.isEnabled = true
-    
-        
+        verloopNavigationController?.navigationBar.shadowImage = UIImage()
+        verloopNavigationController?.navigationBar.backgroundColor = UIColor.white
+        verloopNavigationController?.navigationBar.barTintColor = UIColor.white
         return verloopNavigationController!
     }
     
+    //called when client information such as color cod eof the bar and title to be displayed on bar received from the live chat script
     func refreshClientInfo() {
-        print("refreshClientInfo")
         verloopController?.title = title
         verloopNavigationController?.navigationBar.barTintColor = bgColor
         verloopNavigationController?.navigationBar.tintColor = textColor
@@ -175,10 +161,17 @@ import Foundation
         )
     }
     
+    //This method executes as part of the n/w state changes and if any n/w inactive tasks to be processed then web view manager make respective functions.
     func refreshwebViewOnNetworkReconnection() {
-        manager.setConfig(config: config)
+        print("refreshwebViewOnNetworkReconnection")
+        manager.executeNetworkChangeConfigurations()
     }
 
+    //following is a delegate method of JsDelegate which is responsible for handling back call backs to the client app for
+    //button clicks
+    //url clicks
+    //where as 'ready' call back is used to identify the color code of the navigation bar and title
+    //below method executes when user made a selection on the webview for links / buttons
     func jsCallback(message: Any) {
         if let bodyString = message as? String,let bodyData = bodyString.data(using: .utf8) {
             do {
@@ -198,6 +191,7 @@ import Foundation
                         bgColor = VerloopSDK.hexStringToUIColor(hex: colorArg)
                         verloopController?.dismissLoader()
                         refreshClientInfo()
+                        manager.updateReadyState(true)
                     }
                 }
             } catch {
@@ -206,35 +200,39 @@ import Foundation
         }
     }
     
+    //not sure why this method is, please discuss
     @objc public func start() {
-        previousWindow = UIApplication.shared.keyWindow
-        window.isOpaque = true
-        window.backgroundColor = UIColor.white
-        window.frame = UIScreen.main.bounds//UIApplication.shared.keyWindow!.frame
-        window.windowLevel = UIWindow.Level.normal + 1
-        window.rootViewController = getNavController()
-        window.makeKeyAndVisible()
+//        previousWindow = UIApplication.shared.keyWindow
+//        window.isOpaque = true
+//        window.backgroundColor = UIColor.white
+//        window.frame = UIScreen.main.bounds//UIApplication.shared.keyWindow!.frame
+//        window.windowLevel = UIWindow.Level.normal + 1
+//        window.rootViewController = getNavController()
+//        window.makeKeyAndVisible()
+        // its just create a nav controller widget and set up web SdK with configuration
+        let _ = getNavController()
     }
-    
     
     @objc public func hide() {
-        onChatClose()
-    }
-    
-    func onChatClose() {
-        if previousWindow != nil {
-            window.resignKey()
-            previousWindow!.makeKeyAndVisible()
-            previousWindow = nil
-            window.windowLevel = UIWindow.Level.normal - 30
+        onChatClose {
+            //nothing to do here
         }
     }
     
-    func onTransition() {
-        NSLog("onTransiotion")
+    func onChatClose(completion:@escaping(() -> Void)) {
         
+        self.verloopNavigationController?.dismiss(animated: true, completion: {
+            completion()
+        })
+//        if previousWindow != nil {
+//            window.resignKey()
+//            previousWindow!.makeKeyAndVisible()
+//            previousWindow = nil
+//            window.windowLevel = UIWindow.Level.normal - 30
+//        }
     }
     
+    //below are the 3 objects which will be prepare as part of the JSCallback delegate methods for button click, urlclick and client info
     private struct ClientInfo: Decodable {
         public let title: String
         public let bgColor: String
