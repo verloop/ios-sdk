@@ -21,6 +21,7 @@ class VerloopSDKTest: XCTestCase {
     private let setUserParamComplete = XCTestExpectation(description: "Set user Param complete")
     private let buttonClickListener = XCTestExpectation(description: "Button Click listener complete")
     private let urlClickListener = XCTestExpectation(description: "URL Click listener complete")
+    private let logoutsExpectation = XCTestExpectation(description: "URL Click listener complete")
     private let mockButtonClick = "{\"title\":\"\(TestConstants.testButtonTitle)\",\"type\":\"button\",\"payload\":\"NA\"}"
 //    private let mockClientInfo = "{\"title\":\"\(TestConstants.testClientName)\",\"bgColor\":\"#00000\",\"textColor\":\"#ffffff\"}"
     private let mockURLClick = "{\"url\":\"\((TestConstants.testURL))\"}"
@@ -36,7 +37,7 @@ class VerloopSDKTest: XCTestCase {
         _sdk = VerloopSDK.init(config: _config)
         _sdk.observeLiveChatEventsOn(vlEventDelegate: self)
         verifyClickListener()
-        
+//        logOutUser()
         _sdk.jsCallback(message: mockButtonClick)
         _sdk.jsCallback(message: mockURLClick)
 //        _sdk.jsCallback(message: mockClientInfo)
@@ -83,12 +84,12 @@ class VerloopSDKTest: XCTestCase {
     func verifyUserParamComplete() {
         wait(for: [setUserParamComplete], timeout: 15.0)
         sleep(3)
-        logOutUser()
+//        logOutUser()
     }
     
     func logOutUser() {
         _sdk.logout()
-        wait(for: [logoutExpectation], timeout: 10.0)
+        wait(for: [logoutsExpectation], timeout: 15.0)
     }
     
     func verifyLogoutCache() {

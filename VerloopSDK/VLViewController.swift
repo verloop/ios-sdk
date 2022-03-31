@@ -31,7 +31,7 @@ class VLViewController: UIViewController, WKUIDelegate {
     func setWebView(webView v: VLWebViewManager) {
         webView = v
         view.addSubview(webView!.webView)
-        webView!.webView.frame = self.view.bounds
+//        webView!.webView.frame = self.view.bounds
         loader = UIActivityIndicatorView(frame: CGRect(x: view.center.x, y: view.center.y, width: 30, height: 30))
         loader?.tintColor = .black
         if #available(iOS 13.0, *) {
@@ -46,7 +46,19 @@ class VLViewController: UIViewController, WKUIDelegate {
         }
         
     }
+    private func updateWebViewConstraints() {
 
+           webView?.webView.translatesAutoresizingMaskIntoConstraints = false
+
+           webView?.webView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+
+           webView?.webView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+
+           webView?.webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+
+           webView?.webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+
+       }
     func setSDK(verloopSDK sdk: VerloopSDK) {
         verloopSDK = sdk
     }
@@ -56,6 +68,7 @@ class VLViewController: UIViewController, WKUIDelegate {
         if webView != nil {
             webView!.startRoom()
         }
+        self.view.backgroundColor = .white
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "×", style: .done, target: self, action: #selector(back(_:)))
     }
 
@@ -71,7 +84,9 @@ class VLViewController: UIViewController, WKUIDelegate {
             self.present(noNetworkAlert, animated: true, completion: nil)
             loader?.removeFromSuperview()
         }
-        webView?.webView.frame = self.view.bounds
+//        webView?.webView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height-120)
+        
+        self.updateWebViewConstraints()
     }
 
     func dismissLoader() {
@@ -80,7 +95,9 @@ class VLViewController: UIViewController, WKUIDelegate {
     
     @objc func back(_ sender : AnyObject?) {
         if verloopSDK != nil {
+//            webView?.processConfigurations()
             verloopSDK!.closeWidget()
+//            verloopSDK?.updateConfig(config: verloopSDK!.getConfig())
         }
         self.dismiss(animated: true, completion: nil)
     }

@@ -152,17 +152,13 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     }
     
     @objc public func setUserParam(key:String,value:String) {
-          if let param = UserParamType.init(rawValue: key) {
-
-              userParams.append(VLConfig.UserParam(key: param.rawValue, value: value))
-
-              if !updatedConfigParams.contains(.userParams) {
-
-                  updatedConfigParams.append(.userParams)
-
-              }
-          }
-      }
+        if let param = UserParamType.init(rawValue: key) {
+            userParams.append(VLConfig.UserParam(key: param.rawValue, value: value))
+            if !updatedConfigParams.contains(.userParams) {
+                updatedConfigParams.append(.userParams)
+            }
+        }
+    }
     
     @objc public func setOnEventChangeListener(_ delegate:VLEventDelegate?) {
         mEventChangeDelegate = delegate

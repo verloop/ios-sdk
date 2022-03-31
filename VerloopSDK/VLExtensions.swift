@@ -19,11 +19,15 @@ extension String {
         return "\(Constants.JS_METHOD).setRecipe('\(recepie)')"
     }
     static func getCustomFieldEvaluationJS(_ field:VLConfig.CustomField) -> String {
-        return "\(Constants.JS_METHOD).setCustomField('\(field.key)','\(field.value)','\(field.scope)')"
-    }
-    static func getUserParamEvaluationJS(key:String,value:String) -> String {
-        return "\(Constants.JS_METHOD).setUserParams('\(key)','\(value)')"
-    }
+
+           return "\(Constants.JS_METHOD).setCustomField(\"\(field.key)\",\"\(field.value)\",{scope:\"\(field.scope)\"})"
+
+       }
+
+       static func getUserParamEvaluationJS(key:String,value:String) -> String {
+           return "\(Constants.JS_METHOD).setUserParams({'\(key)':'\(value)'})"
+
+       }
     static func getDepartmentEvaluationJS(dept:String) -> String {
         return "\(Constants.JS_METHOD).setDepartment('\(dept)')"
     }

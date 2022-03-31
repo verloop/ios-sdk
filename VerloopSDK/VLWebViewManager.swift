@@ -23,6 +23,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     }()
     var _eventDelegate:VLEventDelegate?
     private var configParams:[VLConfig.ConfigParam] = []
+    var onMessageReceived:(() -> Void)?
     
     init(config: VLConfig) {
         
@@ -33,6 +34,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         webView =  WKWebView()
         webView.uiDelegate = self
         webView.navigationDelegate = self
+        webView.backgroundColor = .white
         subscribeMessageHandler()
 //        webView.configuration.userContentController.add(self, name: "VerloopMobile")
         webView.isOpaque = true
@@ -108,10 +110,10 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
 //            urlComponents.queryItems?.append(URLQueryItem(name: "user_id", value: self.config.getUserID()!))
 //        }
 //
-//        if self.config.getNotificationToken() != nil {
-//            urlComponents.queryItems?.append(URLQueryItem(name: "device_token", value: self.config.getNotificationToken()!))
-//            urlComponents.queryItems?.append(URLQueryItem(name: "device_type", value: "ios"))
-//        }
+        if self.config.getNotificationToken() != nil {
+            urlComponents.queryItems?.append(URLQueryItem(name: "device_token", value: self.config.getNotificationToken()!))
+            urlComponents.queryItems?.append(URLQueryItem(name: "device_type", value: "ios"))
+        }
 //
 //        if self.config.getCustomFieldsJSON() != nil {
 //            urlComponents.queryItems?.append(URLQueryItem(name: "custom_fields", value: self.config.getCustomFieldsJSON()!))
@@ -288,7 +290,7 @@ extension VLWebViewManager {
         networkChangesConfigurations = []
     }
     
-    private func processConfigurations() {
+    func processConfigurations() {
         print("processConfigurations \(configParams)")
         for parameter in configParams {
             print("parameter \(parameter)")
@@ -298,7 +300,7 @@ extension VLWebViewManager {
                     for userParam in config.getUserParams() {
                         print("userParam \(userParam)")
                         webView.evaluateJavaScript(String.getUserParamEvaluationJS(key: userParam.key, value: userParam.value)) { _, error in
-                                print("set custom field error \(error?.localizedDescription ?? "NIL")")
+                                print("set user param error \(error?.localizedDescription ?? "NIL")")
                         }
                     }
                 }
@@ -306,9 +308,6 @@ extension VLWebViewManager {
                     if let unwrapped = config.getUserID() {
                         webView.evaluateJavaScript(String.getUserIdEvaluationJS(unwrapped, optionArgument: nil)) { _, error in
                             print("set user id error \(error?.localizedDescription ?? "NIL")")
-                        }
-                        webView.evaluateJavaScript(String.getUserParamEvaluationJS(key: "name", value: "sreedeep")) { _, error in
-                                print("set user param field error \(error?.localizedDescription ?? "NIL")")
                         }
                     }
                 case .recepie:
@@ -390,6 +389,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                             isRoomReady = true
                             processRoomReadyConfigurations()
                         case .FunctionCallBack:
+//                            jsInterface?.jsCallback(message: msg)
                             break
                         case .FunctionReady:
                             print("FunctionReady")
@@ -404,6 +404,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                         case .FunctionChatEnded:
                             _eventDelegate?.didEventOccurOnLiveChat(.onChatEnded)
                         case .FunctionChatStarted:
+//                            onMessageReceived?()
                             _eventDelegate?.didEventOccurOnLiveChat(.onChatStarted)
                     }
                 }
