@@ -273,82 +273,126 @@ import Foundation
 
             print("jsCallback")
 
-            if let bodyString = message as? String,let bodyData = bodyString.data(using: .utf8) {
-
-                do {
-
-                    if let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0)) as? [String:Any] {
-
-                        if (expectedModelData["fn"] as? String ?? "") == "callback",
-
-                           let arguments = expectedModelData["args"] as? [Any],let firstArg = arguments.first,((firstArg as? String) != nil)  {
-
-                            if (firstArg as? String ?? "") == "button-clicked" {
-
-                                print("bttn clock")
-
-                                if let lastArgs = arguments.last as? [String:Any],let btnprops = lastArgs["button"] as? [String:Any] {
-
-                                    print("button title \(btnprops["title"])")
-
-                                    let btnTitle = btnprops["title"] as? String ?? ""
-
-                                    let type = btnprops["type"] as? String ?? ""
-
-                                    let payload = btnprops["payload"] as? String ?? ""
-
-                                    print("btnprops \(btnprops)")
-
-                                    print("btnTitle \(btnTitle) type \(type) payload \(payload)")
-
-                                    config.getButtonClickListener()?(btnTitle,type, payload)
-
-                                } else {
-
-                                    config.getButtonClickListener()?("NA", "NA", "NA")
-
-                                }
-
-                            } else if (firstArg as? String ?? "") == "url-clicked" {
-
-                                print("url clock")
-
-                                config.getButtonClickListener()?("URL", "callback", "NA")
-
-                            }
-
-                        } else if (expectedModelData["fn"] as? String ?? "") == "ready",
-
-                                  let arguments = expectedModelData["args"] as? [String:String],let colorArg = arguments["color"],!colorArg.isEmpty {
-
-                            print("color \(colorArg)")
-
-                            bgColor = VerloopSDK.hexStringToUIColor(hex: colorArg)
-
-                            verloopController?.dismissLoader()
-
-
-                            manager.updateReadyState(true)
-
-                        } else if (expectedModelData["fn"] as? String ?? "") == "callback",
-
-                                  let argument = expectedModelData["args"] as? String,argument == "chat-started" {
-
-                            print("chat started \(argument)")
-
-                            refreshClientInfo()
-
-                        }
-
-                    }
-
-                } catch {
-
-                    print("didReceiveMessage decode error \(error)")
-
-                }
-
+        if message is String,let data = (message as? String)?.data(using: String.Encoding.utf8) {
+            do {
+                let clientInfo = try JSONDecoder().decode(ClientInfo.self, from: data)
+                bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
+                textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
+                title = clientInfo.title
+                verloopController?.dismissLoader()
+                refreshClientInfo()
+                manager.updateReadyState(true)
+            } catch {
+                print("not client info \(error)")
             }
+            
+            do {
+                   let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
+                   let title = buttonInfo.title ?? ""
+                   let type = buttonInfo.type ?? ""
+                   let payload = buttonInfo.payload ?? ""
+                if type.lowercased() == MessageType.MessageButtonClick.rawValue.lowercased() {
+                    config.getButtonClickListener()?(title,type, payload)
+                } else if type.lowercased() == MessageType.MessageURLClick.rawValue.lowercased() {
+                    config.getURLClickListener()?(buttonInfo.payload)
+                }
+                    
+                    
+                  print("buttton click ")
+                }catch {
+                   print("Problem retreiving button Info \(error)")
+                }
+//            do {
+//                      let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
+//                      let url = urlInfo.url
+//                    config.getURLClickListener()?(url)
+//                print("url click")
+////                      if config.onUrlClicked != nil{
+////                          config.onUrlClicked?(url)
+////                      }
+//                  }catch {
+//                      print("Problem retreiving url Info \(error)")
+//                  }
+            
+        }
+        
+        
+//            if let bodyString = message as? String,let bodyData = bodyString.data(using: .utf8) {
+//
+//                do {
+//
+//                    if let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0)) as? [String:Any] {
+//
+//                        if (expectedModelData["fn"] as? String ?? "") == "callback",
+//
+//                           let arguments = expectedModelData["args"] as? [Any],let firstArg = arguments.first,((firstArg as? String) != nil)  {
+//
+//                            if (firstArg as? String ?? "") == "button-clicked" {
+//
+//                                print("bttn clock")
+//
+//                                if let lastArgs = arguments.last as? [String:Any],let btnprops = lastArgs["button"] as? [String:Any] {
+//
+//                                    print("button title \(btnprops["title"])")
+//
+//                                    let btnTitle = btnprops["title"] as? String ?? ""
+//
+//                                    let type = btnprops["type"] as? String ?? ""
+//
+//                                    let payload = btnprops["payload"] as? String ?? ""
+//
+//                                    print("btnprops \(btnprops)")
+//
+//                                    print("btnTitle \(btnTitle) type \(type) payload \(payload)")
+//
+//                                    config.getButtonClickListener()?(btnTitle,type, payload)
+//
+//                                } else {
+//
+//                                    config.getButtonClickListener()?("NA", "NA", "NA")
+//
+//                                }
+//
+//                            } else if (firstArg as? String ?? "") == "url-clicked" {
+//
+//                                print("url clock")
+//
+//                                config.getButtonClickListener()?("URL", "callback", "NA")
+//
+//                            }
+//
+//                        } else if (expectedModelData["fn"] as? String ?? "") == "ready",
+//
+//                                  let arguments = expectedModelData["args"] as? [String:String],let colorArg = arguments["color"],!colorArg.isEmpty {
+//
+//                            print("color \(colorArg)")
+//
+//                            bgColor = VerloopSDK.hexStringToUIColor(hex: colorArg)
+//
+//                            verloopController?.dismissLoader()
+//
+//
+//                            manager.updateReadyState(true)
+//
+//                        } else if (expectedModelData["fn"] as? String ?? "") == "callback",
+//
+//                                  let argument = expectedModelData["args"] as? String,argument == "chat-started" {
+//
+//                            print("chat started \(argument)")
+//
+//                            refreshClientInfo()
+//
+//                        }
+//
+//                    }
+//
+//                } catch {
+//
+//                    print("didReceiveMessage decode error \(error)")
+//
+//                }
+//
+//            }
 
         }
     
@@ -392,12 +436,14 @@ import Foundation
     }
     
     private struct OnButtonClick: Decodable {
-        public let title: String
-        public let type: String
-        public let payload: String
+        public let title: String?
+        public let type: String?
+        public let payload: String?
     }
     
     private struct OnURLClick: Decodable {
-        public let url: String
+        public var title:String?
+        public var type:String?
+        public var payload:String?
     }
 }

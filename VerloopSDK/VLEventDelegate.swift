@@ -37,7 +37,7 @@ internal enum FunctionType:String,Codable {
     case FunctionChatEnded = "chat-ended"
 }
 
-internal enum MessageType:String,Codable {
+enum MessageType:String,Codable {
     case MessageButtonClick = "postback"
     case MessageURLClick = "web_url"
 }

@@ -66,24 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       }
 
     }
-    public static var isAvailable: Bool {
-        #if targetEnvironment(simulator)
-        return false
-        #else
-        if #available(iOSApplicationExtension 10.0, iOS 10.0, *) {
-            guard let regionCode = Locale.current.regionCode
-            else {
-                return false
-            }
-            return regionCode.lowercased() != "cn" || regionCode.lowercased() != "chn"
-        } else {
-            return false
-        }
-        #endif
-    }
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let regionCode = Locale.current.regionCode
-        // Override point for customization after application launch.
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {        // Override point for customization after application launch.
 //        UIApplication.shared.registerForRemoteNotifications()
         
 //        registerForPushNotifications()

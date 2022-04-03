@@ -54,10 +54,12 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         let handler = ScriptMessageHandler()
         handler.delegate = self
         contentController.add(handler, name: Constants.SCRIPT_MESSAGE_NAME_V2)
+        contentController.add(handler, name: Constants.SCRIPT_MESSAGE_NAME)
     }
     
     private func unsubscribeMessageHandler() {
         contentController.removeScriptMessageHandler(forName: Constants.SCRIPT_MESSAGE_NAME_V2)
+        contentController.removeScriptMessageHandler(forName: Constants.SCRIPT_MESSAGE_NAME)
     }
     
     func setConfig(config: VLConfig){
@@ -346,7 +348,7 @@ extension VLWebViewManager {
 extension VLWebViewManager:ScriptMessageDelegate {
     func handler(_ scriptMessageHandler: ScriptMessageHandler, didReceiveMessage message: WKScriptMessage) {
 //            print("message.name \(message.name)")
-        if (message.name == Constants.JS_MESSAGE_NAME || message.name == Constants.SCRIPT_MESSAGE_NAME_V2) {
+        if (message.name == Constants.JS_MESSAGE_NAME || message.name == Constants.SCRIPT_MESSAGE_NAME_V2 || message.name == Constants.SCRIPT_MESSAGE_NAME) {
                 if jsInterface != nil {
                     jsInterface?.jsCallback(message: message.body)
                 }

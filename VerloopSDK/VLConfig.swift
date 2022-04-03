@@ -108,18 +108,18 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         isStaging = staging
     }
     
-    @objc public func setDepartment(_ dept:String) {
-        self.department = dept
-        if !updatedConfigParams.contains(.department) {
-            updatedConfigParams.append(.department)
-        }
-    }
-    @objc public func clearDepartment() {
-        self.department = nil
-        if !updatedConfigParams.contains(.clearDepartment) {
-            updatedConfigParams.append(.clearDepartment)
-        }
-    }
+//    @objc public func setDepartment(_ dept:String) {
+//        self.department = dept
+//        if !updatedConfigParams.contains(.department) {
+//            updatedConfigParams.append(.department)
+//        }
+//    }
+//    @objc public func clearDepartment() {
+//        self.department = nil
+//        if !updatedConfigParams.contains(.clearDepartment) {
+//            updatedConfigParams.append(.clearDepartment)
+//        }
+//    }
 
     @objc public func setWidgetColor(_ color:String) {
         self.widgetColor = color

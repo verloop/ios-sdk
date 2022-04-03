@@ -47,18 +47,20 @@ class ViewModel {
     
     private var defaults:[[RowModel]] = []
     private var mSDK:VerloopSDK?
+    private var presentedSDKController:UIViewController?
     
     private var inputs:[RowModel] = [
         RowModel(rowType: .ClientID, isInputType: true, titleToBeShown: "Enter Client ID *", valueToBeshown: "",keyPlaceHolder: "Client ID (required)"),
         RowModel(rowType: .UserId, isInputType: true, titleToBeShown: "Enter user ID", valueToBeshown: "",keyPlaceHolder: "User ID"),
         RowModel(rowType: .RecepieID, isInputType: true, titleToBeShown: "Enter Recepie ID", valueToBeshown: "",keyPlaceHolder: "Recepie ID"),
         RowModel(rowType: .UserParams, isInputType: true, titleToBeShown: "Enter User params.", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key"),
-        RowModel(rowType: .customField, isInputType: true, titleToBeShown: "Enter Custom Field", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key"),
-        RowModel(rowType: .Department, isInputType: true, titleToBeShown: "Enter Department Name", valueToBeshown: "",keyPlaceHolder: "Depart name")
+        RowModel(rowType: .customField, isInputType: true, titleToBeShown: "Enter Custom Field", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key")
+//        ,
+//        RowModel(rowType: .Department, isInputType: true, titleToBeShown: "Enter Department Name", valueToBeshown: "",keyPlaceHolder: "Depart name")
     ]
     
     private var actions:[RowModel] = [
-        RowModel(rowType: .clearDepartment, isInputType: false, titleToBeShown: "Clear Department", valueToBeshown: "Tap to clear department"),
+//        RowModel(rowType: .clearDepartment, isInputType: false, titleToBeShown: "Clear Department", valueToBeshown: "Tap to clear department"),
         RowModel(rowType: .ButtonClickListener, isInputType: false, titleToBeShown: "Tap to verify Buttton click listeners", valueToBeshown: "Button click listener"),
         RowModel(rowType: .URLClickListener, isInputType: false, titleToBeShown: "Tap to verify URL click listeners", valueToBeshown: "URL click listener"),
         RowModel(rowType: .LoginWithUserID, isInputType: false, titleToBeShown: "Tap to login with user ID", valueToBeshown: "login with User ID"),
@@ -133,7 +135,8 @@ class ViewModel {
                 case .RecepieID:
                     config?.setRecipeId(recipeId: fieldInput.valueToBeshown)
                 case .Department:
-                    config?.setDepartment(fieldInput.valueToBeshown)
+//                    config?.setDepartment(fieldInput.valueToBeshown)
+                break
                 case .UserParams:
                     if !fieldInput.valueToBeshown.isEmpty,!fieldInput.secondValueToBeshown.isEmpty {
                         config?.setUserParam(key: fieldInput.valueToBeshown, value: fieldInput.secondValueToBeshown)
@@ -162,7 +165,9 @@ extension ViewModel {
     }
     
     private func getSDKController() -> UIViewController {
-        return mSDK!.getNavController()
+        let cntrl = mSDK!.getNavController()
+        presentedSDKController = cntrl
+        return cntrl
     }
     
     private func getUserIDClientID() -> (userID:String,clentID:String) {
@@ -176,6 +181,15 @@ extension ViewModel {
             }
         }
         return (userID,clientID)
+    }
+    
+    private func getRecepieiD() -> String {
+        for ip in defaults.first ?? [] {
+            if ip.rowType == .RecepieID {
+                return ip.valueToBeshown
+            }
+        }
+        return ""
     }
     
     func launchChatOn(controller:UIViewController,config:VLConfig) {
@@ -248,9 +262,15 @@ extension ViewModel {
                 return
             }
             let config = VLConfig.init(clientId: details.clentID)
-            config.setButtonOnClickListener { title, type, payload in
- 
-                self.showmessage(title: "Button click", message:  "Title \(title ?? "") \nType \(type ?? "")\nPayload \(payload ?? "")", controller: controller)
+            let recepie = self.getRecepieiD()
+            if !recepie.isEmpty {
+                config.setRecipeId(recipeId: recepie)
+            }
+            config.setButtonOnClickListener {[weak self] title, type, payload in
+                print("button click listenr called")
+                self?.presentedSDKController?.dismiss(animated: true, completion: {
+                    self?.showmessage(title: "Button click", message:  "Title \(title ?? "") \nType \(type ?? "")\nPayload \(payload ?? "")", controller: controller)
+                })
             }
             launchChatOn(controller: controller, config: config)
         } else if type == .URLClickListener {
@@ -260,9 +280,15 @@ extension ViewModel {
                 return
             }
             let config = VLConfig.init(clientId: details.clentID)
-            config.setUrlClickListener { url in
-              
-                self.showmessage(title: "URL Click", message: "Url: \(url ?? "")", controller: controller)
+            let recepie = self.getRecepieiD()
+            if !recepie.isEmpty {
+                config.setRecipeId(recipeId: recepie)
+            }
+            config.setUrlClickListener {[weak self] url in
+                print("URL click listener called")
+                self?.presentedSDKController?.dismiss(animated: true, completion: {
+                    self?.showmessage(title: "URL Click", message: "Url: \(url ?? "")", controller: controller)
+                })
             }
             launchChatOn(controller: controller, config: config)
         }
