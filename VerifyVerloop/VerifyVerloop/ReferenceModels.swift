@@ -8,6 +8,7 @@
 import Foundation
 import VerloopSDK
 
+//enum with different categories to be handled
 enum RowType:String {
     case ClientID
     case UserId
@@ -26,16 +27,18 @@ enum RowType:String {
     case EnableNotification
 }
 
+//number of sections appears in tableview
 enum TestSections:Int,CaseIterable {
     case Inputs = 0
     case Actions
 }
 
+//model for each row in tableview.
 struct RowModel {
     let rowType:RowType
     let isInputType:Bool
     let titleToBeShown:String
-    var valueToBeshown:String
+    var valueToBeshown:String //value appears in the text field or button title
     var secondValueToBeshown:String = ""
     var keysToBeShown:String = ""
     var isMultiInputs = false
@@ -49,6 +52,7 @@ class ViewModel {
     private var mSDK:VerloopSDK?
     private var presentedSDKController:UIViewController?
     
+    //default inputs to be shown in tableview 1st section
     private var inputs:[RowModel] = [
         RowModel(rowType: .ClientID, isInputType: true, titleToBeShown: "Enter Client ID *", valueToBeshown: "",keyPlaceHolder: "Client ID (required)"),
         RowModel(rowType: .UserId, isInputType: true, titleToBeShown: "Enter user ID", valueToBeshown: "",keyPlaceHolder: "User ID"),
@@ -59,6 +63,7 @@ class ViewModel {
 //        RowModel(rowType: .Department, isInputType: true, titleToBeShown: "Enter Department Name", valueToBeshown: "",keyPlaceHolder: "Depart name")
     ]
     
+    //default buttons with titles to be shown in tableview 2nd section
     private var actions:[RowModel] = [
 //        RowModel(rowType: .clearDepartment, isInputType: false, titleToBeShown: "Clear Department", valueToBeshown: "Tap to clear department"),
         RowModel(rowType: .ButtonClickListener, isInputType: false, titleToBeShown: "Tap to verify Buttton click listeners", valueToBeshown: "Button click listener"),
@@ -78,6 +83,7 @@ class ViewModel {
         resetData()
     }
     
+    //just reset all data back to defaults
     private func resetData() {
         defaults.removeAll()
         defaults.append(inputs)
@@ -100,8 +106,8 @@ class ViewModel {
         }
     }
     
+    //reset the data of data source
     func clearChatInputs() {
-        
         resetData()
         mSDK?.clearLocalStorage()
     }
@@ -118,6 +124,8 @@ class ViewModel {
         return section == .Inputs ? "Enter details in fields and tap Launch chat" : "Click on below button to open / close chat"
     }
     
+    
+    //following method iterate over the defaults array data source and returns the vlconfig object by setting all the data filled on 1st setion of tableview .
     func getInputsConfig() -> VLConfig? {
         if(defaults.first?.first?.valueToBeshown ?? "").isEmpty {
             return nil
@@ -153,17 +161,18 @@ class ViewModel {
 }
 
 extension ViewModel {
-    
+    //helper method to show alert
     func showmessage(title:String,message:String,controller:UIViewController) {
         let alrt = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alrt.addAction(UIAlertAction(title: "ok", style: .default, handler: nil))
         controller.present(alrt, animated: true, completion: nil)
     }
-    
+    //helper method to create verloopsdk
     private func createSDK(config:VLConfig) {
         mSDK = VerloopSDK(config: config)
     }
     
+    //returns the verloop chat appears controller
     private func getSDKController() -> UIViewController {
         let cntrl = mSDK!.getNavController()
         presentedSDKController = cntrl
@@ -192,6 +201,7 @@ extension ViewModel {
         return ""
     }
     
+    //called when click on "launch chat" button in tableview section 1
     func launchChatOn(controller:UIViewController,config:VLConfig) {
         createSDK(config: config)
         controller.present(getSDKController(), animated: true, completion: nil)
@@ -199,7 +209,8 @@ extension ViewModel {
     class func isKeyPresentInUserDefaults(key: String) -> Bool {
         return UserDefaults.standard.object(forKey: key) != nil
     }
-
+    //calls when click on any of the button which appears in the 2nd section of the tableview
+    //all following methods need client Id as required input field.
     func launchChatWithAction(indexPath:IndexPath,controller:UIViewController) {
         var type:RowType!
         if indexPath.row < defaults[indexPath.section].count {
@@ -207,15 +218,15 @@ extension ViewModel {
         } else {
             return
         }
-        if type == .OpenWidget {
+        if type == .OpenWidget { //open chat with default client id
             guard let id = defaults.first?.first?.valueToBeshown, !id.isEmpty else {
                 showmessage(title: "Error", message: "Please enter Client ID and try again", controller: controller)
                 return
             }
             launchChatOn(controller: controller, config: VLConfig.init(clientId: id))
-        } else if type == .Logout {
+        } else if type == .Logout { // log out current session of verloop
             mSDK?.logout()
-        } else if type == .CloseWidget {
+        } else if type == .CloseWidget { // closes the widget currently shown in screen i.e verloop chat screen
             let details = getUserIDClientID()
             guard !details.clentID.isEmpty else {
                 showmessage(title: "Error", message: "Please enter Client ID and try again", controller: controller)
@@ -228,22 +239,19 @@ extension ViewModel {
             }
             launchChatOn(controller: controller, config: config)
     
-        } else if type == .EnableNotification {
+        } else if type == .EnableNotification { // calls when push notification enable button is clicked
             let details = getUserIDClientID()
 //            let userID = details.userID
             let clientID = details.clentID
             let config = VLConfig.init(clientId: clientID)
-//            let token = UserDefaults.standard.object(forKey: "Device_token")
-////            let token = ViewModel.isKeyPresentInUserDefaults(key: "Device_token")
-//            config.setNotificationToken(notificationToken: "bee3cddc4c9399c0106777be608e322fddfd0540a0e4506dc77dd5e8bd3898b2")
             if let token = UserDefaults.standard.value(forKey: "Device_token") as? String {
                 config.setNotificationToken(notificationToken: token)
                 launchChatOn(controller: controller, config: config)
             }
         
-        } else if type == .Close {
+        } else if type == .Close { // closes the chat session
             mSDK?.close()
-        } else if type == .LoginWithUserID {
+        } else if type == .LoginWithUserID { //open verloop chat with user ID entered in user id field
             let details = getUserIDClientID()
             let userID = details.userID
             let clientID = details.clentID
@@ -255,7 +263,7 @@ extension ViewModel {
             let config = VLConfig.init(clientId: clientID)
             config.setUserId(userId: userID)
             launchChatOn(controller: controller, config: config)
-        } else if type == .ButtonClickListener {
+        } else if type == .ButtonClickListener { // calls when click on any of the button whcih appears on the verloop chat web view DOM.
             let details = getUserIDClientID()
             guard !details.clentID.isEmpty else {
                 showmessage(title: "Error", message: "Please enter Client ID and try again", controller: controller)
@@ -268,12 +276,13 @@ extension ViewModel {
             }
             config.setButtonOnClickListener {[weak self] title, type, payload in
                 print("button click listenr called")
-                self?.presentedSDKController?.dismiss(animated: true, completion: {
-                    self?.showmessage(title: "Button click", message:  "Title \(title ?? "") \nType \(type ?? "")\nPayload \(payload ?? "")", controller: controller)
-                })
+                
+                if let presented = self?.presentedSDKController {
+                    self?.showmessage(title: "Button click", message:  "Clicked on button with Title: \(title ?? "")", controller: presented)
+                }
             }
             launchChatOn(controller: controller, config: config)
-        } else if type == .URLClickListener {
+        } else if type == .URLClickListener { // calls when click on any of the URL whcih appears on the verloop chat web view DOM.
             let details = getUserIDClientID()
             guard !details.clentID.isEmpty else {
                 showmessage(title: "Error", message: "Please enter Client ID and try again", controller: controller)
@@ -281,14 +290,17 @@ extension ViewModel {
             }
             let config = VLConfig.init(clientId: details.clentID)
             let recepie = self.getRecepieiD()
+            config.setUrlRedirectionFlag(canRedirect: false)
             if !recepie.isEmpty {
                 config.setRecipeId(recipeId: recepie)
             }
             config.setUrlClickListener {[weak self] url in
                 print("URL click listener called")
-                self?.presentedSDKController?.dismiss(animated: true, completion: {
-                    self?.showmessage(title: "URL Click", message: "Url: \(url ?? "")", controller: controller)
-                })
+                
+                if let presented = self?.presentedSDKController {
+                    self?.showmessage(title: "URL Click", message: "Clicked on Url with link : \(url ?? "")", controller: presented)
+                }
+                
             }
             launchChatOn(controller: controller, config: config)
         }

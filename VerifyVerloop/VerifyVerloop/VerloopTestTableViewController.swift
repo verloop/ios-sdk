@@ -8,6 +8,8 @@
 import UIKit
 
 
+
+//for the inputs with free text field. appears in 1st section of sample app tableview.
 class InputCell:UITableViewCell {
     
     @IBOutlet weak var mSecondField: UITextField!
@@ -37,6 +39,7 @@ class InputCell:UITableViewCell {
     }
 }
 
+//for the buttons with action which apepars on the 2nd section of the sample app tableview.
 class ActionCell:UITableViewCell {
     
     @IBOutlet weak var mActionBtn: UIButton!
@@ -58,9 +61,9 @@ class ActionCell:UITableViewCell {
 class VerloopTestTableViewController: UITableViewController {
     @IBOutlet weak var mclearBtn: UIButton!
     @IBOutlet weak var mLaunchBtn: UIButton!
-    @IBOutlet var footerParentView: UIView!
+    @IBOutlet var footerParentView: UIView!//this is footer view for first section where launch chat and clear buttons appears.
     
-    private let viewModel = ViewModel()
+    private let viewModel = ViewModel()// this is the view mode for the sample app. all the business logic handled through thie model
     override func awakeFromNib() {
         super.awakeFromNib()
         mclearBtn.layer.cornerRadius = 5
@@ -93,6 +96,7 @@ class VerloopTestTableViewController: UITableViewController {
         self.tableView.endEditing(true)
     }
     
+    //when click on launch chat button following method calls and make required condition checks and open verloop chat.
     @IBAction func onLaunchChat(_ sender: Any) {
         dismissKeyboard()
         let config = viewModel.getInputsConfig()
@@ -106,6 +110,7 @@ class VerloopTestTableViewController: UITableViewController {
         viewModel.launchChatOn(controller: self, config: config!)
     }
     
+    //when click on clear button following method calls and reset the inputs blank
     @IBAction func onClear(_ sender: Any) {
         
         viewModel.clearChatInputs()
@@ -137,12 +142,14 @@ class VerloopTestTableViewController: UITableViewController {
         return UITableViewCell(frame: .zero)
     }
     
+    //calls every time while editing the text field of tableview first section.
     @objc private func onFieldEdit(field:UITextField) {
         if let cell = field.superview?.superview?.superview?.superview as? InputCell,let indexpath = tableView.indexPath(for: cell) {
             viewModel.didChangeModelInput(field.text ?? "", modelIndex: indexpath,isSecondaryField: field.tag == 1)
         }
     }
     
+    //calls when click on the button appears in 2nd section of the tableview
     @objc private func onActionbtn(btn:UIButton) {
         if let cell = btn.superview?.superview?.superview as? ActionCell,let indexpath = tableView.indexPath(for: cell) {
             viewModel.launchChatWithAction(indexPath: indexpath, controller: self)

@@ -211,15 +211,27 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        print("createWebViewWith \(navigationAction)")
         guard let url = navigationAction.request.url else {
             return nil
         }
         
-        if #available(iOS 10.0, *) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        } else {
-            UIApplication.shared.openURL(url)
+        if self.config.isURLRedirection() {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
         }
+        else {
+            //nothing to do
+        }
+        
+//        if #available(iOS 10.0, *) {
+//            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+//        } else {
+//            UIApplication.shared.openURL(url)
+//        }
         return nil
     }
     
@@ -238,6 +250,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        print("decidePolicyFor navigationAction \(navigationAction.request.url)")
         if navigationAction.targetFrame == nil {
             if self.config.isURLRedirection() {
                 decisionHandler(.allow)
