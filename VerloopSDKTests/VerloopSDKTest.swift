@@ -8,6 +8,7 @@
 
 import XCTest
 import WebKit
+import VerloopSDK
 
 class VerloopSDKTest: XCTestCase {
 
@@ -22,9 +23,9 @@ class VerloopSDKTest: XCTestCase {
     private let buttonClickListener = XCTestExpectation(description: "Button Click listener complete")
     private let urlClickListener = XCTestExpectation(description: "URL Click listener complete")
     private let logoutsExpectation = XCTestExpectation(description: "URL Click listener complete")
-    private let mockButtonClick = "{\"title\":\"\(TestConstants.testButtonTitle)\",\"type\":\"button\",\"payload\":\"NA\"}"
+    private let mockButtonClick = "{\"title\":\"\(TestConstants.testButtonTitle)\",\"type\":\"postback\",\"payload\":\"NA\"}"
 //    private let mockClientInfo = "{\"title\":\"\(TestConstants.testClientName)\",\"bgColor\":\"#00000\",\"textColor\":\"#ffffff\"}"
-    private let mockURLClick = "{\"url\":\"\((TestConstants.testURL))\"}"
+    private let mockURLClick = "{\"title\":\"\(TestConstants.testButtonTitle)\",\"type\":\"web_url\",\"payload\":\"https://www.verloop.io\"}"
     
     override func setUpWithError() throws {
         _config = VLConfig(clientId: TestConstants.clientId,userId: TestConstants.userId)
