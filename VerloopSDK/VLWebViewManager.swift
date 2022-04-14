@@ -67,8 +67,6 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         self.loadWebView()
     }
     
-    func updateWebviewConfiguration(_ config:VLConfig,param:[VLConfig.ConfigParam]) {
-        print("updateWebviewConfiguration")
     func clearCookies(){
         let script = "localStorage.removeItem(\"visitorToken\")"
         webView.evaluateJavaScript(script) { (token, error) in
