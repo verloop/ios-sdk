@@ -32,11 +32,12 @@ Two ways to install
 
 Import the library with the following command: 
 
-```import VerloopSDK```
+```
+import VerloopSDK
 
-Initialise the configuration object `VLConfig` like below:
+```
 
-
+Initialise the configuration object `VLConfig`. You could pass an identifier to uniquely indentify a user  - `userId`. Will be useful to manage logged in user sessions. 
 
 ```
 let config = VLConfig(clientId: String)
@@ -44,22 +45,15 @@ let config = VLConfig(clientId: String)
 let config = VLConfig(clientId: String, userId: String?)    //clientId is required parameter while userId.
 
 ```
+You could otherwise update the userId using the method `setUserId` on an instance of `VLConfig`.  
 
-
-
-
-
-VLConfig has distinct optional properties which can be configured by using following methods.
-
-**UserId**
-
-//userId : id of the user to be added to configuration object.
-
-//Void method
-
+```
 setUserId(userId:String)
 
 Ex:config.setUserId(&quot;12345&quot;)
+```
+
+
 
 **Recepie ID:**
 
