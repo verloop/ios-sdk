@@ -48,9 +48,8 @@ let config = VLConfig(clientId: String, userId: String?)    //clientId is requir
 You could otherwise update the userId using the method `setUserId` on an instance of `VLConfig`.  
 
 ```
-setUserId(userId:String)
-
-Ex:config.setUserId(&quot;12345&quot;)
+let config = VLConfig(clientId: String)
+config.setUserId(&quot;12345&quot;)
 ```
 
 
