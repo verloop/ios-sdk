@@ -12,7 +12,7 @@ Two ways to install
   pod 'VerloopSDKiOS'
   ```
   
-- Manually build the repo and generate the VerloopSDK framework .Embedd the framework in Linked Binaries in your project like this
+- Manually build the repo and generate the VerloopSDK framework and embed the framework in Linked Binaries in your project as shown below. 
 <p align="center">
 <img width="700" alt="Screenshot 2022-03-15 at 3 08 56 PM" src="https://user-images.githubusercontent.com/98142458/158394191-f40ef1b5-89eb-41cb-8110-dfcd54b700be.png">
 </p>
