@@ -69,10 +69,6 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     
     func updateWebviewConfiguration(_ config:VLConfig,param:[VLConfig.ConfigParam]) {
         print("updateWebviewConfiguration")
-        self.config = config
-        configParams = param
-    }
-    
     func clearCookies(){
         let script = "localStorage.removeItem(\"visitorToken\")"
         webView.evaluateJavaScript(script) { (token, error) in
@@ -104,39 +100,13 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         urlComponents.path = "/livechat";
         
         urlComponents.queryItems = [
-            URLQueryItem(name: "mode", value: Constants.URL_QUERY_MODE),
             URLQueryItem(name: "sdk", value: Constants.URL_QUERY_SDK),
         ]
-        
-//        if self.config.getUserID() != nil {
-//            urlComponents.queryItems?.append(URLQueryItem(name: "user_id", value: self.config.getUserID()!))
-//        }
-//
+
         if self.config.getNotificationToken() != nil {
             urlComponents.queryItems?.append(URLQueryItem(name: "device_token", value: self.config.getNotificationToken()!))
             urlComponents.queryItems?.append(URLQueryItem(name: "device_type", value: "ios"))
         }
-//
-//        if self.config.getCustomFieldsJSON() != nil {
-//            urlComponents.queryItems?.append(URLQueryItem(name: "custom_fields", value: self.config.getCustomFieldsJSON()!))
-//        }
-//
-//        if self.config.getUsername() != nil {
-//            urlComponents.queryItems?.append(URLQueryItem(name: "name", value: self.config.getUsername()!))
-//        }
-//
-//        if self.config.getUserEmail() != nil {
-//            urlComponents.queryItems?.append(URLQueryItem(name: "email", value: self.config.getUserEmail()!))
-//        }
-//
-//        if self.config.getUserPhone() != nil {
-//            urlComponents.queryItems?.append(URLQueryItem(name: "phone", value: config.getUserPhone()!))
-//        }
-//
-//        if self.config.getRecepieId() != nil {
-//            urlComponents.queryItems?.append(URLQueryItem(name: "recipe_id", value: self.config.getRecepieId()!))
-//        }
-        
         print("Starting chat. " + urlComponents.string!)
         
         let url = URL(string: urlComponents.string!)
@@ -223,29 +193,21 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
                 UIApplication.shared.openURL(url)
             }
         }
-        else {
-            //nothing to do
-        }
-        
-//        if #available(iOS 10.0, *) {
-//            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-//        } else {
-//            UIApplication.shared.openURL(url)
-//        }
+    
         return nil
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         
         //you might want to edit the script, with the escape characters
-//        let script = "localStorage.getItem(\"visitorToken\")"
-//        webView.evaluateJavaScript(script) { (token, error) in
-//            if let error = error {
-//                print ("localStorage.getitem('visitorToken') failed due to \(error)")
-//                assertionFailure()
-//            }
-//            print("token = \(String(describing: token))")
-//        }
+        let script = "localStorage.getItem(\"visitorToken\")"
+        webView.evaluateJavaScript(script) { (token, error) in
+            if let error = error {
+                print ("localStorage.getitem('visitorToken') failed due to \(error)")
+                assertionFailure()
+            }
+            print("##### Visistor token = \(String(describing: token))")
+        }
 //        clearCookies()
     }
     
@@ -305,9 +267,10 @@ extension VLWebViewManager {
         networkChangesConfigurations = []
     }
     
+
     func processConfigurations() {
-        print("processConfigurations \(configParams)")
-        for parameter in configParams {
+        print("processConfigurations \(self.config.getUpdatedConfigParams())")
+        for parameter in self.config.getUpdatedConfigParams() {
             print("parameter \(parameter)")
             switch parameter {
                 case .userParams:
@@ -360,34 +323,35 @@ extension VLWebViewManager {
 
 extension VLWebViewManager:ScriptMessageDelegate {
     func handler(_ scriptMessageHandler: ScriptMessageHandler, didReceiveMessage message: WKScriptMessage) {
-//            print("message.name \(message.name)")
-        if (message.name == Constants.JS_MESSAGE_NAME || message.name == Constants.SCRIPT_MESSAGE_NAME_V2 || message.name == Constants.SCRIPT_MESSAGE_NAME) {
+        print("message.name and message.body are \(message.name) \(message.body)")
+        //TODO handle v2 and non  v2 change
+        if (message.name == Constants.SCRIPT_MESSAGE_NAME) {
                 if jsInterface != nil {
                     jsInterface?.jsCallback(message: message.body)
                 }
-                if (hasTriedToStartRoom) {
-                    startRoom()
-                }
-                handleWebPostMessage(message.body)
+              
             }
+        else if (message.name == Constants.SCRIPT_MESSAGE_NAME_V2){
+            handleWebPostMessage(message.body)
+        }
+        else{
+            print("unrecognized callback")
+        }
     }
     
     private func handleWebPostMessage(_ msg:Any) {
-//        sdk scriptCallback(message: msg)
         if let bodyString = msg as? String,let bodyData = bodyString.data(using: .utf8) {
             do {
                 let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0))
-//                print("expectedModelData \(expectedModelData)")
                 let expectedData = try JSONSerialization.data(withJSONObject: expectedModelData, options: .prettyPrinted)
                 let model = try JSONDecoder().decode(ExpectedEventPayload.self, from: expectedData)
+                //TODO remove the _modelType part
                 if let _modelType = model.type {
                     switch _modelType {
                         //button click and URL click
                         case .MessageButtonClick:
-//                            break
                             _eventDelegate?.didEventOccurOnLiveChat(.onButtonClick)
                         case .MessageURLClick:
-//                            break
                             _eventDelegate?.didEventOccurOnLiveChat(.onURLClick)
                     }
                 } else if let  _function = model.fn {
@@ -404,11 +368,11 @@ extension VLWebViewManager:ScriptMessageDelegate {
                             isRoomReady = true
                             processRoomReadyConfigurations()
                         case .FunctionCallBack:
-//                            jsInterface?.jsCallback(message: msg)
                             break
                         case .FunctionReady:
                             print("FunctionReady")
                             processConfigurations()
+                            webView.evaluateJavaScript("VerloopLivechat.widgetOpened()")
                         case .FunctionCloseComplete:
                             clearCookies()
                             _eventDelegate?.didEventOccurOnLiveChat(.onLogoutComplete)

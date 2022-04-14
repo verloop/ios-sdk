@@ -30,7 +30,7 @@ class InputCell:UITableViewCell {
         mField.placeholder = model.keyPlaceHolder
         mField.text = model.valueToBeshown
         if model.isMultiInputs {
-            mField.text = model.keysToBeShown
+            mField.text = model.valueToBeshown
             mSecondField.text = model.valueToBeshown
             mSecondField.isHidden = false
             mSecondField.placeholder = model.valuePlaceHolder
@@ -41,21 +41,41 @@ class InputCell:UITableViewCell {
 
 //for the buttons with action which apepars on the 2nd section of the sample app tableview.
 class ActionCell:UITableViewCell {
-    
     @IBOutlet weak var mActionBtn: UIButton!
     @IBOutlet weak var mTitle: UILabel!
+
     
+
     override func awakeFromNib() {
+
         super.awakeFromNib()
+
         mActionBtn.layer.cornerRadius = 5
+
         mActionBtn.layer.borderColor = UIColor.blue.cgColor
+
         mActionBtn.layer.borderWidth = 1
 
+        mActionBtn.contentEdgeInsets = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+
+        mActionBtn.titleLabel?.textAlignment = .center
+
+        mActionBtn.titleLabel?.lineBreakMode = .byWordWrapping
+
+        mActionBtn.contentHorizontalAlignment = .center
+
+
+
     }
+
     func configurecell(model:RowModel) {
+
         mTitle.text = model.valueToBeshown
+
         mActionBtn.setTitle(model.titleToBeShown, for: .normal)
+
     }
+
 }
 
 class VerloopTestTableViewController: UITableViewController {

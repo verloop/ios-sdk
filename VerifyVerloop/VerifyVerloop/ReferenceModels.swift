@@ -59,27 +59,21 @@ class ViewModel {
         RowModel(rowType: .RecepieID, isInputType: true, titleToBeShown: "Enter Recepie ID", valueToBeshown: "",keyPlaceHolder: "Recepie ID"),
         RowModel(rowType: .UserParams, isInputType: true, titleToBeShown: "Enter User params.", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key"),
         RowModel(rowType: .customField, isInputType: true, titleToBeShown: "Enter Custom Field", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key")
-//        ,
-//        RowModel(rowType: .Department, isInputType: true, titleToBeShown: "Enter Department Name", valueToBeshown: "",keyPlaceHolder: "Depart name")
     ]
     
     //default buttons with titles to be shown in tableview 2nd section
     private var actions:[RowModel] = [
-//        RowModel(rowType: .clearDepartment, isInputType: false, titleToBeShown: "Clear Department", valueToBeshown: "Tap to clear department"),
         RowModel(rowType: .ButtonClickListener, isInputType: false, titleToBeShown: "Tap to verify Buttton click listeners", valueToBeshown: "Button click listener"),
         RowModel(rowType: .URLClickListener, isInputType: false, titleToBeShown: "Tap to verify URL click listeners", valueToBeshown: "URL click listener"),
         RowModel(rowType: .LoginWithUserID, isInputType: false, titleToBeShown: "Tap to login with user ID", valueToBeshown: "login with User ID"),
         RowModel(rowType: .OpenWidget, isInputType: false, titleToBeShown: "OpenWidget to open the chat window", valueToBeshown: "Tap to open widget"),
-        RowModel(rowType: .CloseWidget, isInputType: false, titleToBeShown: "close Widget(Added on the button title", valueToBeshown: "Tap to close widget"),
+        RowModel(rowType: .CloseWidget, isInputType: false, titleToBeShown: "Launch this chat and observe our chat window closing when a button is pressed", valueToBeshown: "Tap to close widget"),
         RowModel(rowType: .Logout, isInputType: false, titleToBeShown: "Logging Out (First login and then try this scenario)", valueToBeshown: "Tap to log out"),
         RowModel(rowType: .Close, isInputType: false, titleToBeShown: "Close (will close the current conversation)", valueToBeshown: "Tap to close"),
         RowModel(rowType: .EnableNotification, isInputType: false, titleToBeShown: "Enable Notifications", valueToBeshown: "Tap to test notifications feature")
     ]
     
     init() {
-//        defaults.append(inputs)
-//        defaults.append(actions)
-//        print("defaults \(defaults)")
         resetData()
     }
     
@@ -143,7 +137,6 @@ class ViewModel {
                 case .RecepieID:
                     config?.setRecipeId(recipeId: fieldInput.valueToBeshown)
                 case .Department:
-//                    config?.setDepartment(fieldInput.valueToBeshown)
                 break
                 case .UserParams:
                     if !fieldInput.valueToBeshown.isEmpty,!fieldInput.secondValueToBeshown.isEmpty {
@@ -241,7 +234,6 @@ extension ViewModel {
     
         } else if type == .EnableNotification { // calls when push notification enable button is clicked
             let details = getUserIDClientID()
-//            let userID = details.userID
             let clientID = details.clentID
             let config = VLConfig.init(clientId: clientID)
             if let token = UserDefaults.standard.value(forKey: "Device_token") as? String {

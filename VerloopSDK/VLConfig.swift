@@ -30,7 +30,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         case phone
         case name
     }
-    
+//TODO to APIMethods
     enum ConfigParam {
         case userId
         case userName
@@ -46,7 +46,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         case close
         case widgetColor
     }
-    
+    //Scope for custom fields
     @objc public enum SCOPE : Int {
         case ROOM = 0
         case USER = 1
@@ -72,6 +72,8 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     
     @objc public init(clientId cid: String, userId uid: String?) {
         var userId = uid
+        //TODO
+        //Check if needed   let uid = UserDefaults.standard.string(forKey: "VERLOOP_USER_ID")
         if uid == nil {
             userId = UUID().uuidString
         }
@@ -82,7 +84,8 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             self.updatedConfigParams.append(.userId)
         }
     }
-    
+    //TODO
+    //Check if this is getting called..if yes then if userid needs to be added to self.updatedConfigParams
     @objc public convenience init(clientId cid: String) {
         let uid = UserDefaults.standard.string(forKey: "VERLOOP_USER_ID")
         if uid != nil {
@@ -107,20 +110,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     @objc public func setStaging(isStaging staging: Bool) {
         isStaging = staging
     }
-    
-//    @objc public func setDepartment(_ dept:String) {
-//        self.department = dept
-//        if !updatedConfigParams.contains(.department) {
-//            updatedConfigParams.append(.department)
-//        }
-//    }
-//    @objc public func clearDepartment() {
-//        self.department = nil
-//        if !updatedConfigParams.contains(.clearDepartment) {
-//            updatedConfigParams.append(.clearDepartment)
-//        }
-//    }
-
+//TODO Remove
     @objc public func setWidgetColor(_ color:String) {
         self.widgetColor = color
         updatedConfigParams.append(.widgetColor)
@@ -159,7 +149,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             }
         }
     }
-    
+    //TODO just check and cleanup
     @objc public func setOnEventChangeListener(_ delegate:VLEventDelegate?) {
         mEventChangeDelegate = delegate
     }
@@ -188,12 +178,9 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     
     @objc func getCustomFieldsJSON() -> String? {
         let ret = UserDefaults.standard.string(forKey: "VERLOOP_CUSTOM_FIELDS")
-//        if ret != nil {
-//            print(ret!)
-//        }
         return ret
     }
-    
+    //TODO where all we are using save
     func save() {
         let defaults = UserDefaults.standard
         defaults.set(clientId, forKey: "VERLOOP_CLIENT_ID")
@@ -224,7 +211,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         } catch { print(error) }
         
     }
-    
+    //TODO check where all clear is used
     func clear() {
         
         userId = nil
@@ -258,7 +245,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         defaults.removeObject(forKey: "VERLOOP_USER_EMAIL")
         defaults.removeObject(forKey: "VERLOOP_USER_PHONE")
         defaults.removeObject(forKey: "VERLOOP_CUSTOM_FIELDS")
-        
+    //v1 Implementation
         if #available(iOS 9.0, *) {
             let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
             
@@ -287,7 +274,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             URLCache.shared.removeAllCachedResponses()
         }
     }
-    
+//TODO check and remove
     static func getConfig() -> VLConfig {
         let defaults = UserDefaults.standard
         let config = VLConfig(clientId: defaults.string(forKey: "VERLOOP_CLIENT_ID")!, userId: defaults.string(forKey: "VERLOOP_USER_ID"))

@@ -8,7 +8,7 @@
 
 import UIKit
 import WebKit
-
+//Adding the webview here..Base viewcontroller whose child is webview
 class VLViewController: UIViewController, WKUIDelegate {
     private var verloopSDK: VerloopSDK? = nil
 
@@ -31,7 +31,6 @@ class VLViewController: UIViewController, WKUIDelegate {
     func setWebView(webView v: VLWebViewManager) {
         webView = v
         view.addSubview(webView!.webView)
-//        webView!.webView.frame = self.view.bounds
         loader = UIActivityIndicatorView(frame: CGRect(x: view.center.x, y: view.center.y, width: 30, height: 30))
         loader?.tintColor = .black
         if #available(iOS 13.0, *) {
@@ -40,10 +39,6 @@ class VLViewController: UIViewController, WKUIDelegate {
         loader?.center = self.view.center
         loader?.startAnimating()
         view.addSubview(loader!)
-//        view.bringSubviewToFront(loader!)
-        if isViewLoaded {
-            webView!.startRoom()
-        }
         
     }
     private func updateWebViewConstraints() {
@@ -65,9 +60,6 @@ class VLViewController: UIViewController, WKUIDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if webView != nil {
-            webView!.startRoom()
-        }
         self.view.backgroundColor = .white
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "×", style: .done, target: self, action: #selector(back(_:)))
     }
@@ -84,20 +76,15 @@ class VLViewController: UIViewController, WKUIDelegate {
             self.present(noNetworkAlert, animated: true, completion: nil)
             loader?.removeFromSuperview()
         }
-//        webView?.webView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height-120)
-        
         self.updateWebViewConstraints()
     }
 
     func dismissLoader() {
         loader?.removeFromSuperview()
     }
-    
     @objc func back(_ sender : AnyObject?) {
         if verloopSDK != nil {
-//            webView?.processConfigurations()
             verloopSDK!.closeWidget()
-//            verloopSDK?.updateConfig(config: verloopSDK!.getConfig())
         }
         self.dismiss(animated: true, completion: nil)
     }
