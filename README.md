@@ -43,18 +43,18 @@ Initialise the configuration object `VLConfig`. You could pass an identifier to 
 let config = VLConfig(clientId: String)
 
 let config = VLConfig(clientId: String, userId: String?)    //clientId is required parameter while userId.
-
 ```
 You could otherwise update the userId using the method `setUserId` on an instance of `VLConfig`.  
 
 ```
 let config = VLConfig(clientId: String)
-config.setUserId(&quot;12345&quot;)
+
+config.setUserId(userId: String)
 ```
 
+The following are the APIs on `VLConfig`
 
-
-**Recepie ID:**
+**Recepie ID:** 
 
 // recipeId : id of the recipe to be added to configuration object.
 
@@ -64,25 +64,7 @@ setRecipeId(recipeId id: String?)
 
 Ex:config.setRecipeId(&quot;RecepieID&quot;)
 
-**Department**
 
-//dept : department name to be added to configuration object.
-
-//Void method
-
-setDepartment( **\_** dept:String)
-
-Ex: config.setDepartment(&quot;DepartmentName&quot;)
-
-**ClearDepartment**
-
-//No inputs needed.
-
-//Void method
-
-clearDepartment()
-
-Ex:config.clearDepartment()
 
 **Notification Token:**
 
