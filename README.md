@@ -21,6 +21,9 @@ Two ways to install
 
 
 ## **SDK Usage**
+
+** Swift ** 
+
 import VerloopSDK
 
 **1) Initialize configuration**
