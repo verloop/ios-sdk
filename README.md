@@ -30,17 +30,24 @@ Two ways to install
 
 ### **Swift** 
 
-import VerloopSDK
+Import the library with the following command: 
 
-**1) Initialize configuration**
+```import VerloopSDK```
 
-//userId is a optional and client is required parameter.
+Initialise the configuration object `VLConfig` like below:
 
-let config = VLConfig(clientId: String, userId: String?)
 
-//Config can be initialised by using below convenience method and pass mandatory clientId.
 
+```
 let config = VLConfig(clientId: String)
+
+let config = VLConfig(clientId: String, userId: String?)    //clientId is required parameter while userId.
+
+```
+
+
+
+
 
 VLConfig has distinct optional properties which can be configured by using following methods.
 
