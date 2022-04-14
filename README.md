@@ -3,12 +3,12 @@
 This framework helps you configure and launch Verloop's chat. Inorder to integrate, one needs to initiase our `VerloopSDK` instance by passing a configuration `VLConfig` object and present it's navigation controller. APIs on `VerloopSDK` and `VLConfig` are described in detail below. 
 
 
-# **Requirements**
+## **Requirements**
 
 - XCode 13.1+
 - Min IOS version support IOS10
 
-# **Installation**
+## **Installation**
 
 Two ways to install
 
@@ -24,11 +24,11 @@ Two ways to install
 
 
 
-# **SDK Usage**
+## **SDK Usage**
 
 Lets start with 
 
-## **Swift** 
+### **Swift** 
 
 import VerloopSDK
 
