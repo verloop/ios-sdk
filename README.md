@@ -1,9 +1,9 @@
-## **Requirements**
+# **Requirements**
 
 - XCode 13.1+
 - Min IOS version support IOS10
 
-## **Installation**
+# **Installation**
 
 Two ways to install
 
@@ -20,9 +20,9 @@ Two ways to install
 
 
 
-## **SDK Usage**
+# **SDK Usage**
 
-**Swift** 
+## **Swift** 
 
 import VerloopSDK
 
