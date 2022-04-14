@@ -2,27 +2,16 @@
 
 - XCode 13.1+
 - Min IOS version support IOS10
-- Apple developer account
-  - Register your developer account with Apple and associate with the project build settings for a digital signature to compile.
-    - Download developer management app from AppStore
-    - Another option is to utilize the web portal
-      - [https://developer.apple.com/enroll/app](https://developer.apple.com/enroll/app)
-    - If issues prevent registration or activation of your developer account, contact Apple developer program 1-800-692-7753 for manual review
-    - Once approved, associate project build settings with your developer account.
-    - Download the APNS certificate and upload that to your dashboard settings in Verloop for Staging and Prod.Add the BundleID, APNS Certificate file(.p12) and it&#39;s corresponding password on the dashboard&#39;s setting page. Homepage \&gt; Settings \&gt; Chat (under product settings) \&gt; iOS SDK / Android SDK
 
 ## **Installation**
-
-- Fork/Clone Github repository
-- Adjust build settings to include your developer account
-- Known issues with M1 mac (Arm64) – if Any fill here
-- Build &amp; Test!
 
 Two ways to install
 
 - Now, you can install using cocoapod 
   
   pod 'VerloopSDKiOS'
+  
+  
 - Manually build the repo and generate the VerloopSDK framework .Embedd the framework in Linked Binaries in your project like this
 
 <img width="907" alt="Screenshot 2022-03-15 at 3 08 56 PM" src="https://user-images.githubusercontent.com/98142458/158394191-f40ef1b5-89eb-41cb-8110-dfcd54b700be.png">
