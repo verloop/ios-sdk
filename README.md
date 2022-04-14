@@ -22,7 +22,7 @@ Two ways to install
 
 ## **SDK Usage**
 
-** Swift ** 
+**Swift** 
 
 import VerloopSDK
 
