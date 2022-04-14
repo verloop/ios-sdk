@@ -195,7 +195,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         return nil
     }
     
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         
         //you might want to edit the script, with the escape characters
         let script = "localStorage.getItem(\"visitorToken\")"
