@@ -8,9 +8,9 @@
 Two ways to install
 
 - Now, you can install using cocoapod 
-  
+  ```
   pod 'VerloopSDKiOS'
-  
+  ```
   
 - Manually build the repo and generate the VerloopSDK framework .Embedd the framework in Linked Binaries in your project like this
 
