@@ -157,3 +157,29 @@ json { "_by": "verloop", "aps": { "alert": { "body": "notification message body"
 ## **SDK Usage - Objective C** 
 
 
+After importing the Framework, add the following line in your controller:
+
+```
+import <VerloopSDK/VerloopSDK-Swift.h>
+```
+
+Create the `VLConfig` object. Configure the object. Then initialise `VerloopSDK` with the configuration object. Few of the APIs are listed below. 
+
+```
+VLConfig *config = [[VLConfig alloc] initWithClientId:@"clientId" userId:@"userId"];
+
+[config setUserName:@"Name"]; [config setUserEmail:@"hello@verloop.io"]; [config setUserPhone:@"+919xxxxxxxx"];
+[config setNotificationTokenWithNotificationToken:@"token"]; 
+[config setStagingWithIsStaging:YES]; 
+[config putCustomFieldWithKey:@"key" value:@"value" scope:SCOPEUSER];
+
+VerloopSDK *verloop = [[VerloopSDK alloc] initWithConfig:config]; 
+```
+
+After this, when user want to open the chat, you can simply ask for the UINavigationController and present it on your viewcontroller. 
+
+```
+[[self navigationController] presentViewController:[verloop getNavController] animated:YES completion:NULL];
+```
+
+Note: Kindly go through the swift's documentation for further APIs and appropriately call corresponding methods. 
