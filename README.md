@@ -23,6 +23,10 @@ Two ways to install
 </p>
 
 
+## **Change Log**
+
+Kindly refer to our change log for the added features and deprecated APIs on every release. You'll find it here -> [change log](). 
+
 
 ## **SDK Usage - Swift** 
 
