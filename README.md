@@ -116,92 +116,39 @@ setUrlClickListener(onUrlClicked urlClicked: LiveChatUrlClickListener?)
 ```
 
 
-**2) Initialize SDK**
+### APIs on `VerloopSDK`
 
-VerloopSDK class is the SDK class which expects configuration as construction parameter. Once above configuration object prepared, create VerloopSDK instance by passing configuration as shown below.
+VerloopSDK class is the SDK class which expects a `VLConfig` instance as an initialisation parameter. An instance of VerloopSDK is used to present or close the chat. You could manage user session with the login and logout APIs on this class. Here we'll walk you through the APIs with the scenarios.  
 
-//config: VLConfig object created on step 1.
+- To initialise the SDK
+```
+let verloop = VerloopSDK(config: config)     
+```
 
-let verloop = VerloopSDK(config: config)
+- To prsent the chat, you'll need to get the root view controller of the chat and present it modally from your controller. This will launch the converstation too. Use `getNavController` method of the `VerloopSDK` to create an instance of the SDK's root view controller. 
 
-**3) getNavController and start chat**
-
-getNavController method create an instance of the SDK controller which has embedded WKWebview. When its time to open Verloop chat, like other present controllers, pass getNavController() object on your current controller like shown below.
-
+```
 let chatController = verloop.getNavController()
 
-\&lt;your controller\&gt;.present(chatController, animated: true)
+yourViewController.present(chatController, animated: true)
+```
 
-**4)Listen to the events**
+- To manage user session, use the login and logout methods. You could login with a user identifier. 
 
-//On verloopSDK object call below method to receive call backs occurred in live chat.
+```
+let verloop = VerloopSDK(config: config)    
 
-//delegate : is a type of VLEventDelegate
+verloop.login(userId: string)
 
-observeLiveChatEventsOn(vlEventDelegate delegate:VLEventDelegate)
+verloop.logout()
+```
 
-//Protocol **VLEventdelegate**
+### For Apple Push Notifications 
 
-//event: Type of the event occurred in live chat.
+To recieve notifications, add the BundleID, APNS Certificate file(.p12) and it's corresponding password on the dashboard's setting page. Homepage > Settings > Chat (under product settings) > iOS SDK / Android SDK
 
-//below method called if the client confirms to the VLEventDelegate protocol through VerloopSDK&#39;s observeLiveChatEventsOn methods.
+Note: Set the device token on the configuration object, before initialising the SDK. The notification payload from Verloop will have a key `_by` with value `verloop`. 
 
-didEventOccurOnLiveChat(\_ event: VLEvent)
-
-**VLEvent**
-
-VLEvent is enum with different types of instances or scenarios occurred during the live chat execution.
-
-onButtonClick: Occurred when user makes button click on the live chat
-
-onURLClick : Occurred when user makes url click on the live chat
-
-onChatMaximized: Occured when chat widget is opened and ready to chat.
-
-onChatMinimized: Occured when chat widget is closed by multiple scenarios such as closeWidge.
-
-onChatStarted: Occured when chatSrated call back posted by Livechat
-
-onchatEnded: Occured when chat session is closed
-
-onWidgetClosed: Occured when user closed the widget by click close icon
-
-setUserIdComplete: Occured when the configuration passed user Id sets successfully.
-
-setUserParamComplete: Occured when configuration passed user params set successfully.
-
-**5) Open chat**
-
-Another way to open the chat is by simply calling openWidget on verloopSDK .
-
-Ex: verloopSDK.openWidget()
-
-**6) Start chat**
-
-To start the chat session call start() method in verloopSDK.
-
-Ex: verloopSDK.start()
-
-**7) Close widget**
-
-To close the chat session and dismiss the chat window, call closeWidget on verloopSDK
-
-Ex: verloopSDK.closeWidget()
-
-**8)To close the existing chat**
-
-To close existing running chat call close() method on verloopSDK.
-
-Ex:verloopSDK.close()
-
-**9)To logout**
-
-//To logout the current user chat session call logout() method on verloopSDK. This clears the local preferences and kill chat session of the user.
-
-Ex:verloopSDK.logout()
-
-**10) Clear configuration**
-
-//To wipe the any existing configurations on the chat view, call clearConfig() method on verloopSDK.
-
-Ex: verloopSDK.clearConfig()
+```
+json { "_by": "verloop", "aps": { "alert": { "body": "notification message body" } } }
+```
