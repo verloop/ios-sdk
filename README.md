@@ -55,7 +55,7 @@ config.setUserId(userId: String)
 
 The following are the APIs on `VLConfig`
 
-**Recepie ID:** To set the recipe before launching the chat. If this api isn't used, then default recipe would be picked up.
+####**Recepie ID:** To set the recipe before launching the chat. If this api isn't used, then default recipe would be picked up.
 
 ``` 
 config.setRecipeId(recipeId id: String?)
@@ -77,7 +77,6 @@ config.setUserName(username name:String)
 config.setUserEmail(userEmail email:String)
 
 config.setUserPhone(userPhone phone:String)
-
 ```
 
 Or you could pass in one or more of the above details using the api `setUserParam`. Key can be either `name`, `email`, and/or `phone`.
@@ -86,10 +85,10 @@ Or you could pass in one or more of the above details using the api `setUserPara
 config.setUserParam(key:String, value:String)
 
 Ex: 
+
 config.setUserParam(key: "name", value: "Test User")
 
 config.setUserParam(key: "email", value: "user@test.com")
-
 ```
 
 **Custom Fields:** Use this api setCustomField to pass any custom parameters. This helps to add your own logic into conversation. This could be fetched via webhooks while running the bot recipe. 
