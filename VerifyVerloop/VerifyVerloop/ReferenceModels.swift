@@ -51,6 +51,7 @@ class ViewModel {
     private var defaults:[[RowModel]] = []
     private var mSDK:VerloopSDK?
     private var presentedSDKController:UIViewController?
+    private var config:VLConfig?
     
     //default inputs to be shown in tableview 1st section
     private var inputs:[RowModel] = [
@@ -124,7 +125,7 @@ class ViewModel {
         if(defaults.first?.first?.valueToBeshown ?? "").isEmpty {
             return nil
         }
-        var config:VLConfig?
+        
         for fieldInput in defaults.first ?? [] {
             if fieldInput.valueToBeshown.isEmpty {
                continue
@@ -216,7 +217,8 @@ extension ViewModel {
                 showmessage(title: "Error", message: "Please enter Client ID and try again", controller: controller)
                 return
             }
-            launchChatOn(controller: controller, config: VLConfig.init(clientId: id))
+            
+            launchChatOn(controller: controller, config: getInputsConfig()!)
         } else if type == .Logout { // log out current session of verloop
             mSDK?.logout()
         } else if type == .CloseWidget { // closes the widget currently shown in screen i.e verloop chat screen
@@ -225,7 +227,7 @@ extension ViewModel {
                 showmessage(title: "Error", message: "Please enter Client ID and try again", controller: controller)
                 return
             }
-            let config = VLConfig.init(clientId: details.clentID)
+            let config = getInputsConfig()!
             config.setButtonOnClickListener { title, type, payload in
                 self.mSDK?.closeWidget()
 
@@ -235,7 +237,11 @@ extension ViewModel {
         } else if type == .EnableNotification { // calls when push notification enable button is clicked
             let details = getUserIDClientID()
             let clientID = details.clentID
-            let config = VLConfig.init(clientId: clientID)
+            guard !clientID.isEmpty else {
+                showmessage(title: "Error", message: "Please enter Client ID and try again", controller: controller)
+                return
+            }
+            let config = getInputsConfig()!
             if let token = UserDefaults.standard.value(forKey: "Device_token") as? String {
                 config.setNotificationToken(notificationToken: token)
                 launchChatOn(controller: controller, config: config)
@@ -252,7 +258,7 @@ extension ViewModel {
                 showmessage(title: "Error", message: "Please enter Client ID and User ID and try again", controller: controller)
                 return
             }
-            let config = VLConfig.init(clientId: clientID)
+            let config = getInputsConfig()!
             config.setUserId(userId: userID)
             launchChatOn(controller: controller, config: config)
         } else if type == .ButtonClickListener { // calls when click on any of the button whcih appears on the verloop chat web view DOM.
@@ -261,7 +267,7 @@ extension ViewModel {
                 showmessage(title: "Error", message: "Please enter Client ID and try again", controller: controller)
                 return
             }
-            let config = VLConfig.init(clientId: details.clentID)
+            let config = getInputsConfig()!
             let recepie = self.getRecepieiD()
             if !recepie.isEmpty {
                 config.setRecipeId(recipeId: recepie)
@@ -280,12 +286,10 @@ extension ViewModel {
                 showmessage(title: "Error", message: "Please enter Client ID and try again", controller: controller)
                 return
             }
-            let config = VLConfig.init(clientId: details.clentID)
-            let recepie = self.getRecepieiD()
+            let config = getInputsConfig()!
+
             config.setUrlRedirectionFlag(canRedirect: false)
-            if !recepie.isEmpty {
-                config.setRecipeId(recipeId: recepie)
-            }
+      
             config.setUrlClickListener {[weak self] url in
                 print("URL click listener called")
                 
@@ -298,3 +302,4 @@ extension ViewModel {
         }
     }
 }
+

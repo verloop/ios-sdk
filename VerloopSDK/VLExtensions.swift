@@ -8,6 +8,8 @@
 import Foundation
 import WebKit
 
+
+//RV -- Since evaluatejavascript is string.So for better accessability and mantaianability we have added a string extensions.
 extension String {
     static func getUserIdEvaluationJS(_ userId:String,optionArgument:String?) -> String {
         if let _unwrapped = optionArgument {
