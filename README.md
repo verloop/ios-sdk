@@ -31,7 +31,6 @@ Import the library with the following command:
 
 ```
 import VerloopSDK
-
 ```
 
 Initialise the configuration object `VLConfig`. You could pass an identifier to uniquely indentify a user  - `userId`. Will be useful to manage logged in user sessions. 
@@ -50,7 +49,9 @@ config.setUserId(userId: String)
 ```
 
 
-### **The following are the APIs on `VLConfig`**
+### APIs on `VLConfig`
+
+You could configure your chat's instance with the following APIs on VLConfig:
 
 - **Recepie ID:** To set the recipe before launching the chat. If this api isn't used, then default recipe would be picked up.
 
