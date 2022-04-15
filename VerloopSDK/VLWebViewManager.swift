@@ -66,7 +66,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         self.config = config
         self.loadWebView()
     }
-    //RV Its removing the visitor token called on different instances so below extra method is created
+
     func clearLocalStorageVistorToken(){
         let script = "localStorage.removeItem(\"visitorToken\")"
         webView.evaluateJavaScript(script) { (token, error) in
@@ -190,20 +190,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         return nil
     }
 
-//RV Better to have this method for some sanity check for anyone to verify if webview has loaded properly
-  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 
-        
-//        let script = "localStorage.getItem(\"visitorToken\")"
-//        webView.evaluateJavaScript(script) { (token, error) in
-//            if let error = error {
-//                print ("localStorage.getitem('visitorToken') failed due to \(error)")
-//                assertionFailure()
-//            }
-//            print("##### Visistor token = \(String(describing: token))")
-//        }
-
-    }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         print("decidePolicyFor navigationAction \(navigationAction.request.url)")
@@ -220,7 +207,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         }
     }
 }
-//RV These extension functions hosts  all the operations we are doing for webview while interacting with livechat.Code is segregatted for better mantainability to make it more modular for future scalability.Anything on new configuration can be added in this extension
+
 
 extension VLWebViewManager {
     
@@ -316,7 +303,7 @@ extension VLWebViewManager {
     }
 }
 
-//RV this extension is for parsing the callbacks from livechat script message handlers.The extensions are written for segreggating the code for better mantaianbility.Anything on new callback can be added in this extension 
+
 
 extension VLWebViewManager:ScriptMessageDelegate {
     func handler(_ scriptMessageHandler: ScriptMessageHandler, didReceiveMessage message: WKScriptMessage) {

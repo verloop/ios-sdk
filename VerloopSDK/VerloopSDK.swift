@@ -260,7 +260,7 @@ import Foundation
         }
     
 
-    //RV As part of backward compatability we have retained this and sample app can call to close the window without closing chat.Used to dismiss the chat controller.The common closure is written additionaly to take care of closing the chat
+
     @objc public func hide() {
         onChatClose {
             //nothing to do here

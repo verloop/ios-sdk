@@ -145,7 +145,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             }
         }
     }
-    //RV We can remove this method.Initially to align with existing SDK implementation because they added url click and button click on the VLconfig itself so we added below method.Later we segregatted and made VLConfig only for configuration and client callbacks observers can be set on VerloopSDK and VerloopSDK will pass all the reference to VLWebviewManager
+
 //    @objc public func setOnEventChangeListener(_ delegate:VLEventDelegate?) {
 //        mEventChangeDelegate = delegate
 //    }
@@ -176,7 +176,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         let ret = UserDefaults.standard.string(forKey: "VERLOOP_CUSTOM_FIELDS")
         return ret
     }
-    //RV Part of v1 Implementation.
+
     func save() {
         let defaults = UserDefaults.standard
         defaults.set(clientId, forKey: "VERLOOP_CLIENT_ID")
@@ -207,7 +207,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         } catch { print(error) }
         
     }
-    //RV Used in clearConfig to clear the configs,token etc .Part of v1 implementation mostly
+
     func clear() {
         
         userId = nil
