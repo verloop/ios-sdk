@@ -66,7 +66,7 @@ config.setNotificationToken(notificationToken: string)
 ```
 
 
-- User Parameters: To set user parameters such as username, email and phone number. 
+- UserName, UserEmail and UserPhone: To set user parameters such as username, email and phone number. 
 
 
 ```
@@ -77,7 +77,7 @@ config.setUserEmail(userEmail email:String)
 config.setUserPhone(userPhone phone:String)
 ```
 
-Or you could pass in one or more of the above details using the api `setUserParam`. Key can be either `name`, `email`, and/or `phone`.
+- User Parameters: You could pass in one or more of the above details using the api `setUserParam`. Key can be either `name`, `email`, and/or `phone`.
 
 ```
 config.setUserParam(key:String, value:String)
@@ -89,13 +89,11 @@ config.setUserParam(key: "name", value: "Test User")
 config.setUserParam(key: "email", value: "user@test.com")
 ```
 
-- Custom Fields: Use this api setCustomField to pass any custom parameters. This helps to add your own logic into conversation. This could be fetched via webhooks while running the bot recipe. 
+- Custom Fields: Use this api setCustomField to pass any custom parameters. This helps to add your own logic into conversation. This could be fetched via webhooks while running the bot recipe. `key` and `value` are the details saved within the set scope. Scope takes in two values, `user` and `room`.
 
 ```
 config.putCustomField(key: String, value: String, scope: SCOPE)
 ```
-
-Where key and value are the details saved within the set scope. Scope takes in two values, `user` and `room`.
 
 
 - Listeners: You could set two listenrs when an end user taps on a button or url in the recipe. 
