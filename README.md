@@ -52,103 +52,69 @@ let config = VLConfig(clientId: String)
 config.setUserId(userId: String)
 ```
 
+
 The following are the APIs on `VLConfig`
 
-**Recepie ID:** 
+**Recepie ID:** To set the recipe before launching the chat. If this api isn't used, then default recipe would be picked up.
 
-// recipeId : id of the recipe to be added to configuration object.
+``` 
+config.setRecipeId(recipeId id: String?)
+```
 
-//Void method
+**Notification Token:** To receive notifications, you'll need to pass your device token via this API apart from setting you bundle id, p12 apns cert and its password in the dashboard. 
 
-setRecipeId(recipeId id: String?)
+```
+config.setNotificationToken(notificationToken: string)
+```
 
-Ex:config.setRecipeId(&quot;RecepieID&quot;)
+
+**User Parameters** To set user parameters such as username, email and phone number. 
 
 
+```
+config.setUserName(username name:String)
 
-**Notification Token:**
+config.setUserEmail(userEmail email:String)
 
-//notificationToken: Token for the push notifications
+config.setUserPhone(userPhone phone:String)
 
-setNotificationToken(notificationToken: token)
+```
 
-Ex **:** config.setNotificationToken(notificationToken: token)
+Or you could pass in one or more of the above details using the api `setUserParam`. Key can be either `name`, `email`, and/or `phone`.
 
-**User-Name**
+```
+config.setUserParam(key:String, value:String)
 
-//name: Name of the user to be added to configuration object
+Ex: 
+config.setUserParam(key: "name", value: "Test User")
 
-//Void method
+config.setUserParam(key: "email", value: "user@test.com")
 
-setUserName(username name:String)
+```
 
-Ex: config.setUserName(&quot;User&#39;s Name&quot;)
+**Custom Fields:** Use this api setCustomField to pass any custom parameters. This helps to add your own logic into conversation. This could be fetched via webhooks while running the bot recipe. 
 
-**User-Email**
+```
+config.putCustomField(key: String, value: String, scope: SCOPE)
+```
 
-//email: Email address of the user to be added to configuration object
+Where key and value are the details saved within the set scope. Scope takes in two values, `user` and `room`.
 
-//Void method
 
-setUserEmail(userEmail email:String)
+**Listeners:** You could set two listenrs when an end user taps on a button or url in the recipe. 
 
-Ex: config.setUserEmail(&quot;hello@verloop.io&quot;)
+```
+//Button Click Listener
 
-**User-Phone number**
+config.setButtonOnClickListener(onButtonClicked buttonClicked: LiveChatButtonClickListener?)
 
-//phone: Phone number of the user to be added to configuration object
 
-//Void method
-
-setUserPhone(userPhone phone:String)
-
-Ex:config.setUserPhone(&quot;+919xxxxxxxx&quot;)
-
-**UserParameters:**
-
-//setUserParam is a another handy method exposed to set any 3 the above values such as : name, email,phone
-
-//key: name of the parameter [&quot;name&quot;,&quot;email&quot;,&quot;phone&quot;]
-
-//value: value of the respective key
-
-//Void method
-
-setUserParam(key:String, value:String)
-
-config.setUserParam(key: &quot;name&quot;, value: &quot;Jack&quot;)
-
-config.setUserParam(key: &quot;email&quot;, value: &quot;jack.albert@gmail.com&quot;)
-
-config.setUserParam(key: &quot;phone&quot;, value: &quot;+91434432&quot;)
-
-**Button Click Listener:**
-
-//Confirm to below method to receive call back while a button click happens on the live script
-
-//onButtonClicked : closure available on the VLConfig
-
-setButtonOnClickListener(onButtonClicked buttonClicked: LiveChatButtonClickListener?)
-
-**URL Click Listener:**
-
-//Confirm to below method to receive call back while a URL click happens on the live script
-
-//onUrlClicked : closure available on the VLConfig
+// URL Click Listener
 
 setUrlClickListener(onUrlClicked urlClicked: LiveChatUrlClickListener?)
 
-**CustomField:**
+```
 
-//putCustomField is used to set any custom key values on the config object.
-
-//key: name of the key
-
-//value: value of the respective key
-
-//scope: [&quot;User&quot;,&quot;Room&quot;]. Pass either of the scope to be added on configuration.
-
-putCustomField(key: String, value: String, scope: SCOPE)
 
 **2) Initialize SDK**
 
