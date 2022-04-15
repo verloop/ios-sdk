@@ -1,124 +1,190 @@
-NOTE:\
-Now, you can install using cocoapod - `pod install VerloopSDKiOS`
+# VerloopSDK for iOS
 
-Or Download the iOS using this link:
+This framework helps you configure and launch Verloop's chat. Inorder to integrate, one needs to initiase our `VerloopSDK` instance by passing a configuration `VLConfig` object and present it's navigation controller. This will present Verloop's chat modally. The APIs on `VerloopSDK` and `VLConfig` are described in detail below. 
 
-`https://drive.google.com/file/d/1qi3_Kq42eRu487rjGRTD5gX9-2-U2Ia5/view?usp=sharing`
 
-**Version 0.1.3**
+## **Requirements**
 
-`https://drive.google.com/file/d/18UUCTqxLqCSybMiK3aUJhZ87aAkM_pO2/view?usp=sharing`
+- XCode 13.1+
+- Min IOS version support IOS10
 
-**Version 0.1.4**
+## **Installation**
 
-`https://drive.google.com/file/d/172R2OaMygDXjYPMj4zUgIKWurV8NDyaO/view?usp=sharing`
+Two ways to install
+
+- CocoaPods is a dependency manager for Cocoa projects. For usage and installation instructions, visit their website. To integrate Verloop into your Xcode project using CocoaPods, add the following line in your Podfile:
+  ```
+  pod 'VerloopSDKiOS'
+  ```
+  
+- Manually build the repo and generate the VerloopSDK framework and embed the framework in Linked Binaries in your project as shown below. 
+<p align="center">
+<img width="700" alt="Screenshot 2022-03-15 at 3 08 56 PM" src="https://user-images.githubusercontent.com/98142458/158394191-f40ef1b5-89eb-41cb-8110-dfcd54b700be.png">
+</p>
+
+
+
+## **Change Log**
+
+Kindly refer to our change log for the added features and deprecated APIs on every release. You'll find it here -> [change log](https://github.com/verloop/ios-sdk/wiki/Change-log) 
+
+
+## **SDK Usage - Swift** 
+
  
-**For Swift**\
-After importing the Framework like any other framework you do, import the SDK in controller as :-
-
-`swift import VerloopSDK`
-
-In your viewDidLoad, create a config and instantiate the verloop variable like this :-
+Import the library with the following command: 
 
 ```
-let config = VLConfig(clientId: clientId, userId: userId) config.setStaging(isStaging: true/false) // default false config.setNotificationToken(notificationToken: token) // optional config.addCustomField(key: "key", value: "value", scope: VLConfig.SCOPE.USER)
-
-verloop = VerloopSDK(config: config) 
+import VerloopSDK
 ```
 
-After this, when user wants to open the chat, you can simply ask for the UINavigationController and open that UINavigationController :-
+Initialise the configuration object `VLConfig`. You could pass an identifier to uniquely indentify a user  - `userId`. Will be useful to manage logged in user sessions. 
+
 ```
-self.navigationController?.present(verloop.getNavController(), animated: true)
+let config = VLConfig(clientId: String)
+
+let config = VLConfig(clientId: String, userId: String?)    //clientId is required parameter while userId.
 ```
-Adding user properties
-To set a user's name, email, or phone, you can use the method in config object before initializing the SDK.
+You could otherwise update the userId using the method `setUserId` on an instance of `VLConfig`.  
+
 ```
-config.setUserName("User's Name") config.setUserEmail("hello@verloop.io") config.setUserPhone("+919xxxxxxxx")
-```
-Setting a Recipe\
-To set a Recipe :-
-```
-config.setRecipeId("RECIPE ID")
+let config = VLConfig(clientId: String)
+
+config.setUserId(userId: String)
 ```
 
-Adding a callback for Button Click\
-```
-config.setButtonOnClickListener(onButtonClicked:{ (title, type, payload) in
-     print(title)
-})
-```
 
-Notifications
+### APIs on `VLConfig`
 
-Add the BundleID, APNS Certificate file(.p12) and it's corresponding password on the dashboard's setting page. Homepage > Settings > Chat (under product settings) > iOS SDK / Android SDK
+You could configure your chat's instance with the following APIs on VLConfig:
 
-Before initiating the SDK, pass the device token onto our configuration object. 
-```
- config.setNotificationToken(notificationToken: token) 
+- **Recepie ID:** To set the recipe before launching the chat. If this api isn't used, then default recipe would be picked up.
+
+``` 
+config.setRecipeId(recipeId id: String?)
 ```
 
-When you get a notification from Verloop, simply create the verloop variable and present it's navigation controller.
+- Notification Token: To receive notifications, you'll need to pass your device token via this API apart from setting you bundle id, p12 apns cert and its password in the dashboard. 
 
-The notification from Verloop will have a key _by with value verloop. Something like this -
+```
+config.setNotificationToken(notificationToken: string)
+```
+
+
+- UserName, UserEmail and UserPhone: To set user parameters such as username, email and phone number. 
+
+
+```
+config.setUserName(username name:String)
+
+config.setUserEmail(userEmail email:String)
+
+config.setUserPhone(userPhone phone:String)
+```
+
+- User Parameters: You could pass in one or more of the above details using the api `setUserParam`. Key can be either `name`, `email`, and/or `phone`.
+
+```
+config.setUserParam(key:String, value:String)
+
+Example: 
+
+config.setUserParam(key: "name", value: "Test User")
+
+config.setUserParam(key: "email", value: "user@test.com")
+```
+
+- Custom Fields: Use this api setCustomField to pass any custom parameters. This helps to add your own logic into conversation. This could be fetched via webhooks while running the bot recipe. `key` and `value` are the details saved within the set scope. Scope takes in two values, `user` and `room`.
+
+```
+config.putCustomField(key: String, value: String, scope: SCOPE)
+
+Example:
+                        
+config?.putCustomField(key: "custom_key", value: "custom_value", scope: .USER)
+
+```
+
+
+- Listeners: You could set two listenrs when an end user taps on a button or url in the recipe. 
+
+```
+//Button Click Listener
+
+config.setButtonOnClickListener(onButtonClicked buttonClicked: LiveChatButtonClickListener?)
+
+
+// URL Click Listener
+
+setUrlClickListener(onUrlClicked urlClicked: LiveChatUrlClickListener?)
+
+```
+
+
+### APIs on `VerloopSDK`
+
+VerloopSDK class is the SDK class which expects a `VLConfig` instance as an initialisation parameter. An instance of VerloopSDK is used to present or close the chat. You could manage user session with the login and logout APIs on this class. Here we'll walk you through the APIs with the scenarios.  
+
+- To initialise the SDK
+```
+let verloop = VerloopSDK(config: config)     
+```
+
+- To prsent the chat, you'll need to get the root view controller of the chat and present it modally from your controller. This will launch the converstation too. Use `getNavController` method of the `VerloopSDK` to create an instance of the SDK's root view controller. 
+
+```
+let chatController = verloop.getNavController()
+
+yourViewController.present(chatController, animated: true)
+```
+
+- To manage user session, use the login and logout methods. You could login with a user identifier. 
+
+```
+let verloop = VerloopSDK(config: config)    
+
+verloop.login(userId: string)
+
+verloop.logout()
+```
+
+### For Apple Push Notifications 
+
+To recieve notifications, add the BundleID, APNS Certificate file(.p12) and it's corresponding password on the dashboard's setting page. Homepage > Settings > Chat (under product settings) > iOS SDK / Android SDK
+
+Note: Set the device token on the configuration object, before initialising the SDK. The notification payload from Verloop will have a key `_by` with value `verloop`. 
+
 ```
 json { "_by": "verloop", "aps": { "alert": { "body": "notification message body" } } }
 ```
-So if a user clicks on a notification with payload like this, open the verloop's nav controller.
-
-If you don't have access to your current controller (in case of frameworks like Ionic), you can call
-```
-verloop.start();
-```
-But this is not the preferred method of opening the chat.
-
-If you run into run time errors which say that library is missing, you might have to do this to fix - https://stackoverflow.com/a/26949219 (Build Settings > Always Embed Swift Standard Libraries set to YES)
 
 
-\
-**For Objective C**\
-After importing the Framework like any other framework you do, import the SDK in controller as :-
+## **SDK Usage - Objective C** 
+
+
+After importing the Framework, add the following line in your controller:
 
 ```
 import <VerloopSDK/VerloopSDK-Swift.h>
 ```
 
-In your viewDidLoad, create a config and instantiate the verloop variable like this :-
+Create the `VLConfig` object. Configure the object. Then initialise `VerloopSDK` with the configuration object. Few of the APIs are listed below. 
 
 ```
 VLConfig *config = [[VLConfig alloc] initWithClientId:@"clientId" userId:@"userId"];
 
-[config setNotificationTokenWithNotificationToken:@"token"]; [config setStagingWithIsStaging:YES]; [config putCustomFieldWithKey:@"key" value:@"value" scope:SCOPEUSER];
-
-VerloopSDK *verloop = [[VerloopSDK alloc] initWithConfig:config]; ```
-```
-After this, when user want to open the chat, you can simply ask for the UINavigationController and open that UINavigationController.
-
-```
-[[self navigationController] presentViewController:obj animated:YES completion:NULL];
-```
-Adding user properties
-To set a user's name, email, or phone, you can use the method in config object before initializing the SDK.
-```
 [config setUserName:@"Name"]; [config setUserEmail:@"hello@verloop.io"]; [config setUserPhone:@"+919xxxxxxxx"];
+[config setNotificationTokenWithNotificationToken:@"token"]; 
+[config setStagingWithIsStaging:YES]; 
+[config putCustomFieldWithKey:@"key" value:@"value" scope:SCOPEUSER];
+
+VerloopSDK *verloop = [[VerloopSDK alloc] initWithConfig:config]; 
+```
+
+After this, when user want to open the chat, you can simply ask for the UINavigationController and present it on your viewcontroller. 
 
 ```
-To open the chat -
-```
-[verloop start]; 
+[[self navigationController] presentViewController:[verloop getNavController] animated:YES completion:NULL];
 ```
 
-# Build SDK manually
-
-Note: you need this if the compiled sdk provided is not compatible with the swift version / Xcode version
-
-https://github.com/Carthage/Carthage
-
-
-- Open the VerloopSDK project in the xcode (https://github.com/verloop/ios-sdk)
-- Set the swift version from the build settings
-- Run the following command to build the archive- make sure that you are in the VerloopSDK folder
-
-`carthage build --archive`
-
-- Once this command is executed successfully, a carthage folder will be created
-- You will find the framework in Carthage/build/iOS
+Note: Kindly go through the swift's documentation for further APIs and appropriately call corresponding methods. 
