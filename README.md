@@ -53,7 +53,7 @@ config.setUserId(userId: String)
 ```
 
 
-The following are the APIs on `VLConfig`
+**The following are the APIs on `VLConfig`**
 
 - **Recepie ID:** To set the recipe before launching the chat. If this api isn't used, then default recipe would be picked up.
 
@@ -61,14 +61,14 @@ The following are the APIs on `VLConfig`
 config.setRecipeId(recipeId id: String?)
 ```
 
-- **Notification Token:** To receive notifications, you'll need to pass your device token via this API apart from setting you bundle id, p12 apns cert and its password in the dashboard. 
+- Notification Token: To receive notifications, you'll need to pass your device token via this API apart from setting you bundle id, p12 apns cert and its password in the dashboard. 
 
 ```
 config.setNotificationToken(notificationToken: string)
 ```
 
 
-- **User Parameters:** To set user parameters such as username, email and phone number. 
+- User Parameters: To set user parameters such as username, email and phone number. 
 
 
 ```
@@ -91,7 +91,7 @@ config.setUserParam(key: "name", value: "Test User")
 config.setUserParam(key: "email", value: "user@test.com")
 ```
 
-- **Custom Fields:** Use this api setCustomField to pass any custom parameters. This helps to add your own logic into conversation. This could be fetched via webhooks while running the bot recipe. 
+- Custom Fields: Use this api setCustomField to pass any custom parameters. This helps to add your own logic into conversation. This could be fetched via webhooks while running the bot recipe. 
 
 ```
 config.putCustomField(key: String, value: String, scope: SCOPE)
@@ -100,7 +100,7 @@ config.putCustomField(key: String, value: String, scope: SCOPE)
 Where key and value are the details saved within the set scope. Scope takes in two values, `user` and `room`.
 
 
-- **Listeners:** You could set two listenrs when an end user taps on a button or url in the recipe. 
+- Listeners: You could set two listenrs when an end user taps on a button or url in the recipe. 
 
 ```
 //Button Click Listener
