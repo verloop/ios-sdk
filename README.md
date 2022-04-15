@@ -12,7 +12,7 @@ This framework helps you configure and launch Verloop's chat. Inorder to integra
 
 Two ways to install
 
-- Now, you can install using cocoapod 
+- CocoaPods is a dependency manager for Cocoa projects. For usage and installation instructions, visit their website. To integrate Verloop into your Xcode project using CocoaPods, add the following line in your Podfile:
   ```
   pod 'VerloopSDKiOS'
   ```
