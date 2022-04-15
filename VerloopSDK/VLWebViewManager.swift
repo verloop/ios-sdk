@@ -193,7 +193,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
 
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        print("decidePolicyFor navigationAction \(navigationAction.request.url)")
+
         if navigationAction.targetFrame == nil {
             if self.config.isURLRedirection() {
                 decisionHandler(.allow)
