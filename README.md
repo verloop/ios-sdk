@@ -113,6 +113,12 @@ config?.putCustomField(key: "custom_key", value: "custom_value", scope: .USER)
 
 config.setButtonOnClickListener(onButtonClicked buttonClicked: LiveChatButtonClickListener?)
 
+Example: 
+
+config.setButtonOnClickListener(onButtonClicked:{ (title, type, payload) in
+     print(title)
+})
+
 
 // URL Click Listener
 
