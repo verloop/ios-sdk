@@ -32,11 +32,6 @@ import Foundation
         super.init()
         manager = VLWebViewManager(config: config)
         manager.jsDelegate(delegate: self)
-        //TODO property needed for manager.to be removed
-        manager.onMessageReceived = {[weak self] in
-            print("refreshClientInfo")
-            self?.refreshClientInfo()
-        }
         //Part of network reachability
         startHost(host: "verloop.io")
     }
@@ -104,9 +99,10 @@ import Foundation
         config.clear()
         manager.clearConfig(config: config)
         self.config = VLConfig(clientId: "")
+        self.clearLocalStorage()
     }
     @objc public func clearLocalStorage(){
-        manager.clearCookies()
+        manager.clearLocalStorageVistorToken()
 
     }
     public func getConfig() -> VLConfig {
@@ -264,7 +260,7 @@ import Foundation
         }
     
 
-    
+
     @objc public func hide() {
         onChatClose {
             //nothing to do here

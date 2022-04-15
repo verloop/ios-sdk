@@ -52,10 +52,10 @@ enum MessageType:String,Codable {
     case onLogoutComplete
     case onWidgetLoaded
     case onWidgetClosed
-//    case onIncomingMessage(_ message:VLMessage)
     case setUserIdComplete
     case setUserParamComplete
 }
+
 
 @objc public protocol VLEventDelegate {
     @objc func didEventOccurOnLiveChat(_ event:VLEvent)

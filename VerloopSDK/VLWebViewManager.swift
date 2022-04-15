@@ -16,13 +16,13 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     private var isRoomReady = false
     private var isReady = false
     private var config: VLConfig!
-    private var roomReadyConfigurations:[VLConfig.ConfigParam] = []
-    private var networkChangesConfigurations:[VLConfig.ConfigParam] = []
+    private var roomReadyConfigurations:[VLConfig.APIMethods] = []
+    private var networkChangesConfigurations:[VLConfig.APIMethods] = []
     private lazy var contentController: WKUserContentController = {
         return webView.configuration.userContentController
     }()
     var _eventDelegate:VLEventDelegate?
-    private var configParams:[VLConfig.ConfigParam] = []
+    private var configParams:[VLConfig.APIMethods] = []
     var onMessageReceived:(() -> Void)?
     
     init(config: VLConfig) {
@@ -66,8 +66,8 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         self.config = config
         self.loadWebView()
     }
-    
-    func clearCookies(){
+
+    func clearLocalStorageVistorToken(){
         let script = "localStorage.removeItem(\"visitorToken\")"
         webView.evaluateJavaScript(script) { (token, error) in
             print("remove visitor token on logout")
@@ -121,16 +121,11 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         _eventDelegate = delegate
     }
     
-    func startRoom() {
-        hasTriedToStartRoom = true
-        webView.evaluateJavaScript("VerloopLivechat.start();")
-    }
-    
     func logoutSession() {
         webView.evaluateJavaScript(String.getLogoutEvaluationJS()) {[weak self] _, error in
             print("logout error \(error?.localizedDescription ?? "NA")")
             if error == nil {// when user is logged out, clear the local cookies
-                self?.clearCookies()
+                self?.clearLocalStorageVistorToken()
             }
         }
     }
@@ -194,20 +189,8 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     
         return nil
     }
-    
-  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        
-        //you might want to edit the script, with the escape characters
-        let script = "localStorage.getItem(\"visitorToken\")"
-        webView.evaluateJavaScript(script) { (token, error) in
-            if let error = error {
-                print ("localStorage.getitem('visitorToken') failed due to \(error)")
-                assertionFailure()
-            }
-            print("##### Visistor token = \(String(describing: token))")
-        }
-//        clearCookies()
-    }
+
+
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         print("decidePolicyFor navigationAction \(navigationAction.request.url)")
@@ -224,6 +207,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         }
     }
 }
+
 
 extension VLWebViewManager {
     
@@ -319,10 +303,12 @@ extension VLWebViewManager {
     }
 }
 
+
+
 extension VLWebViewManager:ScriptMessageDelegate {
     func handler(_ scriptMessageHandler: ScriptMessageHandler, didReceiveMessage message: WKScriptMessage) {
         print("message.name and message.body are \(message.name) \(message.body)")
-        //TODO handle v2 and non  v2 change
+
         if (message.name == Constants.SCRIPT_MESSAGE_NAME) {
                 if jsInterface != nil {
                     jsInterface?.jsCallback(message: message.body)
@@ -343,23 +329,15 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0))
                 let expectedData = try JSONSerialization.data(withJSONObject: expectedModelData, options: .prettyPrinted)
                 let model = try JSONDecoder().decode(ExpectedEventPayload.self, from: expectedData)
-                //TODO remove the _modelType part
-                if let _modelType = model.type {
-                    switch _modelType {
-                        //button click and URL click
-                        case .MessageButtonClick:
-                            _eventDelegate?.didEventOccurOnLiveChat(.onButtonClick)
-                        case .MessageURLClick:
-                            _eventDelegate?.didEventOccurOnLiveChat(.onURLClick)
-                    }
-                } else if let  _function = model.fn {
+
+                if let  _function = model.fn {
                     switch _function {
                         case .FunctionSetUserIdComplete:
                             _eventDelegate?.didEventOccurOnLiveChat(.setUserIdComplete)
                         case .FunctionSetUserParamComplete:
                             _eventDelegate?.didEventOccurOnLiveChat(.setUserParamComplete)
                         case .FunctionCloseWidget:
-                            clearCookies()
+                            clearLocalStorageVistorToken()
                             _eventDelegate?.didEventOccurOnLiveChat(.onWidgetClosed)
                         case .FunctionOnRoomReady:
                             print("FunctionOnRoomReady")
@@ -372,7 +350,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                             processConfigurations()
                             webView.evaluateJavaScript("VerloopLivechat.widgetOpened()")
                         case .FunctionCloseComplete:
-                            clearCookies()
+                            clearLocalStorageVistorToken()
                             _eventDelegate?.didEventOccurOnLiveChat(.onLogoutComplete)
                         case .FunctionChatMinimized:
                             _eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)

@@ -1,260 +1,190 @@
+# VerloopSDK for iOS
+
+This framework helps you configure and launch Verloop's chat. Inorder to integrate, one needs to initiase our `VerloopSDK` instance by passing a configuration `VLConfig` object and present it's navigation controller. This will present Verloop's chat modally. The APIs on `VerloopSDK` and `VLConfig` are described in detail below. 
+
+
 ## **Requirements**
 
 - XCode 13.1+
 - Min IOS version support IOS10
-- Apple developer account
-  - Register your developer account with Apple and associate with the project build settings for a digital signature to compile.
-    - Download developer management app from AppStore
-    - Another option is to utilize the web portal
-      - [https://developer.apple.com/enroll/app](https://developer.apple.com/enroll/app)
-    - If issues prevent registration or activation of your developer account, contact Apple developer program 1-800-692-7753 for manual review
-    - Once approved, associate project build settings with your developer account.
-    - Download the APNS certificate and upload that to your dashboard settings in Verloop for Staging and Prod.Add the BundleID, APNS Certificate file(.p12) and it&#39;s corresponding password on the dashboard&#39;s setting page. Homepage \&gt; Settings \&gt; Chat (under product settings) \&gt; iOS SDK / Android SDK
 
 ## **Installation**
 
-- Fork/Clone Github repository
-- Adjust build settings to include your developer account
-- Known issues with M1 mac (Arm64) – if Any fill here
-- Build &amp; Test!
-
 Two ways to install
 
-- Now, you can install using cocoapod 
-  
+- CocoaPods is a dependency manager for Cocoa projects. For usage and installation instructions, visit their website. To integrate Verloop into your Xcode project using CocoaPods, add the following line in your Podfile:
+  ```
   pod 'VerloopSDKiOS'
-- Manually build the repo and generate the VerloopSDK framework .Embedd the framework in Linked Binaries in your project like this
+  ```
+  
+- Manually build the repo and generate the VerloopSDK framework and embed the framework in Linked Binaries in your project as shown below. 
+<p align="center">
+<img width="700" alt="Screenshot 2022-03-15 at 3 08 56 PM" src="https://user-images.githubusercontent.com/98142458/158394191-f40ef1b5-89eb-41cb-8110-dfcd54b700be.png">
+</p>
 
-<img width="907" alt="Screenshot 2022-03-15 at 3 08 56 PM" src="https://user-images.githubusercontent.com/98142458/158394191-f40ef1b5-89eb-41cb-8110-dfcd54b700be.png">
 
 
+## **Change Log**
+
+Kindly refer to our change log for the added features and deprecated APIs on every release. You'll find it here -> [change log](https://github.com/verloop/ios-sdk/wiki/Change-log) 
 
 
-## **SDK Usage**
+## **SDK Usage - Swift** 
+
+ 
+Import the library with the following command: 
+
+```
 import VerloopSDK
+```
 
-**1) Initialize configuration**
+Initialise the configuration object `VLConfig`. You could pass an identifier to uniquely indentify a user  - `userId`. Will be useful to manage logged in user sessions. 
 
-//userId is a optional and client is required parameter.
-
-let config = VLConfig(clientId: String, userId: String?)
-
-//Config can be initialised by using below convenience method and pass mandatory clientId.
-
+```
 let config = VLConfig(clientId: String)
 
-VLConfig has distinct optional properties which can be configured by using following methods.
+let config = VLConfig(clientId: String, userId: String?)    //clientId is required parameter while userId.
+```
+You could otherwise update the userId using the method `setUserId` on an instance of `VLConfig`.  
 
-**UserId**
+```
+let config = VLConfig(clientId: String)
 
-//userId : id of the user to be added to configuration object.
+config.setUserId(userId: String)
+```
 
-//Void method
 
-setUserId(userId:String)
+### APIs on `VLConfig`
 
-Ex:config.setUserId(&quot;12345&quot;)
+You could configure your chat's instance with the following APIs on VLConfig:
 
-**Recepie ID:**
+- **Recepie ID:** To set the recipe before launching the chat. If this api isn't used, then default recipe would be picked up.
 
-// recipeId : id of the recipe to be added to configuration object.
+``` 
+config.setRecipeId(recipeId id: String?)
+```
 
-//Void method
+- Notification Token: To receive notifications, you'll need to pass your device token via this API apart from setting you bundle id, p12 apns cert and its password in the dashboard. 
 
-setRecipeId(recipeId id: String?)
+```
+config.setNotificationToken(notificationToken: string)
+```
 
-Ex:config.setRecipeId(&quot;RecepieID&quot;)
 
-**Department**
+- UserName, UserEmail and UserPhone: To set user parameters such as username, email and phone number. 
 
-//dept : department name to be added to configuration object.
 
-//Void method
+```
+config.setUserName(username name:String)
 
-setDepartment( **\_** dept:String)
+config.setUserEmail(userEmail email:String)
 
-Ex: config.setDepartment(&quot;DepartmentName&quot;)
+config.setUserPhone(userPhone phone:String)
+```
 
-**ClearDepartment**
+- User Parameters: You could pass in one or more of the above details using the api `setUserParam`. Key can be either `name`, `email`, and/or `phone`.
 
-//No inputs needed.
+```
+config.setUserParam(key:String, value:String)
 
-//Void method
+Example: 
 
-clearDepartment()
+config.setUserParam(key: "name", value: "Test User")
 
-Ex:config.clearDepartment()
+config.setUserParam(key: "email", value: "user@test.com")
+```
 
-**Notification Token:**
+- Custom Fields: Use this api setCustomField to pass any custom parameters. This helps to add your own logic into conversation. This could be fetched via webhooks while running the bot recipe. `key` and `value` are the details saved within the set scope. Scope takes in two values, `user` and `room`.
 
-//notificationToken: Token for the push notifications
+```
+config.putCustomField(key: String, value: String, scope: SCOPE)
 
-setNotificationToken(notificationToken: token)
+Example:
+                        
+config?.putCustomField(key: "custom_key", value: "custom_value", scope: .USER)
 
-Ex **:** config.setNotificationToken(notificationToken: token)
+```
 
-**User-Name**
 
-//name: Name of the user to be added to configuration object
+- Listeners: You could set two listenrs when an end user taps on a button or url in the recipe. 
 
-//Void method
+```
+//Button Click Listener
 
-setUserName(username name:String)
+config.setButtonOnClickListener(onButtonClicked buttonClicked: LiveChatButtonClickListener?)
 
-Ex: config.setUserName(&quot;User&#39;s Name&quot;)
 
-**User-Email**
-
-//email: Email address of the user to be added to configuration object
-
-//Void method
-
-setUserEmail(userEmail email:String)
-
-Ex: config.setUserEmail(&quot;hello@verloop.io&quot;)
-
-**User-Phone number**
-
-//phone: Phone number of the user to be added to configuration object
-
-//Void method
-
-setUserPhone(userPhone phone:String)
-
-Ex:config.setUserPhone(&quot;+919xxxxxxxx&quot;)
-
-**UserParameters:**
-
-//setUserParam is a another handy method exposed to set any 3 the above values such as : name, email,phone
-
-//key: name of the parameter [&quot;name&quot;,&quot;email&quot;,&quot;phone&quot;]
-
-//value: value of the respective key
-
-//Void method
-
-setUserParam(key:String, value:String)
-
-config.setUserParam(key: &quot;name&quot;, value: &quot;Jack&quot;)
-
-config.setUserParam(key: &quot;email&quot;, value: &quot;jack.albert@gmail.com&quot;)
-
-config.setUserParam(key: &quot;phone&quot;, value: &quot;+91434432&quot;)
-
-**Button Click Listener:**
-
-//Confirm to below method to receive call back while a button click happens on the live script
-
-//onButtonClicked : closure available on the VLConfig
-
-setButtonOnClickListener(onButtonClicked buttonClicked: LiveChatButtonClickListener?)
-
-**URL Click Listener:**
-
-//Confirm to below method to receive call back while a URL click happens on the live script
-
-//onUrlClicked : closure available on the VLConfig
+// URL Click Listener
 
 setUrlClickListener(onUrlClicked urlClicked: LiveChatUrlClickListener?)
 
-**CustomField:**
+```
 
-//putCustomField is used to set any custom key values on the config object.
 
-//key: name of the key
+### APIs on `VerloopSDK`
 
-//value: value of the respective key
+VerloopSDK class is the SDK class which expects a `VLConfig` instance as an initialisation parameter. An instance of VerloopSDK is used to present or close the chat. You could manage user session with the login and logout APIs on this class. Here we'll walk you through the APIs with the scenarios.  
 
-//scope: [&quot;User&quot;,&quot;Room&quot;]. Pass either of the scope to be added on configuration.
+- To initialise the SDK
+```
+let verloop = VerloopSDK(config: config)     
+```
 
-putCustomField(key: String, value: String, scope: SCOPE)
+- To prsent the chat, you'll need to get the root view controller of the chat and present it modally from your controller. This will launch the converstation too. Use `getNavController` method of the `VerloopSDK` to create an instance of the SDK's root view controller. 
 
-**2) Initialize SDK**
-
-VerloopSDK class is the SDK class which expects configuration as construction parameter. Once above configuration object prepared, create VerloopSDK instance by passing configuration as shown below.
-
-//config: VLConfig object created on step 1.
-
-let verloop = VerloopSDK(config: config)
-
-**3) getNavController and start chat**
-
-getNavController method create an instance of the SDK controller which has embedded WKWebview. When its time to open Verloop chat, like other present controllers, pass getNavController() object on your current controller like shown below.
-
+```
 let chatController = verloop.getNavController()
 
-\&lt;your controller\&gt;.present(chatController, animated: true)
+yourViewController.present(chatController, animated: true)
+```
 
-**4)Listen to the events**
+- To manage user session, use the login and logout methods. You could login with a user identifier. 
 
-//On verloopSDK object call below method to receive call backs occurred in live chat.
+```
+let verloop = VerloopSDK(config: config)    
 
-//delegate : is a type of VLEventDelegate
+verloop.login(userId: string)
 
-observeLiveChatEventsOn(vlEventDelegate delegate:VLEventDelegate)
+verloop.logout()
+```
 
-//Protocol **VLEventdelegate**
+### For Apple Push Notifications 
 
-//event: Type of the event occurred in live chat.
+To recieve notifications, add the BundleID, APNS Certificate file(.p12) and it's corresponding password on the dashboard's setting page. Homepage > Settings > Chat (under product settings) > iOS SDK / Android SDK
 
-//below method called if the client confirms to the VLEventDelegate protocol through VerloopSDK&#39;s observeLiveChatEventsOn methods.
+Note: Set the device token on the configuration object, before initialising the SDK. The notification payload from Verloop will have a key `_by` with value `verloop`. 
 
-didEventOccurOnLiveChat(\_ event: VLEvent)
+```
+json { "_by": "verloop", "aps": { "alert": { "body": "notification message body" } } }
+```
 
-**VLEvent**
 
-VLEvent is enum with different types of instances or scenarios occurred during the live chat execution.
+## **SDK Usage - Objective C** 
 
-onButtonClick: Occurred when user makes button click on the live chat
 
-onURLClick : Occurred when user makes url click on the live chat
+After importing the Framework, add the following line in your controller:
 
-onChatMaximized: Occured when chat widget is opened and ready to chat.
+```
+import <VerloopSDK/VerloopSDK-Swift.h>
+```
 
-onChatMinimized: Occured when chat widget is closed by multiple scenarios such as closeWidge.
+Create the `VLConfig` object. Configure the object. Then initialise `VerloopSDK` with the configuration object. Few of the APIs are listed below. 
 
-onChatStarted: Occured when chatSrated call back posted by Livechat
+```
+VLConfig *config = [[VLConfig alloc] initWithClientId:@"clientId" userId:@"userId"];
 
-onchatEnded: Occured when chat session is closed
+[config setUserName:@"Name"]; [config setUserEmail:@"hello@verloop.io"]; [config setUserPhone:@"+919xxxxxxxx"];
+[config setNotificationTokenWithNotificationToken:@"token"]; 
+[config setStagingWithIsStaging:YES]; 
+[config putCustomFieldWithKey:@"key" value:@"value" scope:SCOPEUSER];
 
-onWidgetClosed: Occured when user closed the widget by click close icon
+VerloopSDK *verloop = [[VerloopSDK alloc] initWithConfig:config]; 
+```
 
-setUserIdComplete: Occured when the configuration passed user Id sets successfully.
+After this, when user want to open the chat, you can simply ask for the UINavigationController and present it on your viewcontroller. 
 
-setUserParamComplete: Occured when configuration passed user params set successfully.
+```
+[[self navigationController] presentViewController:[verloop getNavController] animated:YES completion:NULL];
+```
 
-**5) Open chat**
-
-Another way to open the chat is by simply calling openWidget on verloopSDK .
-
-Ex: verloopSDK.openWidget()
-
-**6) Start chat**
-
-To start the chat session call start() method in verloopSDK.
-
-Ex: verloopSDK.start()
-
-**7) Close widget**
-
-To close the chat session and dismiss the chat window, call closeWidget on verloopSDK
-
-Ex: verloopSDK.closeWidget()
-
-**8)To close the existing chat**
-
-To close existing running chat call close() method on verloopSDK.
-
-Ex:verloopSDK.close()
-
-**9)To logout**
-
-//To logout the current user chat session call logout() method on verloopSDK. This clears the local preferences and kill chat session of the user.
-
-Ex:verloopSDK.logout()
-
-**10) Clear configuration**
-
-//To wipe the any existing configurations on the chat view, call clearConfig() method on verloopSDK.
-
-Ex: verloopSDK.clearConfig()
+Note: Kindly go through the swift's documentation for further APIs and appropriately call corresponding methods. 

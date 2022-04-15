@@ -8,6 +8,8 @@
 import Foundation
 import WebKit
 
+
+
 extension String {
     static func getUserIdEvaluationJS(_ userId:String,optionArgument:String?) -> String {
         if let _unwrapped = optionArgument {

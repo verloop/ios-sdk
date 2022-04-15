@@ -30,8 +30,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         case phone
         case name
     }
-//TODO to APIMethods
-    enum ConfigParam {
+    enum APIMethods {
         case userId
         case userName
         case email
@@ -68,12 +67,12 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
    private var userParams: [UserParam] = []
    private var widgetColor:String?
    
-   private var updatedConfigParams:[ConfigParam] = []
+   private var updatedConfigParams:[APIMethods] = []
     
     @objc public init(clientId cid: String, userId uid: String?) {
         var userId = uid
-        //TODO
-        //Check if needed   let uid = UserDefaults.standard.string(forKey: "VERLOOP_USER_ID")
+
+        let uid = UserDefaults.standard.string(forKey: "VERLOOP_USER_ID")
         if uid == nil {
             userId = UUID().uuidString
         }
@@ -84,8 +83,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             self.updatedConfigParams.append(.userId)
         }
     }
-    //TODO
-    //Check if this is getting called..if yes then if userid needs to be added to self.updatedConfigParams
+
     @objc public convenience init(clientId cid: String) {
         let uid = UserDefaults.standard.string(forKey: "VERLOOP_USER_ID")
         if uid != nil {
@@ -94,6 +92,9 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             self.init(clientId: cid, userId: UUID().uuidString)
         }
         self.updatedConfigParams = []
+        if let ud = userId,!ud.isEmpty {
+            self.updatedConfigParams.append(.userId)
+        }
     }
     
     @objc public func setNotificationToken(notificationToken token: String?) {
@@ -109,11 +110,6 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     
     @objc public func setStaging(isStaging staging: Bool) {
         isStaging = staging
-    }
-//TODO Remove
-    @objc public func setWidgetColor(_ color:String) {
-        self.widgetColor = color
-        updatedConfigParams.append(.widgetColor)
     }
     
     @objc public func setUserName(userName name: String?) {
@@ -149,10 +145,10 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             }
         }
     }
-    //TODO just check and cleanup
-    @objc public func setOnEventChangeListener(_ delegate:VLEventDelegate?) {
-        mEventChangeDelegate = delegate
-    }
+
+//    @objc public func setOnEventChangeListener(_ delegate:VLEventDelegate?) {
+//        mEventChangeDelegate = delegate
+//    }
     
     @objc public func setButtonOnClickListener(onButtonClicked buttonClicked: LiveChatButtonClickListener?) {
         onButtonClicked = buttonClicked
@@ -180,7 +176,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         let ret = UserDefaults.standard.string(forKey: "VERLOOP_CUSTOM_FIELDS")
         return ret
     }
-    //TODO where all we are using save
+
     func save() {
         let defaults = UserDefaults.standard
         defaults.set(clientId, forKey: "VERLOOP_CLIENT_ID")
@@ -211,7 +207,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         } catch { print(error) }
         
     }
-    //TODO check where all clear is used
+
     func clear() {
         
         userId = nil
@@ -274,22 +270,6 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             URLCache.shared.removeAllCachedResponses()
         }
     }
-//TODO check and remove
-    static func getConfig() -> VLConfig {
-        let defaults = UserDefaults.standard
-        let config = VLConfig(clientId: defaults.string(forKey: "VERLOOP_CLIENT_ID")!, userId: defaults.string(forKey: "VERLOOP_USER_ID"))
-        
-        config.setStaging(isStaging: defaults.bool(forKey: "VERLOOP_IS_STAGING"))
-        
-        config.setNotificationToken(notificationToken: defaults.string(forKey: "VERLOOP_NOTIFICATION_TOKEN"))
-        
-        config.setUserName(userName: defaults.string(forKey: "VERLOOP_USER_NAME"))
-        config.setUserEmail(userEmail: defaults.string(forKey: "VERLOOP_USER_EMAIL"))
-        config.setUserPhone(userPhone: defaults.string(forKey: "VERLOOP_USER_PHONE"))
-        config.setRecipeId(recipeId: defaults.string(forKey: "VERLOOP_RECIPE_ID"))
-        
-        return config
-    }
 }
 
 extension VLConfig {
@@ -348,7 +328,7 @@ extension VLConfig {
     func getURLClickListener() -> LiveChatUrlClickListener? {
         return onUrlClicked
     }
-    func getUpdatedConfigParams() -> [ConfigParam] {
+    func getUpdatedConfigParams() -> [APIMethods] {
         return updatedConfigParams
     }
     func getDepartment() -> String? {
