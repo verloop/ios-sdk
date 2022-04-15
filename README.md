@@ -24,12 +24,9 @@ Two ways to install
 
 
 
-## **SDK Usage**
+## **SDK Usage - Swift** 
 
  
-
-### **Swift** 
-
 Import the library with the following command: 
 
 ```
@@ -53,7 +50,7 @@ config.setUserId(userId: String)
 ```
 
 
-**The following are the APIs on `VLConfig`**
+### **The following are the APIs on `VLConfig`**
 
 - **Recepie ID:** To set the recipe before launching the chat. If this api isn't used, then default recipe would be picked up.
 
