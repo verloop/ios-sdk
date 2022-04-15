@@ -82,7 +82,7 @@ config.setUserPhone(userPhone phone:String)
 ```
 config.setUserParam(key:String, value:String)
 
-Ex: 
+Example: 
 
 config.setUserParam(key: "name", value: "Test User")
 
@@ -93,6 +93,11 @@ config.setUserParam(key: "email", value: "user@test.com")
 
 ```
 config.putCustomField(key: String, value: String, scope: SCOPE)
+
+Example:
+                        
+config?.putCustomField(key: "custom_key", value: "custom_value", scope: .USER)
+
 ```
 
 
