@@ -189,8 +189,10 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     
         return nil
     }
+
 //RV Better to have this method for some sanity check for anyone to verify if webview has loaded properly
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+
         
 //        let script = "localStorage.getItem(\"visitorToken\")"
 //        webView.evaluateJavaScript(script) { (token, error) in

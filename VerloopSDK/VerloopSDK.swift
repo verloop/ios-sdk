@@ -178,6 +178,7 @@ import Foundation
 
         verloopNavigationController?.navigationBar.isTranslucent = false
 
+
         // TODO: In VLViewController, the leftBarButtonItem is set on controller's navigationItem and here it was being set on verloopNavigationController's navigationItem that was creating issue and leftBarItem's tint color was nil
 
         verloopController?.navigationItem.leftBarButtonItem?.tintColor = textColor
