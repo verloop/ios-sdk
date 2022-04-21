@@ -11,6 +11,7 @@
 		186AC1F127DB46890079B027 /* VLEventDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1ED27DB46890079B027 /* VLEventDelegate.swift */; };
 		186AC1F227DB46890079B027 /* VLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1EE27DB46890079B027 /* VLExtensions.swift */; };
 		186AC1F327DB46890079B027 /* ScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1EF27DB46890079B027 /* ScriptMessageHandler.swift */; };
+		186CB75B280EE60B00BE1658 /* VLEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186CB75A280EE60B00BE1658 /* VLEvent.swift */; };
 		18746D6827F5C9AA002A5CBD /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18746D6727F5C9AA002A5CBD /* Reachability.swift */; };
 		18DE98E627E07A2600B87788 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DE98E327E07A2500B87788 /* NetworkMonitor.swift */; };
 		EE21DA5E21DF4C17004B8A24 /* VLNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */; };
@@ -27,6 +28,7 @@
 		186AC1ED27DB46890079B027 /* VLEventDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLEventDelegate.swift; sourceTree = "<group>"; };
 		186AC1EE27DB46890079B027 /* VLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLExtensions.swift; sourceTree = "<group>"; };
 		186AC1EF27DB46890079B027 /* ScriptMessageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptMessageHandler.swift; sourceTree = "<group>"; };
+		186CB75A280EE60B00BE1658 /* VLEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLEvent.swift; sourceTree = "<group>"; };
 		18746D6727F5C9AA002A5CBD /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		18DE98E327E07A2500B87788 /* NetworkMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLNavViewController.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 		EE300E9D21AA89EF00FDEA21 /* VerloopSDK */ = {
 			isa = PBXGroup;
 			children = (
+				186CB75A280EE60B00BE1658 /* VLEvent.swift */,
 				18746D6727F5C9AA002A5CBD /* Reachability.swift */,
 				18DE98E327E07A2500B87788 /* NetworkMonitor.swift */,
 				186AC1EC27DB46890079B027 /* Constants.swift */,
@@ -168,6 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE300EAF21AA8A2C00FDEA21 /* VLConfig.swift in Sources */,
+				186CB75B280EE60B00BE1658 /* VLEvent.swift in Sources */,
 				18DE98E627E07A2600B87788 /* NetworkMonitor.swift in Sources */,
 				18746D6827F5C9AA002A5CBD /* Reachability.swift in Sources */,
 				EE300EAE21AA8A2C00FDEA21 /* VerloopSDK.swift in Sources */,

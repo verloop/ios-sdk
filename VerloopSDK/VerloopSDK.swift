@@ -26,9 +26,9 @@ import Foundation
         config = vlConfig
         //Storing config params in user defaults
         config.save()
+        print("user params \(config.getUserParams()) custom \(config.getCustomFields())")
         bgColor = .clear
         textColor = VerloopSDK.hexStringToUIColor(hex: "#ffffff")
-        
         super.init()
         manager = VLWebViewManager(config: config)
         manager.jsDelegate(delegate: self)
@@ -268,10 +268,13 @@ import Foundation
     }
     
     func onChatClose(completion:@escaping(() -> Void)) {
-        
-        self.verloopNavigationController?.dismiss(animated: true, completion: {
+        if self.verloopController != nil {
+            self.verloopNavigationController?.dismiss(animated: true, completion: {
+                completion()
+            })
+        } else {
             completion()
-        })
+        }
     }
     
     //below are the 3 objects which will be prepare as part of the JSCallback delegate methods for button click, urlclick and client info
