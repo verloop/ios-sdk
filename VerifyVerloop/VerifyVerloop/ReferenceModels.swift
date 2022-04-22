@@ -336,31 +336,28 @@ extension ViewModel {
     }
 }
 
-//Public callbacks
-
 extension ViewModel:VLEventDelegate {
-    func onChatMaximized(_ message:Any) {
+    func onChatMaximized() {
         print("ref onChatMaximized")
     }
-    func onChatMinimized(_ message:Any) {
+    func onChatMinimized() {
         print("ref onChatMinimized")
     }
-    func onChatStarted(_ message:Any) {
+    func onChatStarted() {
         print("ref onChatStarted")
     }
-    func onChatEnded(_ message:Any) {
+    func onChatEnded() {
         print("ref onChatEnded")
     }
-    func onLogoutComplete(_ message:Any) {
+    func onLogoutComplete() {
         print("ref onLogoutComplete")
     }
-    func onWidgetLoaded(_ message:Any) {
+    func onWidgetLoaded() {
         print("ref onWidgetLoaded")
     }
     func onIncomingMessage(_ message:Any) {
-        print("ref onIncomingMessage")
+        print("ref onIncomingMessage \(message)")
     }
     
-
 }
 

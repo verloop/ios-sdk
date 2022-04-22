@@ -135,13 +135,19 @@ class VerloopTestTableViewController: UITableViewController {
                 cell.accessoryView = nil
                 if model.showRightAccessoryView {
                     if model.additionView {
+                        let v = UIView(frame: CGRect(x: 0, y: 0, width: 28, height: 90))
                         let plusIcon = UIButton(type: .contactAdd)
                         plusIcon.addTarget(self, action: #selector(onAddIcon), for: .touchUpInside)
-                        cell.accessoryView = plusIcon
+                        plusIcon.center.y = v.center.y+10
+                        v.addSubview(plusIcon)
+                        cell.accessoryView = v
                     } else {
+                        let v = UIView(frame: CGRect(x: 0, y: 0, width: 28, height: 90))
                         let minusIcon = UIButton.init(type: .close)
                         minusIcon.addTarget(self, action: #selector(onRemoveicon), for: .touchUpInside)
-                        cell.accessoryView = minusIcon
+                        v.addSubview(minusIcon)
+                        minusIcon.center.y = v.center.y+10
+                        cell.accessoryView = v
                     }
                 }
                 return cell
@@ -162,7 +168,7 @@ class VerloopTestTableViewController: UITableViewController {
     }
     
     @objc private func onAddIcon(btn:UIButton) {
-        if let cell = btn.superview as? InputCell,let iPath = tableView.indexPath(for: cell) {
+        if let cell = btn.superview?.superview as? InputCell,let iPath = tableView.indexPath(for: cell) {
             viewModel.didSelectAddAtIndexPath(iPath) {[weak self] in
                 self?.tableView.reloadData()
             }
@@ -170,7 +176,7 @@ class VerloopTestTableViewController: UITableViewController {
     }
     
     @objc private func onRemoveicon(btn:UIButton) {
-        if let cell = btn.superview as? InputCell,let iPath = tableView.indexPath(for: cell) {
+        if let cell = btn.superview?.superview as? InputCell,let iPath = tableView.indexPath(for: cell) {
             viewModel.didSelectRemoveAtIndexpath(iPath) {[weak self] in
                 self?.tableView.reloadData()
             }

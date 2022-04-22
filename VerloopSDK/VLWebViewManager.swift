@@ -138,7 +138,6 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
             webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
                 print("closeWidget error \(error?.localizedDescription ?? "NA")")
                 if error == nil {
-            print("getWidgetClosedEvaluationJS success with No error")
                 }
             }
         }
@@ -348,14 +347,13 @@ extension VLWebViewManager:ScriptMessageDelegate {
                             clearLocalStorageVistorToken()
                             self.didReceiveCallbackEventsOnLivechat(message: bodyString, data: bodyData)
                         case .FunctionChatMinimized:
-                            _eventDelegate?.onChatMinimized?(bodyString)
+                            _eventDelegate?.onChatMinimized?()
                         case .FunctionChatMaximized:
-                            _eventDelegate?.onChatMaximized?(bodyString)
+                            _eventDelegate?.onChatMaximized?()
                         case .FunctionChatEnded:
-                            _eventDelegate?.onChatEnded?(bodyString)
+                            _eventDelegate?.onChatEnded?()
                         case .FunctionChatStarted:
-//                            onMessageReceived?()
-                            _eventDelegate?.onChatStarted?(bodyString)
+                            _eventDelegate?.onChatStarted?()
                         case .FunctionChatMessageReceived:
                             _eventDelegate?.onIncomingMessage?(bodyString)
                     default:break
@@ -366,7 +364,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
             }
         }
     }
-    
+    //All function callback are segregatted here for better handling
     private func didReceiveCallbackEventsOnLivechat(message:String,data:Data) {
         do {
             if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String:Any] {
@@ -379,11 +377,21 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 print("firstArg \(firstArg)")
                     switch firstArg {
                         case FunctionType.FunctionChatMessageReceived.rawValue:
-                            _eventDelegate?.onIncomingMessage?(message)
+                        if let args = json["args"] as? [Any] {
+                            for arg in args {
+                                if arg is [String:Any],(arg as! [String:Any]).keys.first ?? "" == "message",
+                                   let messagedict = (arg as! [String:Any])["message"] as? [String:Any],
+                                   let message = messagedict["msg"] as? String {
+                                    print("chat message \(message)")
+                                    _eventDelegate?.onIncomingMessage?(message)
+                                    break
+                                }
+                            }
+                        }                            
                         case FunctionType.FunctionChatStarted.rawValue:
-                            _eventDelegate?.onChatStarted?(message)
+                            _eventDelegate?.onChatStarted?()
                         case FunctionType.FunctionLogOutCompleted.rawValue:
-                        _eventDelegate?.onLogoutComplete?(message)
+                            _eventDelegate?.onLogoutComplete?()
                         default:break
                     }
             }

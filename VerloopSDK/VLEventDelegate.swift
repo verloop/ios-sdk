@@ -8,15 +8,14 @@
 
 import Foundation
 
-//Public callback apis
 @objc public protocol VLEventDelegate {
     
-    @objc optional func onChatMaximized(_ message:Any)
-    @objc optional func onChatMinimized(_ message:Any)
-    @objc optional func onChatStarted(_ message:Any)
-    @objc optional func onChatEnded(_ message:Any)
-    @objc optional func onLogoutComplete(_ message:Any)
-    @objc optional func onWidgetLoaded(_ message:Any)
+    @objc optional func onChatMaximized()
+    @objc optional func onChatMinimized()
+    @objc optional func onChatStarted()
+    @objc optional func onChatEnded()
+    @objc optional func onLogoutComplete()
+    @objc optional func onWidgetLoaded()
     @objc optional func onIncomingMessage(_ message:Any)
     
 }
