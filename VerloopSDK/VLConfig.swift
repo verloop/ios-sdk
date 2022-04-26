@@ -69,6 +69,19 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
    
    private var updatedConfigParams:[APIMethods] = []
     
+    
+    func isValidEmail(_ email:String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
+    
+    func isValidNumber(_ number:String) -> Bool {
+        let reg = "^[0-9]+$"
+        let numPred = NSPredicate(format:"SELF MATCHES %@", reg)
+        return numPred.evaluate(with: number)
+    }
+    
     @objc public init(clientId cid: String, userId uid: String?) {
         var userId = uid
 
@@ -92,19 +105,23 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             self.init(clientId: cid, userId: UUID().uuidString)
         }
         self.updatedConfigParams = []
-        if let ud = userId,!ud.isEmpty {
+        if let ud = userId,!ud.hasEmptyValue() {
             self.updatedConfigParams.append(.userId)
         }
     }
     
     @objc public func setNotificationToken(notificationToken token: String?) {
-        notificationToken = token
+        if !(token ?? "").hasEmptyValue() {
+            notificationToken = token
+        }
     }
     
     @objc public func setUserId(userId uid: String) {
-        userId = uid
-        if !updatedConfigParams.contains(.userId) {
-            updatedConfigParams.append(.userId)
+        if !uid.hasEmptyValue() {
+            userId = uid
+            if !updatedConfigParams.contains(.userId),!uid.hasEmptyValue() {
+                updatedConfigParams.append(.userId)
+            }
         }
     }
     
@@ -113,32 +130,37 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     }
     
     @objc public func setUserName(userName name: String?) {
-        if let _name = name {
+        if let _name = name,!_name.hasEmptyValue() {
             setUserParam(key: UserParamType.name.rawValue, value: _name)
         }
     }
     
     @objc public func setUserEmail(userEmail email: String?) {
-        if let _email = email {
+        if let _email = email,!_email.hasEmptyValue(),isValidEmail(_email) {
             setUserParam(key: UserParamType.email.rawValue, value: _email)
         }
     }
     
     @objc public func setUserPhone(userPhone phone: String?) {
-        if let _phone = phone {
+        if let _phone = phone,!_phone.hasEmptyValue(),isValidNumber(_phone) {
             setUserParam(key: UserParamType.phone.rawValue, value: _phone)
         }
     }
     
     @objc public func setRecipeId(recipeId id: String?) {
-        recipeId = id
-        if !updatedConfigParams.contains(.recepie) {
+        if !updatedConfigParams.contains(.recepie),!(id ?? "").hasEmptyValue() {
+            recipeId = id
             updatedConfigParams.append(.recepie)
         }
     }
     
     @objc public func setUserParam(key:String,value:String) {
-        if let param = UserParamType.init(rawValue: key) {
+        if let param = UserParamType.init(rawValue: key),!key.hasEmptyValue(),!value.hasEmptyValue() {
+            if param == .email,!isValidEmail(value) {
+                return
+            } else if param == .phone,!isValidNumber(value) {
+                return
+            }
             userParams.append(VLConfig.UserParam(key: param.rawValue, value: value))
             if !updatedConfigParams.contains(.userParams) {
                 updatedConfigParams.append(.userParams)
@@ -163,12 +185,14 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     }
 
     @objc public func putCustomField(key: String, value: String, scope: SCOPE) {
-        updatedConfigParams.append(.customFields)
-        switch scope {
-            case .USER:
-                customFields.append(CustomField(key: key, value: value, scope: "user"))
-            case .ROOM:
-                customFields.append(CustomField(key: key, value: value, scope: "room"))
+        if !key.hasEmptyValue(),!value.hasEmptyValue() {
+            updatedConfigParams.append(.customFields)
+            switch scope {
+                case .USER:
+                    customFields.append(CustomField(key: key, value: value, scope: "user"))
+                case .ROOM:
+                    customFields.append(CustomField(key: key, value: value, scope: "room"))
+            }
         }
     }
     

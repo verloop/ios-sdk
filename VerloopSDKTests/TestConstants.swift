@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import VerloopSDK
 
 struct TestConstants {
     static let clientId = "sreedeep.dev"
@@ -20,4 +21,39 @@ struct TestConstants {
     static let testButtonTitle = "VButton"
     static let testClientName = "Verloop"
     static let department = "IT"
+    
+    static func createSDKWithConfig(_ config:VLConfig) ->VerloopSDK {
+        return VerloopSDK.init(config: config)
+    }
+    
+    static func getDefaultConfig() -> VLConfig {
+        return VLConfig.init(clientId: clientId)
+    }
+    
+    static func getUserIdconfig() -> VLConfig {
+        let config = VLConfig.init(clientId: clientId)
+        config.setUserId(userId: userId)
+        return config
+    }
+    
+    static func getUserParamConfig() -> VLConfig {
+        let config = VLConfig.init(clientId: clientId)
+        config.setUserEmail(userEmail: email)
+        config.setUserPhone(userPhone: phone)
+        config.setUserName(userName: name)
+        return config
+    }
+    
+    static func getRecepieConfig() -> VLConfig {
+        let config = VLConfig.init(clientId: clientId)
+        config.setRecipeId(recipeId: recepie)
+        return config
+    }
+    
+    static func getCustomFieldConfig() -> VLConfig {
+        let config = VLConfig.init(clientId: clientId)
+        config.putCustomField(key: customField.keys.first!, value: customField.values.first!, scope: .ROOM)
+        return config
+    }
+    
 }

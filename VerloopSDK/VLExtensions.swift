@@ -11,19 +11,22 @@ import WebKit
 
 
 extension String {
-    static func getUserIdEvaluationJS(_ userId:String,optionArgument:String?) -> String {
-        if let _unwrapped = optionArgument {
-            return "\(Constants.JS_METHOD).setUserId('\(userId)','\(_unwrapped)')"
-        }
-        return "VerloopLivechat.setUserId('\(userId)')"
+    
+    func hasEmptyValue() -> Bool {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || self == ""
+    }
+    
+    static func getUserIdEvaluationJS(_ userId:String) -> String {
+//        if let _unwrapped = optionArgument {
+//            return "\(Constants.JS_METHOD).setUserId('\(userId)','\(optionArgument ?? "")')"
+//        }
+        return "\(Constants.JS_METHOD).setUserId('\(userId)')"
     }
     static func getRecepieEvaluationJS(_ recepie:String) -> String {
         return "\(Constants.JS_METHOD).setRecipe('\(recepie)')"
     }
     static func getCustomFieldEvaluationJS(_ field:VLConfig.CustomField) -> String {
-
            return "\(Constants.JS_METHOD).setCustomField(\"\(field.key)\",\"\(field.value)\",{scope:\"\(field.scope)\"})"
-
        }
 
        static func getUserParamEvaluationJS(key:String,value:String) -> String {

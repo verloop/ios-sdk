@@ -12,7 +12,7 @@ import Foundation
 
 @objc open class VerloopSDK: NSObject, VLJSInterface {
     private var config: VLConfig
-    private var manager: VLWebViewManager!
+    var manager: VLWebViewManager!
     private var verloopController: VLViewController? = nil
     private var verloopNavigationController: UINavigationController? = nil
 
