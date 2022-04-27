@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 //for the inputs with free text field. appears in 1st section of sample app tableview.
 class InputCell:UITableViewCell {
     
@@ -44,36 +42,20 @@ class ActionCell:UITableViewCell {
     @IBOutlet weak var mActionBtn: UIButton!
     @IBOutlet weak var mTitle: UILabel!
 
-    
-
     override func awakeFromNib() {
-
         super.awakeFromNib()
-
         mActionBtn.layer.cornerRadius = 5
-
         mActionBtn.layer.borderColor = UIColor.blue.cgColor
-
         mActionBtn.layer.borderWidth = 1
-
         mActionBtn.contentEdgeInsets = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-
         mActionBtn.titleLabel?.textAlignment = .center
-
         mActionBtn.titleLabel?.lineBreakMode = .byWordWrapping
-
         mActionBtn.contentHorizontalAlignment = .center
-
-
-
     }
 
     func configurecell(model:RowModel) {
-
         mTitle.text = model.valueToBeshown
-
         mActionBtn.setTitle(model.titleToBeShown, for: .normal)
-
     }
 
 }
@@ -93,11 +75,10 @@ class VerloopTestTableViewController: UITableViewController {
         mLaunchBtn.layer.cornerRadius = 5
         mLaunchBtn.layer.borderColor = UIColor.blue.cgColor
         mLaunchBtn.layer.borderWidth = 1
-
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let gesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         self.tableView.addGestureRecognizer(gesture)
     }
@@ -111,7 +92,7 @@ class VerloopTestTableViewController: UITableViewController {
 //        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 150, right: 0)
 //        self.navigationController?.view.addSubview(footerParentView)
     }
-
+    
     @objc private func dismissKeyboard() {
         self.tableView.endEditing(true)
     }
@@ -126,21 +107,20 @@ class VerloopTestTableViewController: UITableViewController {
             self.present(alrt, animated: true, completion: nil)
             return
         }
-        print("config \(config!.description)")
+//        print("config \(config!.getCustomFields())")
         viewModel.launchChatOn(controller: self, config: config!)
     }
     
     //when click on clear button following method calls and reset the inputs blank
     @IBAction func onClear(_ sender: Any) {
-        
         viewModel.clearChatInputs()
         self.tableView.reloadData()
     }
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.getNumberOfSections()
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.getNumberOfrowsToDisplayed(section: section)
     }
@@ -152,6 +132,24 @@ class VerloopTestTableViewController: UITableViewController {
                 cell.configureCell(model: model)
                 cell.mField.addTarget(self, action: #selector(onFieldEdit), for: .editingChanged)
                 cell.mSecondField.addTarget(self, action: #selector(onFieldEdit), for: .editingChanged)
+                cell.accessoryView = nil
+                if model.showRightAccessoryView {
+                    if model.additionView {
+                        let v = UIView(frame: CGRect(x: 0, y: 0, width: 28, height: 90))
+                        let plusIcon = UIButton(type: .contactAdd)
+                        plusIcon.addTarget(self, action: #selector(onAddIcon), for: .touchUpInside)
+                        plusIcon.center.y = v.center.y+10
+                        v.addSubview(plusIcon)
+                        cell.accessoryView = v
+                    } else {
+                        let v = UIView(frame: CGRect(x: 0, y: 0, width: 28, height: 90))
+                        let minusIcon = UIButton.init(type: .close)
+                        minusIcon.addTarget(self, action: #selector(onRemoveicon), for: .touchUpInside)
+                        v.addSubview(minusIcon)
+                        minusIcon.center.y = v.center.y+10
+                        cell.accessoryView = v
+                    }
+                }
                 return cell
             }
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: "ActionCell") as? ActionCell {
@@ -166,6 +164,22 @@ class VerloopTestTableViewController: UITableViewController {
     @objc private func onFieldEdit(field:UITextField) {
         if let cell = field.superview?.superview?.superview?.superview as? InputCell,let indexpath = tableView.indexPath(for: cell) {
             viewModel.didChangeModelInput(field.text ?? "", modelIndex: indexpath,isSecondaryField: field.tag == 1)
+        }
+    }
+    
+    @objc private func onAddIcon(btn:UIButton) {
+        if let cell = btn.superview?.superview as? InputCell,let iPath = tableView.indexPath(for: cell) {
+            viewModel.didSelectAddAtIndexPath(iPath) {[weak self] in
+                self?.tableView.reloadData()
+            }
+        }
+    }
+    
+    @objc private func onRemoveicon(btn:UIButton) {
+        if let cell = btn.superview?.superview as? InputCell,let iPath = tableView.indexPath(for: cell) {
+            viewModel.didSelectRemoveAtIndexpath(iPath) {[weak self] in
+                self?.tableView.reloadData()
+            }
         }
     }
     
@@ -200,7 +214,6 @@ class VerloopTestTableViewController: UITableViewController {
         label.textAlignment = .left
         v.addSubview(label)
         return v
-        
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
