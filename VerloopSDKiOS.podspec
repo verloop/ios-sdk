@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "VerloopSDKiOS"
-  spec.version      = "0.1.5"
+  spec.version      = "0.2.0-rc.3"
   spec.summary      = "VerloopSDKiOS - client side iOS livechat"
 
   # This description is used to generate tags and improve search results.
@@ -66,7 +66,7 @@ Pod::Spec.new do |spec|
   #  profile URL.
   #
 
-  spec.author             = { "Raghav Rawat" => "raghav39@gmail.com" }
+  spec.author             = { "Tarun Gujjula" => "tarun@verloop.io" }
   # Or just: spec.author    = "Raghav Rawat"
   # spec.authors            = { "Raghav Rawat" => "raghav39@gmail.com" }
   # spec.social_media_url   = "https://twitter.com/Raghav Rawat"
@@ -77,7 +77,7 @@ Pod::Spec.new do |spec|
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  spec.platforms    = { :ios => "9.0" }
+  spec.platforms    = { :ios => "11.0" }
   # spec.platform     = :ios
   # spec.platform     = :ios, "5.0"
 

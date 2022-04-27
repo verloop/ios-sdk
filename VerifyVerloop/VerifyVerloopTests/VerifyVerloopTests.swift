@@ -1,14 +1,13 @@
 //
-//  VerloopSDKTests.swift
-//  VerloopSDKTests
+//  VerifyVerloopTests.swift
+//  VerifyVerloopTests
 //
-//  Created by sreedeep on 16/04/22.
-//  Copyright © 2022 Verloop. All rights reserved.
+//  Created by Apple on 25/04/22.
 //
 
 import XCTest
 
-class VerloopSDKTests: XCTestCase {
+class VerifyVerloopTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
