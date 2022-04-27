@@ -44,6 +44,8 @@ struct RowModel {
     var isMultiInputs = false
     var keyPlaceHolder = ""
     var valuePlaceHolder = ""
+    var showRightAccessoryView = false
+    var additionView = false
 }
 
 class ViewModel {
@@ -55,11 +57,11 @@ class ViewModel {
     
     //default inputs to be shown in tableview 1st section
     private var inputs:[RowModel] = [
-        RowModel(rowType: .ClientID, isInputType: true, titleToBeShown: "Enter Client ID *", valueToBeshown: "",keyPlaceHolder: "Client ID (required)"),
-        RowModel(rowType: .UserId, isInputType: true, titleToBeShown: "Enter user ID", valueToBeshown: "",keyPlaceHolder: "User ID"),
-        RowModel(rowType: .RecepieID, isInputType: true, titleToBeShown: "Enter Recepie ID", valueToBeshown: "",keyPlaceHolder: "Recepie ID"),
-        RowModel(rowType: .UserParams, isInputType: true, titleToBeShown: "Enter User params.", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key"),
-        RowModel(rowType: .customField, isInputType: true, titleToBeShown: "Enter Custom Field", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key")
+        RowModel(rowType: .ClientID, isInputType: true, titleToBeShown: "Enter Client ID *", valueToBeshown: "",keyPlaceHolder: "Client ID (required)",showRightAccessoryView:false,additionView:false),
+        RowModel(rowType: .UserId, isInputType: true, titleToBeShown: "Enter user ID", valueToBeshown: "",keyPlaceHolder: "User ID",showRightAccessoryView:false,additionView:false),
+        RowModel(rowType: .RecepieID, isInputType: true, titleToBeShown: "Enter Recepie ID", valueToBeshown: "",keyPlaceHolder: "Recepie ID",showRightAccessoryView:false,additionView:false),
+        RowModel(rowType: .UserParams, isInputType: true, titleToBeShown: "Enter User params.", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key",showRightAccessoryView:true,additionView:true),
+        RowModel(rowType: .customField, isInputType: true, titleToBeShown: "Enter Custom Field", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key",showRightAccessoryView:true,additionView:true)
     ]
     
     //default buttons with titles to be shown in tableview 2nd section
@@ -100,6 +102,36 @@ class ViewModel {
             defaults[modelIndex.section][modelIndex.row].valueToBeshown = text
         }
     }
+    
+    //on add icon
+    
+    func didSelectAddAtIndexPath(_ path:IndexPath,completion:(() -> Void)) {
+        if defaults[path.section].count > path.row {
+            if defaults[path.section][path.row].rowType == .UserParams {
+                let blankParams = RowModel(rowType: .UserParams, isInputType: true, titleToBeShown: "Enter User params.", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key",showRightAccessoryView:true,additionView:false)
+                defaults[path.section].insert(blankParams, at: path.row+1)
+                completion()
+            } else if defaults[path.section][path.row].rowType == .customField {
+                let blankFields = RowModel(rowType: .customField, isInputType: true, titleToBeShown: "Enter Custom Field", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key",showRightAccessoryView:true,additionView:false)
+                defaults[path.section].insert(blankFields, at: path.row+1)
+                completion()
+            }
+        }
+    }
+    
+    func didSelectRemoveAtIndexpath(_ path:IndexPath,completion:(() -> Void)) {
+        if defaults[path.section].count > path.row {
+            if defaults[path.section][path.row].rowType == .UserParams {
+                defaults[path.section].remove(at: path.row)
+                completion()
+            } else if defaults[path.section][path.row].rowType == .customField {
+                defaults[path.section].remove(at: path.row)
+                completion()
+            }
+        }
+        
+    }
+    
     
     //reset the data of data source
     func clearChatInputs() {
@@ -164,6 +196,7 @@ extension ViewModel {
     //helper method to create verloopsdk
     private func createSDK(config:VLConfig) {
         mSDK = VerloopSDK(config: config)
+        mSDK?.observeLiveChatEventsOn(vlEventDelegate: self)
     }
     
     //returns the verloop chat appears controller
@@ -301,5 +334,30 @@ extension ViewModel {
             launchChatOn(controller: controller, config: config)
         }
     }
+}
+
+extension ViewModel:VLEventDelegate {
+    func onChatMaximized() {
+        print("ref onChatMaximized")
+    }
+    func onChatMinimized() {
+        print("ref onChatMinimized")
+    }
+    func onChatStarted() {
+        print("ref onChatStarted")
+    }
+    func onChatEnded() {
+        print("ref onChatEnded")
+    }
+    func onLogoutComplete() {
+        print("ref onLogoutComplete")
+    }
+    func onWidgetLoaded() {
+        print("ref onWidgetLoaded")
+    }
+    func onIncomingMessage(_ message:Any) {
+        print("ref onIncomingMessage \(message)")
+    }
+    
 }
 

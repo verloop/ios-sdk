@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		18746D7B27F5DD45002A5CBD /* VerloopSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18746D7A27F5DCC0002A5CBD /* VerloopSDK.framework */; };
 		18746D7C27F5DD45002A5CBD /* VerloopSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 18746D7A27F5DCC0002A5CBD /* VerloopSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		18C7298828166C81006EF202 /* VerifyVerloopTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C7298728166C81006EF202 /* VerifyVerloopTests.swift */; };
 		18F86EB427F14AE900F3BF25 /* ReferenceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F86EB127F14AE900F3BF25 /* ReferenceModels.swift */; };
 		18F86EB527F14AE900F3BF25 /* VerloopTestTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F86EB327F14AE900F3BF25 /* VerloopTestTableViewController.swift */; };
 		F75D46FA27E3264000B7403A /* ConfigTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75D46F927E3264000B7403A /* ConfigTestViewController.swift */; };
@@ -26,6 +27,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = EE300E9B21AA89EF00FDEA21;
 			remoteInfo = VerloopSDK;
+		};
+		18C7298928166C81006EF202 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F7D13E8027A3B81F00262E51 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F7D13E8727A3B81F00262E51;
+			remoteInfo = VerifyVerloop;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -45,6 +53,8 @@
 
 /* Begin PBXFileReference section */
 		18746D7527F5DCC0002A5CBD /* VerloopSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = VerloopSDK.xcodeproj; path = ../VerloopSDK.xcodeproj; sourceTree = "<group>"; };
+		18C7298528166C81006EF202 /* VerifyVerloopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VerifyVerloopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		18C7298728166C81006EF202 /* VerifyVerloopTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyVerloopTests.swift; sourceTree = "<group>"; };
 		18E9E4FE27E982A9007E6B58 /* VerifyVerloop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VerifyVerloop.entitlements; sourceTree = "<group>"; };
 		18F86EB127F14AE900F3BF25 /* ReferenceModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReferenceModels.swift; sourceTree = "<group>"; };
 		18F86EB327F14AE900F3BF25 /* VerloopTestTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerloopTestTableViewController.swift; sourceTree = "<group>"; };
@@ -59,6 +69,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		18C7298228166C81006EF202 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F7D13E8527A3B81F00262E51 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -78,6 +95,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		18C7298628166C81006EF202 /* VerifyVerloopTests */ = {
+			isa = PBXGroup;
+			children = (
+				18C7298728166C81006EF202 /* VerifyVerloopTests.swift */,
+			);
+			path = VerifyVerloopTests;
+			sourceTree = "<group>";
+		};
 		F7BE11EE27AAEA2200D1DDFD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -90,6 +115,7 @@
 			children = (
 				18746D7527F5DCC0002A5CBD /* VerloopSDK.xcodeproj */,
 				F7D13E8A27A3B81F00262E51 /* VerifyVerloop */,
+				18C7298628166C81006EF202 /* VerifyVerloopTests */,
 				F7D13E8927A3B81F00262E51 /* Products */,
 				F7BE11EE27AAEA2200D1DDFD /* Frameworks */,
 			);
@@ -99,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				F7D13E8827A3B81F00262E51 /* VerifyVerloop.app */,
+				18C7298528166C81006EF202 /* VerifyVerloopTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -123,6 +150,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		18C7298428166C81006EF202 /* VerifyVerloopTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 18C7298E28166C81006EF202 /* Build configuration list for PBXNativeTarget "VerifyVerloopTests" */;
+			buildPhases = (
+				18C7298128166C81006EF202 /* Sources */,
+				18C7298228166C81006EF202 /* Frameworks */,
+				18C7298328166C81006EF202 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				18C7298A28166C81006EF202 /* PBXTargetDependency */,
+			);
+			name = VerifyVerloopTests;
+			productName = VerifyVerloopTests;
+			productReference = 18C7298528166C81006EF202 /* VerifyVerloopTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F7D13E8727A3B81F00262E51 /* VerifyVerloop */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F7D13E9C27A3B82000262E51 /* Build configuration list for PBXNativeTarget "VerifyVerloop" */;
@@ -151,6 +196,10 @@
 				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1310;
 				TargetAttributes = {
+					18C7298428166C81006EF202 = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = F7D13E8727A3B81F00262E51;
+					};
 					F7D13E8727A3B81F00262E51 = {
 						CreatedOnToolsVersion = 13.1;
 					};
@@ -176,6 +225,7 @@
 			projectRoot = "";
 			targets = (
 				F7D13E8727A3B81F00262E51 /* VerifyVerloop */,
+				18C7298428166C81006EF202 /* VerifyVerloopTests */,
 			);
 		};
 /* End PBXProject section */
@@ -191,6 +241,13 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		18C7298328166C81006EF202 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F7D13E8627A3B81F00262E51 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -204,6 +261,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		18C7298128166C81006EF202 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18C7298828166C81006EF202 /* VerifyVerloopTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F7D13E8427A3B81F00262E51 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -217,6 +282,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		18C7298A28166C81006EF202 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F7D13E8727A3B81F00262E51 /* VerifyVerloop */;
+			targetProxy = 18C7298928166C81006EF202 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		F7D13E9127A3B81F00262E51 /* Main.storyboard */ = {
@@ -238,6 +311,52 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		18C7298B28166C81006EF202 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5423774D8G;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heymate.VerifyVerloopTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VerifyVerloop.app/VerifyVerloop";
+			};
+			name = Debug;
+		};
+		18C7298C28166C81006EF202 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5423774D8G;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heymate.VerifyVerloopTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VerifyVerloop.app/VerifyVerloop";
+			};
+			name = Release;
+		};
 		F7D13E9A27A3B82000262E51 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -361,7 +480,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VerifyVerloop/VerifyVerloop.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = 5423774D8G;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -397,7 +516,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VerifyVerloop/VerifyVerloop.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = 5423774D8G;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -429,6 +548,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		18C7298E28166C81006EF202 /* Build configuration list for PBXNativeTarget "VerifyVerloopTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18C7298B28166C81006EF202 /* Debug */,
+				18C7298C28166C81006EF202 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F7D13E8327A3B81F00262E51 /* Build configuration list for PBXProject "VerifyVerloop" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

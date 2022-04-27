@@ -9,6 +9,11 @@
 import Foundation
 import WebKit
 
+enum VLError:Error {
+    case InvalidSourceName
+    case JSONParseError
+}
+
 class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     var webView: WKWebView!
     private var hasTriedToStartRoom = false
@@ -131,6 +136,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     }
     
     func closeWidget(hasInternet:Bool) {
+        print("closeWidget \(isReady)")
         if !isReady,hasInternet {
             if !networkChangesConfigurations.contains(.closeWidget) {
                 networkChangesConfigurations.append(.closeWidget)
@@ -139,17 +145,20 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
             webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
                 print("closeWidget error \(error?.localizedDescription ?? "NA")")
                 if error == nil {
-                    self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
+//                    self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
+//                    self?._eventDelegate?.didReceiveEventChatMinimized?(<#T##message: Any##Any#>)
+                    self?._eventDelegate?.onChatMinimized?()
                 }
             }
         }
     }
     
     func openWidget() {
+        print("openWidget")
         webView.evaluateJavaScript(String.getWidgetOpenedEvaluationJS()) {[weak self] _, error in
             print("openWidget error \(error?.localizedDescription ?? "NA")")
             if error == nil {
-                self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMaximized)
+                self?._eventDelegate?.onChatMaximized?()
             }
         }
     }
@@ -190,10 +199,21 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         return nil
     }
 
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 
+           //you might want to edit the script, with the escape characters
+           let script = "localStorage.getItem(\"visitorToken\")"
+           webView.evaluateJavaScript(script) { (token, error) in
+               if let error = error {
+                   print ("localStorage.getitem('visitorToken') failed due to \(error)")
+                   assertionFailure()
+               }
+               print("token = \(String(describing: token))")
+           }
+       }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        print("decidePolicyFor navigationAction \(navigationAction.request.url)")
+
         if navigationAction.targetFrame == nil {
             if self.config.isURLRedirection() {
                 decisionHandler(.allow)
@@ -222,7 +242,7 @@ extension VLWebViewManager {
                     webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
                         print("closeWidget error \(error?.localizedDescription ?? "NA")")
                         if error == nil {
-                            self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
+//                            self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
                         }
                     }
                 default: break
@@ -266,7 +286,7 @@ extension VLWebViewManager {
                 }
                 case .userId:
                     if let unwrapped = config.getUserID() {
-                        webView.evaluateJavaScript(String.getUserIdEvaluationJS(unwrapped, optionArgument: nil)) { _, error in
+                        webView.evaluateJavaScript(String.getUserIdEvaluationJS(unwrapped)) { _, error in
                             print("set user id error \(error?.localizedDescription ?? "NIL")")
                         }
                     }
@@ -303,69 +323,121 @@ extension VLWebViewManager {
     }
 }
 
-
-
 extension VLWebViewManager:ScriptMessageDelegate {
     func handler(_ scriptMessageHandler: ScriptMessageHandler, didReceiveMessage message: WKScriptMessage) {
-        print("message.name and message.body are \(message.name) \(message.body)")
+//        print("message.name and message.body are \(message.name) \(message.body)")
 
         if (message.name == Constants.SCRIPT_MESSAGE_NAME) {
                 if jsInterface != nil {
                     jsInterface?.jsCallback(message: message.body)
                 }
-              
+        } else if (message.name == Constants.SCRIPT_MESSAGE_NAME_V2){
+            do {
+                try handleWebPostMessage(message.body)
+            } catch {
+                print("handleWebPostMessage error \(error)")
             }
-        else if (message.name == Constants.SCRIPT_MESSAGE_NAME_V2){
-            handleWebPostMessage(message.body)
-        }
-        else{
+        } else{
             print("unrecognized callback")
         }
     }
     
-    private func handleWebPostMessage(_ msg:Any) {
+    func handleWebPostMessage(_ msg:Any) throws {
         if let bodyString = msg as? String,let bodyData = bodyString.data(using: .utf8) {
+            var modelObject:ExpectedEventPayload?
             do {
                 let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0))
                 let expectedData = try JSONSerialization.data(withJSONObject: expectedModelData, options: .prettyPrinted)
-                let model = try JSONDecoder().decode(ExpectedEventPayload.self, from: expectedData)
-
-                if let  _function = model.fn {
-                    switch _function {
-                        case .FunctionSetUserIdComplete:
-                            _eventDelegate?.didEventOccurOnLiveChat(.setUserIdComplete)
-                        case .FunctionSetUserParamComplete:
-                            _eventDelegate?.didEventOccurOnLiveChat(.setUserParamComplete)
-                        case .FunctionCloseWidget:
-                            clearLocalStorageVistorToken()
-                            _eventDelegate?.didEventOccurOnLiveChat(.onWidgetClosed)
-                        case .FunctionOnRoomReady:
-                            print("FunctionOnRoomReady")
-                            isRoomReady = true
-                            processRoomReadyConfigurations()
-                        case .FunctionCallBack:
-                            break
-                        case .FunctionReady:
-                            print("FunctionReady")
-                            processConfigurations()
-                            webView.evaluateJavaScript("VerloopLivechat.widgetOpened()")
-                        case .FunctionCloseComplete:
-                            clearLocalStorageVistorToken()
-                            _eventDelegate?.didEventOccurOnLiveChat(.onLogoutComplete)
-                        case .FunctionChatMinimized:
-                            _eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
-                        case .FunctionChatMaximized:
-                            _eventDelegate?.didEventOccurOnLiveChat(.onChatMaximized)
-                        case .FunctionChatEnded:
-                            _eventDelegate?.didEventOccurOnLiveChat(.onChatEnded)
-                        case .FunctionChatStarted:
-//                            onMessageReceived?()
-                            _eventDelegate?.didEventOccurOnLiveChat(.onChatStarted)
-                    }
-                }
+                modelObject = try JSONDecoder().decode(ExpectedEventPayload.self, from: expectedData)
             } catch {
-                print("didReceiveMessage decode error \(error)")
+                print(" handleWebPostMessage json parse error \(error)")
+                throw VLError.JSONParseError
             }
+//                print("model \(model)")
+            guard let model = modelObject,let src = model.src,src.lowercased() == Constants.JS_MESSAGE_NAME.lowercased() else {
+                print("source is not a verloop")
+                throw VLError.InvalidSourceName
+            }
+            print("model.fn \(model.fn)")
+            if let  _function = model.fn {
+                print("call back function \(_function)")
+                switch _function {
+                case .FunctionSetUserIdComplete:
+                    break
+                case .FunctionSetUserParamComplete:
+                    break
+                case .FunctionCloseWidget:
+                    clearLocalStorageVistorToken()
+                    self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)
+                case .FunctionOnRoomReady:
+                    print("FunctionOnRoomReady")
+                    isRoomReady = true
+                    processRoomReadyConfigurations()
+                case .FunctionCallBack:
+                    self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)
+                case .FunctionReady:
+                    print("FunctionReady")
+                    processConfigurations()
+                    webView.evaluateJavaScript("VerloopLivechat.widgetOpened()")
+                    _eventDelegate?.onWidgetLoaded?()
+                case .FunctionCloseComplete:
+                    clearLocalStorageVistorToken()
+                    self.didReceiveCallbackEventsOnLivechat(message: bodyString, data: bodyData)
+                case .FunctionChatMinimized:
+                    _eventDelegate?.onChatMinimized?()
+                    //                            _eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
+                case .FunctionChatMaximized:
+                    _eventDelegate?.onChatMaximized?()
+                    //                            _eventDelegate?.didEventOccurOnLiveChat(.onChatMaximized)
+                case .FunctionChatEnded:
+                    _eventDelegate?.onChatEnded?()
+                    //                            _eventDelegate?.didEventOccurOnLiveChat(.onChatEnded)
+                case .FunctionChatStarted:
+                    //                            onMessageReceived?()
+                    _eventDelegate?.onChatStarted?()
+                    //                            _eventDelegate?.didEventOccurOnLiveChat(.onChatStarted)
+                case .FunctionChatMessageReceived:
+                    _eventDelegate?.onIncomingMessage?(bodyString)
+                default:break
+                }
+            }
+        }
+    }
+    
+    private func didReceiveCallbackEventsOnLivechat(message:String,data:Data) {
+        do {
+            if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String:Any] {
+                    var firstArg = ""
+                    if let args = json["args"] as? [Any],let first = args.first as? String {
+                        firstArg = first
+                    } else if let args = json["args"] as? String {
+                        firstArg = args
+                    }
+                    print("firstArg \(firstArg)")
+                    switch firstArg {
+                        case FunctionType.FunctionChatMessageReceived.rawValue:
+                        if let args = json["args"] as? [Any] {
+                            for arg in args {
+                                if arg is [String:Any],(arg as! [String:Any]).keys.first ?? "" == "message",
+                                   let messagedict = (arg as! [String:Any])["message"] as? [String:Any],
+                                   let message = messagedict["msg"] as? String {
+                                    print("chat message \(message)")
+                                    _eventDelegate?.onIncomingMessage?(message)
+                                    break
+                                }
+                            }
+                        }
+                        case FunctionType.FunctionChatEnded.rawValue:
+                            _eventDelegate?.onChatEnded?()
+                        case FunctionType.FunctionChatStarted.rawValue:
+                            _eventDelegate?.onChatStarted?()
+                        case FunctionType.FunctionLogOutCompleted.rawValue:
+                            _eventDelegate?.onLogoutComplete?()
+                        default:break
+                    }
+            }
+        } catch {
+            print("didReceiveCallbackEventsOnLivechat parse error \(error)")
         }
     }
 }
