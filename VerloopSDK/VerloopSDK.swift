@@ -39,6 +39,7 @@ import Foundation
     deinit {
         verloopNavigationController = nil
         verloopController = nil
+        config.resetConfigParams()
         stopNotifier()
     }
     
@@ -145,7 +146,7 @@ import Foundation
             verloopNavigationController?.view.backgroundColor = .white
 
             verloopNavigationController?.navigationBar.barTintColor = UIColor.white
-
+            verloopController?.setViewControllerLifeCycleDelegate(manager)
 
 
             UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
