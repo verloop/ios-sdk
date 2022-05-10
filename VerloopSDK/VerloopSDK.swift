@@ -122,9 +122,9 @@ import Foundation
 
             
 
-            verloopController = VLViewController.init()
+            verloopController = VLViewController.init(webView: manager)
 
-            verloopController!.setWebView(webView: manager)
+
 
             verloopController!.title = title
 
@@ -132,11 +132,11 @@ import Foundation
 
             verloopNavigationController = VLNavViewController.init(rootViewController: verloopController!)
 
-            verloopNavigationController!.navigationItem.leftItemsSupplementBackButton = true
+            verloopNavigationController?.navigationItem.leftItemsSupplementBackButton = true
 
-            verloopNavigationController!.navigationItem.hidesBackButton = false
+            verloopNavigationController?.navigationItem.hidesBackButton = false
 
-            verloopNavigationController!.navigationItem.backBarButtonItem?.isEnabled = true
+            verloopNavigationController?.navigationItem.backBarButtonItem?.isEnabled = true
 
 
             verloopNavigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -146,7 +146,7 @@ import Foundation
             verloopNavigationController?.view.backgroundColor = .white
 
             verloopNavigationController?.navigationBar.barTintColor = UIColor.white
-            verloopController?.setViewControllerLifeCycleDelegate(manager)
+
 
 
             UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
