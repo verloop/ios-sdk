@@ -44,6 +44,7 @@ class VLViewController: UIViewController, WKUIDelegate {
     func setWebView(webView v: VLWebViewManager) {
         webView = v
         view.addSubview(webView!.webView)
+        self.lifeCycleDelegate = webView
     }
     private func updateWebViewConstraints() {
 
