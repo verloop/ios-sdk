@@ -232,23 +232,29 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         
     }
 
-    func clear() {
-        
-        userId = nil
-        userName = nil
-        userEmail = nil
-        userPhone = nil
-        notificationToken = nil
-        recipeId = nil
-        onButtonClicked = nil
-        customFields.removeAll()
-        userParams.removeAll()
-        
-        if let bundleID = Bundle.main.bundleIdentifier {
-            UserDefaults.standard.removePersistentDomain(forName: bundleID)
-        }
-    }
-    
+    func resetConfigParams() {
+          print("resetConfigParams in vlconfig")
+          userId = nil
+          userName = nil
+          userEmail = nil
+          userPhone = nil
+          notificationToken = nil
+          recipeId = nil
+          onButtonClicked = nil
+          onUrlClicked = nil
+          customFields.removeAll()
+          userParams.removeAll()
+          updatedConfigParams = []
+      }
+
+      func clear() {
+          resetConfigParams()
+          
+          if let bundleID = Bundle.main.bundleIdentifier {
+              UserDefaults.standard.removePersistentDomain(forName: bundleID)
+          }
+      }
+      
     func clearUserDetails(){
         
         userId = nil
