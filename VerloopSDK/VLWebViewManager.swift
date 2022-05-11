@@ -20,6 +20,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     private var jsInterface: VLJSInterface? = nil
     private var isRoomReady = false
     private var isReady = false
+    private var isReadyForPassConfigs = false
     private var config: VLConfig!
     private var roomReadyConfigurations:[VLConfig.APIMethods] = []
     private var networkChangesConfigurations:[VLConfig.APIMethods] = []
@@ -44,7 +45,8 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
 //        webView.configuration.userContentController.add(self, name: "VerloopMobile")
         webView.isOpaque = true
         isRoomReady = false
-        self.loadWebView()
+        isReadyForPassConfigs = false
+//        self.loadWebView()
     }
     
     deinit {
@@ -67,9 +69,18 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         contentController.removeScriptMessageHandler(forName: Constants.SCRIPT_MESSAGE_NAME)
     }
     
+    func launchWebView() {
+        print("launchWebView")
+        self.loadWebView()
+    }
+    
     func setConfig(config: VLConfig){
         self.config = config
-        self.loadWebView()
+        if isReadyForPassConfigs {
+            self.processConfigurations()
+        }
+        //no need to reload entire webview, just pass the modified config params
+//        self.loadWebView()
     }
 
     func clearLocalStorageVistorToken(){
@@ -377,6 +388,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                     self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)
                 case .FunctionReady:
                     print("FunctionReady")
+                    isReadyForPassConfigs = true
                     processConfigurations()
                     webView.evaluateJavaScript("VerloopLivechat.widgetOpened()")
                     _eventDelegate?.onWidgetLoaded?()
@@ -439,5 +451,30 @@ extension VLWebViewManager:ScriptMessageDelegate {
         } catch {
             print("didReceiveCallbackEventsOnLivechat parse error \(error)")
         }
+    }
+}
+
+extension VLWebViewManager:VLViewControllerLifeCycleDelegate {
+    func VLViewControllerViewdidLoad() {
+        //nothing to do for now
+    }
+    
+    func VLViewControllerViewWillAppear() {
+        print("VLViewControllerViewWillAppear")
+        launchWebView()
+    }
+    
+    func VLViewControllerViewDidAppear() {
+        //nothing to do for now
+    }
+    
+    func VLViewControllerViewWillDisappear() {
+        
+        isReadyForPassConfigs = false
+        isReady = false
+    }
+    
+    func VLViewControllerViewdidDisappeaar() {
+//        webView.stopLoading()
     }
 }
