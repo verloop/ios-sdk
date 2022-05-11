@@ -470,9 +470,7 @@ extension VLWebViewManager:VLViewControllerLifeCycleDelegate {
     
     func VLViewControllerViewWillDisappear() {
         
-        webView.load(URLRequest(url: URL(string: "about:blank")!))
         isReadyForPassConfigs = false
-        isRoomReady = false
         isReady = false
     }
     
