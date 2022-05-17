@@ -12,6 +12,7 @@ import Foundation
 }
 
 struct ExpectedEventPayload:Codable {
+    let src:String?
     let title:String?
     let type:MessageType?
     let fn:FunctionType?

@@ -13,6 +13,34 @@
 		186AC1F327DB46890079B027 /* ScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1EF27DB46890079B027 /* ScriptMessageHandler.swift */; };
 		186CB75B280EE60B00BE1658 /* VLEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186CB75A280EE60B00BE1658 /* VLEvent.swift */; };
 		18746D6827F5C9AA002A5CBD /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18746D6727F5C9AA002A5CBD /* Reachability.swift */; };
+		18C7299728166CA1006EF202 /* VerloopSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE300E9B21AA89EF00FDEA21 /* VerloopSDK.framework */; };
+		18C729D128166E8F006EF202 /* ScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1EF27DB46890079B027 /* ScriptMessageHandler.swift */; };
+		18C729D228166E8F006EF202 /* VLEventDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1ED27DB46890079B027 /* VLEventDelegate.swift */; };
+		18C729D328166E8F006EF202 /* VLEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186CB75A280EE60B00BE1658 /* VLEvent.swift */; };
+		18C729D528166E8F006EF202 /* VLWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE300EA621AA8A2C00FDEA21 /* VLWebViewManager.swift */; };
+		18C729D628166E8F006EF202 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18746D6727F5C9AA002A5CBD /* Reachability.swift */; };
+		18C729D728166E8F006EF202 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DE98E327E07A2500B87788 /* NetworkMonitor.swift */; };
+		18C729D828166E8F006EF202 /* VLViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE300EA821AA8A2C00FDEA21 /* VLViewController.swift */; };
+		18C729D928166E8F006EF202 /* VLJSInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE300EA721AA8A2C00FDEA21 /* VLJSInterface.swift */; };
+		18C729DA28166E8F006EF202 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1EC27DB46890079B027 /* Constants.swift */; };
+		18C729DB28166E8F006EF202 /* VLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AC1EE27DB46890079B027 /* VLExtensions.swift */; };
+		18C729DC28166E8F006EF202 /* VLConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE300EAA21AA8A2C00FDEA21 /* VLConfig.swift */; };
+		18C729ED2817D0F6006EF202 /* TestChatEnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729B928166CE3006EF202 /* TestChatEnd.swift */; };
+		18C729EE2817D0FE006EF202 /* TestUserParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729C028166CE4006EF202 /* TestUserParam.swift */; };
+		18C729EF2817D0FE006EF202 /* TestIncomeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729BC28166CE4006EF202 /* TestIncomeMessage.swift */; };
+		18C729F02817D0FE006EF202 /* TestChatStarted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729C228166CE4006EF202 /* TestChatStarted.swift */; };
+		18C729F12817D0FE006EF202 /* TestWidgetClose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729C128166CE4006EF202 /* TestWidgetClose.swift */; };
+		18C729F22817D0FE006EF202 /* TestChatMaximized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729BA28166CE4006EF202 /* TestChatMaximized.swift */; };
+		18C729F32817D0FE006EF202 /* TestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729BE28166CE4006EF202 /* TestConstants.swift */; };
+		18C729F42817D0FE006EF202 /* TestLogout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729B828166CE3006EF202 /* TestLogout.swift */; };
+		18C729F52817D0FE006EF202 /* TestChatMinimized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729BF28166CE4006EF202 /* TestChatMinimized.swift */; };
+		18C729F62817D0FE006EF202 /* TestUserIdAndchatEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729BB28166CE4006EF202 /* TestUserIdAndchatEvents.swift */; };
+		18C729F72817D0FE006EF202 /* VerloopSDKTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729BD28166CE4006EF202 /* VerloopSDKTest.swift */; };
+		18C729F82817D0FE006EF202 /* VLConfigTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729C328166CE4006EF202 /* VLConfigTest.swift */; };
+		18C729F92817D0FE006EF202 /* VerloopSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C7299528166CA1006EF202 /* VerloopSDKTests.swift */; };
+		18C729FA2817DA4C006EF202 /* VerloopSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE300EA921AA8A2C00FDEA21 /* VerloopSDK.swift */; };
+		18C729FB2817DA9C006EF202 /* VLNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */; };
+		18C729FD2817DF0E006EF202 /* TestClickListeners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729FC2817DF0D006EF202 /* TestClickListeners.swift */; };
 		18DE98E627E07A2600B87788 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DE98E327E07A2500B87788 /* NetworkMonitor.swift */; };
 		EE21DA5E21DF4C17004B8A24 /* VLNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */; };
 		EE300EA021AA89EF00FDEA21 /* VerloopSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = EE300E9E21AA89EF00FDEA21 /* VerloopSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -23,6 +51,16 @@
 		EE300EAF21AA8A2C00FDEA21 /* VLConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE300EAA21AA8A2C00FDEA21 /* VLConfig.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		18C7299828166CA1006EF202 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EE300E9221AA89EF00FDEA21 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EE300E9A21AA89EF00FDEA21;
+			remoteInfo = VerloopSDK;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		186AC1EC27DB46890079B027 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		186AC1ED27DB46890079B027 /* VLEventDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLEventDelegate.swift; sourceTree = "<group>"; };
@@ -30,6 +68,21 @@
 		186AC1EF27DB46890079B027 /* ScriptMessageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptMessageHandler.swift; sourceTree = "<group>"; };
 		186CB75A280EE60B00BE1658 /* VLEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLEvent.swift; sourceTree = "<group>"; };
 		18746D6727F5C9AA002A5CBD /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		18C7299328166CA1006EF202 /* VerloopSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VerloopSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		18C7299528166CA1006EF202 /* VerloopSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerloopSDKTests.swift; sourceTree = "<group>"; };
+		18C729B828166CE3006EF202 /* TestLogout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLogout.swift; sourceTree = "<group>"; };
+		18C729B928166CE3006EF202 /* TestChatEnd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestChatEnd.swift; sourceTree = "<group>"; };
+		18C729BA28166CE4006EF202 /* TestChatMaximized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestChatMaximized.swift; sourceTree = "<group>"; };
+		18C729BB28166CE4006EF202 /* TestUserIdAndchatEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUserIdAndchatEvents.swift; sourceTree = "<group>"; };
+		18C729BC28166CE4006EF202 /* TestIncomeMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestIncomeMessage.swift; sourceTree = "<group>"; };
+		18C729BD28166CE4006EF202 /* VerloopSDKTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerloopSDKTest.swift; sourceTree = "<group>"; };
+		18C729BE28166CE4006EF202 /* TestConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestConstants.swift; sourceTree = "<group>"; };
+		18C729BF28166CE4006EF202 /* TestChatMinimized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestChatMinimized.swift; sourceTree = "<group>"; };
+		18C729C028166CE4006EF202 /* TestUserParam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUserParam.swift; sourceTree = "<group>"; };
+		18C729C128166CE4006EF202 /* TestWidgetClose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestWidgetClose.swift; sourceTree = "<group>"; };
+		18C729C228166CE4006EF202 /* TestChatStarted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestChatStarted.swift; sourceTree = "<group>"; };
+		18C729C328166CE4006EF202 /* VLConfigTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLConfigTest.swift; sourceTree = "<group>"; };
+		18C729FC2817DF0D006EF202 /* TestClickListeners.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestClickListeners.swift; sourceTree = "<group>"; };
 		18DE98E327E07A2500B87788 /* NetworkMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLNavViewController.swift; sourceTree = "<group>"; };
 		EE300E9B21AA89EF00FDEA21 /* VerloopSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VerloopSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,6 +96,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		18C7299028166CA1006EF202 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18C7299728166CA1006EF202 /* VerloopSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE300E9821AA89EF00FDEA21 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -53,10 +114,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18C7299428166CA1006EF202 /* VerloopSDKTests */ = {
+			isa = PBXGroup;
+			children = (
+				18C729FC2817DF0D006EF202 /* TestClickListeners.swift */,
+				18C729B928166CE3006EF202 /* TestChatEnd.swift */,
+				18C729BA28166CE4006EF202 /* TestChatMaximized.swift */,
+				18C729BF28166CE4006EF202 /* TestChatMinimized.swift */,
+				18C729C228166CE4006EF202 /* TestChatStarted.swift */,
+				18C729BE28166CE4006EF202 /* TestConstants.swift */,
+				18C729BC28166CE4006EF202 /* TestIncomeMessage.swift */,
+				18C729B828166CE3006EF202 /* TestLogout.swift */,
+				18C729BB28166CE4006EF202 /* TestUserIdAndchatEvents.swift */,
+				18C729C028166CE4006EF202 /* TestUserParam.swift */,
+				18C729C128166CE4006EF202 /* TestWidgetClose.swift */,
+				18C729BD28166CE4006EF202 /* VerloopSDKTest.swift */,
+				18C729C328166CE4006EF202 /* VLConfigTest.swift */,
+				18C7299528166CA1006EF202 /* VerloopSDKTests.swift */,
+			);
+			path = VerloopSDKTests;
+			sourceTree = "<group>";
+		};
 		EE300E9121AA89EF00FDEA21 = {
 			isa = PBXGroup;
 			children = (
 				EE300E9D21AA89EF00FDEA21 /* VerloopSDK */,
+				18C7299428166CA1006EF202 /* VerloopSDKTests */,
 				EE300E9C21AA89EF00FDEA21 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -65,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				EE300E9B21AA89EF00FDEA21 /* VerloopSDK.framework */,
+				18C7299328166CA1006EF202 /* VerloopSDKTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,6 +189,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		18C7299228166CA1006EF202 /* VerloopSDKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 18C7299C28166CA1006EF202 /* Build configuration list for PBXNativeTarget "VerloopSDKTests" */;
+			buildPhases = (
+				18C7298F28166CA1006EF202 /* Sources */,
+				18C7299028166CA1006EF202 /* Frameworks */,
+				18C7299128166CA1006EF202 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				18C7299928166CA1006EF202 /* PBXTargetDependency */,
+			);
+			name = VerloopSDKTests;
+			productName = VerloopSDKTests;
+			productReference = 18C7299328166CA1006EF202 /* VerloopSDKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		EE300E9A21AA89EF00FDEA21 /* VerloopSDK */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EE300EA321AA89EF00FDEA21 /* Build configuration list for PBXNativeTarget "VerloopSDK" */;
@@ -129,9 +231,13 @@
 		EE300E9221AA89EF00FDEA21 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = Verloop;
 				TargetAttributes = {
+					18C7299228166CA1006EF202 = {
+						CreatedOnToolsVersion = 13.1;
+					};
 					EE300E9A21AA89EF00FDEA21 = {
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1020;
@@ -151,11 +257,19 @@
 			projectRoot = "";
 			targets = (
 				EE300E9A21AA89EF00FDEA21 /* VerloopSDK */,
+				18C7299228166CA1006EF202 /* VerloopSDKTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		18C7299128166CA1006EF202 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE300E9921AA89EF00FDEA21 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -166,6 +280,40 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		18C7298F28166CA1006EF202 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18C729FA2817DA4C006EF202 /* VerloopSDK.swift in Sources */,
+				18C729FD2817DF0E006EF202 /* TestClickListeners.swift in Sources */,
+				18C729F62817D0FE006EF202 /* TestUserIdAndchatEvents.swift in Sources */,
+				18C729F32817D0FE006EF202 /* TestConstants.swift in Sources */,
+				18C729D228166E8F006EF202 /* VLEventDelegate.swift in Sources */,
+				18C729ED2817D0F6006EF202 /* TestChatEnd.swift in Sources */,
+				18C729D628166E8F006EF202 /* Reachability.swift in Sources */,
+				18C729D128166E8F006EF202 /* ScriptMessageHandler.swift in Sources */,
+				18C729F42817D0FE006EF202 /* TestLogout.swift in Sources */,
+				18C729FB2817DA9C006EF202 /* VLNavViewController.swift in Sources */,
+				18C729DA28166E8F006EF202 /* Constants.swift in Sources */,
+				18C729DB28166E8F006EF202 /* VLExtensions.swift in Sources */,
+				18C729F72817D0FE006EF202 /* VerloopSDKTest.swift in Sources */,
+				18C729F22817D0FE006EF202 /* TestChatMaximized.swift in Sources */,
+				18C729D528166E8F006EF202 /* VLWebViewManager.swift in Sources */,
+				18C729F52817D0FE006EF202 /* TestChatMinimized.swift in Sources */,
+				18C729F02817D0FE006EF202 /* TestChatStarted.swift in Sources */,
+				18C729F12817D0FE006EF202 /* TestWidgetClose.swift in Sources */,
+				18C729DC28166E8F006EF202 /* VLConfig.swift in Sources */,
+				18C729EF2817D0FE006EF202 /* TestIncomeMessage.swift in Sources */,
+				18C729D828166E8F006EF202 /* VLViewController.swift in Sources */,
+				18C729D928166E8F006EF202 /* VLJSInterface.swift in Sources */,
+				18C729F92817D0FE006EF202 /* VerloopSDKTests.swift in Sources */,
+				18C729EE2817D0FE006EF202 /* TestUserParam.swift in Sources */,
+				18C729D328166E8F006EF202 /* VLEvent.swift in Sources */,
+				18C729F82817D0FE006EF202 /* VLConfigTest.swift in Sources */,
+				18C729D728166E8F006EF202 /* NetworkMonitor.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE300E9721AA89EF00FDEA21 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -188,7 +336,63 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		18C7299928166CA1006EF202 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EE300E9A21AA89EF00FDEA21 /* VerloopSDK */;
+			targetProxy = 18C7299828166CA1006EF202 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		18C7299A28166CA1006EF202 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5423774D8G;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heymate.VerloopSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		18C7299B28166CA1006EF202 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5423774D8G;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heymate.VerloopSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		EE300EA121AA89EF00FDEA21 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -369,6 +573,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		18C7299C28166CA1006EF202 /* Build configuration list for PBXNativeTarget "VerloopSDKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18C7299A28166CA1006EF202 /* Debug */,
+				18C7299B28166CA1006EF202 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EE300E9521AA89EF00FDEA21 /* Build configuration list for PBXProject "VerloopSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

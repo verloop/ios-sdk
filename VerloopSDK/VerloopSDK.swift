@@ -12,7 +12,7 @@ import Foundation
 
 @objc open class VerloopSDK: NSObject, VLJSInterface {
     private var config: VLConfig
-    private var manager: VLWebViewManager!
+    var manager: VLWebViewManager!
     private var verloopController: VLViewController? = nil
     private var verloopNavigationController: UINavigationController? = nil
 
@@ -39,6 +39,7 @@ import Foundation
     deinit {
         verloopNavigationController = nil
         verloopController = nil
+        config.resetConfigParams()
         stopNotifier()
     }
     
@@ -121,9 +122,9 @@ import Foundation
 
             
 
-            verloopController = VLViewController.init()
+            verloopController = VLViewController.init(webView: manager)
 
-            verloopController!.setWebView(webView: manager)
+
 
             verloopController!.title = title
 
@@ -131,11 +132,11 @@ import Foundation
 
             verloopNavigationController = VLNavViewController.init(rootViewController: verloopController!)
 
-            verloopNavigationController!.navigationItem.leftItemsSupplementBackButton = true
+            verloopNavigationController?.navigationItem.leftItemsSupplementBackButton = true
 
-            verloopNavigationController!.navigationItem.hidesBackButton = false
+            verloopNavigationController?.navigationItem.hidesBackButton = false
 
-            verloopNavigationController!.navigationItem.backBarButtonItem?.isEnabled = true
+            verloopNavigationController?.navigationItem.backBarButtonItem?.isEnabled = true
 
 
             verloopNavigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
