@@ -15,7 +15,7 @@ struct TestConstants {
     static let email = "sreedeep.dev@gmail.com"
     static let phone = "78353421312"
     static let name = "sreedeep"
-    static let recepie = "Sy3xTxzrJXX8XCeCT"
+    static let recipe = "Sy3xTxzrJXX8XCeCT"
     static let customField:[String:String] = ["is_beauty":"true"]
     static let testURL = "https://www.verloop.io"
     static let testButtonTitle = "VButton"
@@ -44,9 +44,9 @@ struct TestConstants {
         return config
     }
     
-    static func getRecepieConfig() -> VLConfig {
+    static func getRecipeConfig() -> VLConfig {
         let config = VLConfig.init(clientId: clientId)
-        config.setRecipeId(recipeId: recepie)
+        config.setRecipeId(recipeId: recipe)
         return config
     }
     

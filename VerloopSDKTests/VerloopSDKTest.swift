@@ -34,7 +34,7 @@ import VerloopSDK
 //        _config.setUserName(userName: TestConstants.name)
 //        _config.setUserPhone(userPhone: TestConstants.phone)
 //        _config.putCustomField(key: TestConstants.customField.keys.first ?? "", value: TestConstants.customField.values.first ?? "", scope: .USER)
-//        _config.setRecipeId(recipeId: TestConstants.recepie)
+//        _config.setRecipeId(recipeId: TestConstants.recipe)
 //        _sdk = VerloopSDK.init(config: _config)
 //        _sdk.observeLiveChatEventsOn(vlEventDelegate: self)
 //        verifyClickListener()
@@ -106,7 +106,7 @@ import VerloopSDK
 //    func verifyLogoutCache() {
 //        let config = _sdk.getConfig()
 //        XCTAssertNil(config.getUsername())
-//        XCTAssertNil(config.getRecepieId())
+//        XCTAssertNil(config.getRecipeId())
 //    }
 //
 //    func verifyCustomFieldsJSON() {

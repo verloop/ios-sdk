@@ -19,7 +19,7 @@ class VLConfigTest: XCTestCase {
         _config.setUserPhone(userPhone: TestConstants.phone)
         _config.putCustomField(key: TestConstants.customField.keys.first ?? "", value: TestConstants.customField.values.first ?? "", scope: .USER)
 //        _config.setDepartment(TestConstants.department)
-        _config.setRecipeId(recipeId: TestConstants.recepie)
+        _config.setRecipeId(recipeId: TestConstants.recipe)
     }
 
     override func tearDownWithError() throws {
@@ -87,10 +87,10 @@ class VLConfigTest: XCTestCase {
 //        XCTAssertNil(_config.getDepartment())
     }
     
-    func testRecepie() {
-        XCTAssertEqual(_config.getRecepieId() ?? "", TestConstants.recepie)
+    func testRecipe() {
+        XCTAssertEqual(_config.getRecipeId() ?? "", TestConstants.recipe)
         _config.setRecipeId(recipeId: nil)
-        XCTAssertNotNil(_config.getRecepieId())
+        XCTAssertNotNil(_config.getRecipeId())
     }
     
     func testValidateConfigParams() {
