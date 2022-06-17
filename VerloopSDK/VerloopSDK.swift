@@ -12,28 +12,65 @@ import Foundation
 
 @objc open class VerloopSDK: NSObject, VLJSInterface {
     private var config: VLConfig
-    private var manager: VLWebViewManager!
+    var manager: VLWebViewManager!
     private var verloopController: VLViewController? = nil
     private var verloopNavigationController: UINavigationController? = nil
+
     
-    private var previousWindow: UIWindow? = nil
-    private var window = UIWindow()
-    
-    private var title = "Chat"
+    private var title = ""
     private var bgColor: UIColor
     private var textColor: UIColor
-    
+    var reachability: Reachability?
+    var lostNetworkConnection = false
     @objc public init(config vlConfig: VLConfig) {
         config = vlConfig
+        //Storing config params in user defaults
         config.save()
-        
-        bgColor = VerloopSDK.hexStringToUIColor(hex: "#000000")
+        print("user params \(config.getUserParams()) custom \(config.getCustomFields())")
+        bgColor = .clear
         textColor = VerloopSDK.hexStringToUIColor(hex: "#ffffff")
-        
         super.init()
         manager = VLWebViewManager(config: config)
         manager.jsDelegate(delegate: self)
-
+        //Part of network reachability
+        startHost(host: "verloop.io")
+    }
+    
+    deinit {
+        verloopNavigationController = nil
+        verloopController = nil
+        config.resetConfigParams()
+        stopNotifier()
+    }
+    
+    @objc public func openWidget(rootController:UIViewController) {
+        
+        verloopNavigationController = getNavController()
+        
+        rootController.present(verloopNavigationController!, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {[weak self] in
+                self?.manager.openWidget()
+            }
+        }
+    }
+    
+    @objc public func closeWidget() {
+        onChatClose {
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {[weak self] in
+                let hasNetwork = !((self?.reachability?.connection == .unavailable) )
+                self?.manager.closeWidget(hasInternet: hasNetwork)
+            }
+        }
+    }
+    
+    @objc public func close() {
+        self.manager.close()
+    }
+    
+    @objc public func observeLiveChatEventsOn(vlEventDelegate delegate:VLEventDelegate) {
+        if manager != nil {
+            manager.addEventChangeDelegate(delegate)
+        }
     }
     
     @objc public func updateConfig(config vlConfig: VLConfig){
@@ -54,66 +91,103 @@ import Foundation
     }
     
     @objc public func logout() {
+        manager.logoutSession()
+        clearConfig()
         config.clearUserDetails()
-        manager.clearLocalStorage()
-        manager.setConfig(config: config)
     }
     
     @objc public func clearConfig(){
         config.clear()
         manager.clearConfig(config: config)
+        self.config = VLConfig(clientId: "")
+        self.clearLocalStorage()
     }
-    
+    @objc public func clearLocalStorage(){
+        manager.clearLocalStorageVistorToken()
+
+    }
+    public func getConfig() -> VLConfig {
+        return config
+    }
     
     @objc public func getNavController() -> UINavigationController {
-        
-        if verloopNavigationController != nil {
-            
-            print("Already initialized")
-            return verloopNavigationController!
-        }
-        
-        verloopController = VLViewController.init()
-        verloopController!.setWebView(webView: manager)
-        verloopController!.title = title
-        verloopController!.setSDK(verloopSDK: self)
-        
-        verloopNavigationController = VLNavViewController.init(rootViewController: verloopController!)
-        print("Updating Client Info")
-        refreshClientInfo()
-        print("Updated Client Info")
 
-        verloopNavigationController!.navigationItem.leftItemsSupplementBackButton = true
-        
-        verloopNavigationController!.navigationItem.hidesBackButton = false
-        verloopNavigationController!.navigationItem.backBarButtonItem?.isEnabled = true
+            
+
+            if verloopNavigationController != nil {
+
+                return verloopNavigationController!
+
+            }
+
+            
+
+            verloopController = VLViewController.init(webView: manager)
+
+
+
+            verloopController!.title = title
+
+            verloopController!.setSDK(verloopSDK: self)
+
+            verloopNavigationController = VLNavViewController.init(rootViewController: verloopController!)
+
+            verloopNavigationController?.navigationItem.leftItemsSupplementBackButton = true
+
+            verloopNavigationController?.navigationItem.hidesBackButton = false
+
+            verloopNavigationController?.navigationItem.backBarButtonItem?.isEnabled = true
+
+
+            verloopNavigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+
+            verloopNavigationController?.hidesBarsOnSwipe = false
+
+            verloopNavigationController?.view.backgroundColor = .white
+
+            verloopNavigationController?.navigationBar.barTintColor = UIColor.white
+
+
+
+            UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+
+            UINavigationBar.appearance().shadowImage = UIImage()
+
+            UINavigationBar.appearance().isTranslucent = true
+
+
+
+            verloopNavigationController?.modalPresentationStyle = .fullScreen
+
+
+
+            return verloopNavigationController!
+
+        }
     
-        
-        return verloopNavigationController!
-    }
+    //called when client information such as color cod eof the bar and title to be displayed on bar received from the live chat script
     
     func refreshClientInfo() {
-        verloopController?.title = title
-        if #available(iOS 13.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = bgColor
-            appearance.titleTextAttributes = [
-                NSAttributedString.Key.foregroundColor: textColor]
-            verloopNavigationController?.navigationBar.standardAppearance = appearance;
-            verloopNavigationController?.navigationBar.scrollEdgeAppearance = verloopNavigationController?.navigationBar.standardAppearance
-            
-        } else {
-            verloopNavigationController?.navigationBar.barTintColor = bgColor
-            verloopNavigationController?.navigationBar.tintColor = textColor
 
-        }
+        print("refreshClientInfo")
+
+        verloopController?.title = title
+
+        verloopNavigationController?.navigationBar.backgroundColor = bgColor
+
+        verloopNavigationController?.navigationBar.barTintColor = bgColor
+
+        verloopNavigationController?.navigationBar.isTranslucent = false
+
 
         // TODO: In VLViewController, the leftBarButtonItem is set on controller's navigationItem and here it was being set on verloopNavigationController's navigationItem that was creating issue and leftBarItem's tint color was nil
+
         verloopController?.navigationItem.leftBarButtonItem?.tintColor = textColor
+
         verloopNavigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: textColor]
+
     }
-    
+
     
     static func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
@@ -137,75 +211,74 @@ import Foundation
         )
     }
     
+    //This method executes as part of the n/w state changes and if any n/w inactive tasks to be processed then web view manager make respective functions.
+    func refreshwebViewOnNetworkReconnection() {
+        print("refreshwebViewOnNetworkReconnection")
+        manager.executeNetworkChangeConfigurations()
+    }
+
+    //following is a delegate method of JsDelegate which is responsible for handling back call backs to the client app for
+    //button clicks
+    //url clicks
+    //where as 'ready' call back is used to identify the color code of the navigation bar and title
+    //below method executes when user made a selection on the webview for links / buttons
     func jsCallback(message: Any) {
-        let str = message as! String
-        let data = str.data(using: String.Encoding.utf8)!
-        print("button clicked 1")
-        do {
-           let clientInfo =  try JSONDecoder().decode(ClientInfo.self, from: data)
-           title = clientInfo.title
-           bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
-           textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
 
-           refreshClientInfo()
-        }catch {
-           print("Problem retreiving client Info")
-        }
-        do {
-           let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
-           let title = buttonInfo.title
-           let type = buttonInfo.type
-           let payload = buttonInfo.payload
+            print("jsCallback")
 
-           if config.onButtonClicked != nil{
-               config.onButtonClicked?(title, type, payload)
-           }
-        }catch {
-           print("Problem retreiving button Info")
-        }
-        do {
-           let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
-           let url = urlInfo.url
-
-           if config.onUrlClicked != nil{
-               config.onUrlClicked?(url)
-           }
-       }catch {
-           print("Problem retreiving url Info")
-       }
-    }
-    
-    @objc public func start() {
-        previousWindow = UIApplication.shared.keyWindow
-        
-        window.isOpaque = true
-        window.backgroundColor = UIColor.white
-        window.frame = UIScreen.main.bounds//UIApplication.shared.keyWindow!.frame
-        window.windowLevel = UIWindow.Level.normal + 1
-        window.rootViewController = getNavController()
-        window.makeKeyAndVisible()
-    }
-    
-    
-    @objc public func hide() {
-        onChatClose()
-    }
-    
-    func onChatClose() {
-        if previousWindow != nil {
-            window.resignKey()
-            previousWindow!.makeKeyAndVisible()
-            previousWindow = nil
+        if message is String,let data = (message as? String)?.data(using: String.Encoding.utf8) {
+            do {
+                let clientInfo = try JSONDecoder().decode(ClientInfo.self, from: data)
+                bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
+                textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
+                title = clientInfo.title
+                verloopController?.dismissLoader()
+                refreshClientInfo()
+                manager.updateReadyState(true)
+            } catch {
+            }
             
-            window.windowLevel = UIWindow.Level.normal - 30
+            do {
+                   let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
+                   let title = buttonInfo.title ?? ""
+                   let type = buttonInfo.type ?? ""
+                   let payload = buttonInfo.payload ?? ""
+                if type.lowercased() == MessageType.MessageButtonClick.rawValue.lowercased() {
+                    config.getButtonClickListener()?(title,type, payload)
+                } else if type.lowercased() == MessageType.MessageURLClick.rawValue.lowercased() {
+                    config.getURLClickListener()?(buttonInfo.payload)
+                }
+                    
+                    
+                  print("buttton click ")
+                }catch {
+                   print("Problem retreiving button Info \(error)")
+                }
+            
+        }
+        
+    
+        }
+    
+
+
+    @objc public func hide() {
+        onChatClose {
+            //nothing to do here
         }
     }
     
-    func onTransition() {
-        NSLog("onTransiotion")
-        
+    func onChatClose(completion:@escaping(() -> Void)) {
+        if self.verloopController != nil {
+            self.verloopNavigationController?.dismiss(animated: true, completion: {
+                completion()
+            })
+        } else {
+            completion()
+        }
     }
     
+    //below are the 3 objects which will be prepare as part of the JSCallback delegate methods for button click, urlclick and client info
     private struct ClientInfo: Decodable {
         public let title: String
         public let bgColor: String
@@ -213,13 +286,14 @@ import Foundation
     }
     
     private struct OnButtonClick: Decodable {
-        public let title: String
-        public let type: String
-        public let payload: String
+        public let title: String?
+        public let type: String?
+        public let payload: String?
     }
     
     private struct OnURLClick: Decodable {
-        public let url: String
+        public var title:String?
+        public var type:String?
+        public var payload:String?
     }
 }
-
