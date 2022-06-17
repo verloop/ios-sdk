@@ -11,7 +11,7 @@
 ////enum RowType:String {
 ////    case Defaults
 ////    case UserId
-////    case RecepieID
+////    case RecipeID
 ////    case UserParams
 ////    case customField
 ////    case Department
@@ -26,11 +26,11 @@
 //
 //class ConfigTestViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
 //
-//    private let mTitles:[RowType] = [.Defaults,.UserId,.RecepieID,.UserParams,.customField,.Department,.clearDepartment,.OpenWidget,.CloseWidget,.AddListeners,.LoginWithUserID,.Logout,.Close]
+//    private let mTitles:[RowType] = [.Defaults,.UserId,.RecipeID,.UserParams,.customField,.Department,.clearDepartment,.OpenWidget,.CloseWidget,.AddListeners,.LoginWithUserID,.Logout,.Close]
 //    private var mValues:[String] = []
 //    private let defaultClientID = "sreedeep.dev"
 //    private let userId = "Verloop123"
-//    private let recepieID = "Sy3xTxzrJXX8XCeCT"
+//    private let recipeID = "Sy3xTxzrJXX8XCeCT"
 //    private let userParamNameKey = "email"
 //    private let userParamNameValue = "test@verloop.io"
 //    private let userParamPhoneKey = "phone"
@@ -43,7 +43,7 @@
 //    override func viewDidLoad() {
 //        super.viewDidLoad()
 //        self.title = "Verloop"
-//        mValues = ["Client ID \(defaultClientID) ",userId,recepieID,"\(userParamNameKey):\(userParamNameValue) \(userParamPhoneKey):\(userParamPhoneValue)","\(customFieldKey):\(customFieldValue) scope:room",department,"Clears department","Opening widget","Close widget","All listeners","verloop123","",""]
+//        mValues = ["Client ID \(defaultClientID) ",userId,recipeID,"\(userParamNameKey):\(userParamNameValue) \(userParamPhoneKey):\(userParamPhoneValue)","\(customFieldKey):\(customFieldValue) scope:room",department,"Clears department","Opening widget","Close widget","All listeners","verloop123","",""]
 //        // Do any additional setup after loading the view.
 //    }
 //    
@@ -74,9 +74,9 @@
 //        
 //    }
 //    
-//    private func setRecepie() {
+//    private func setRecipe() {
 //        let config = VLConfig.init(clientId: defaultClientID)
-//        config.setRecipeId(recipeId: recepieID)
+//        config.setRecipeId(recipeId: recipeID)
 //        createSDK(config: config)
 //        self.present(getSDKController(), animated: true, completion: nil)
 //    }
@@ -120,7 +120,7 @@
 //    private func closeWidget() {
 ////        mSDK?.closeWidget()
 //        let config = VLConfig.init(clientId: defaultClientID)
-//        config.setRecipeId(recipeId: recepieID)
+//        config.setRecipeId(recipeId: recipeID)
 //        createSDK(config: config)
 ////        config.setButtonOnClickListener {[weak self] title, type, payload in
 ////            print("button clicked \(title ?? "")")
@@ -131,7 +131,7 @@
 //    
 //    private func addListeners() {
 //        let config = VLConfig.init(clientId: defaultClientID)
-//        config.setRecipeId(recipeId: recepieID)
+//        config.setRecipeId(recipeId: recipeID)
 //        createSDK(config: config)
 //        config.setButtonOnClickListener {[weak self] title, type, payload in
 ////            print("button clicked \(title ?? "")")
@@ -194,8 +194,8 @@
 //                setUserId()
 //            case .UserParams:
 //                setUserParam()
-//            case .RecepieID:
-//                setRecepie()
+//            case .RecipeID:
+//                setRecipe()
 //            case .customField:
 //                setCustomfield()
 //            case .Department:

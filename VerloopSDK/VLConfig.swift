@@ -35,7 +35,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         case userName
         case email
         case phoneNumber
-        case recepie
+        case recipe
         case department
         case userParams
         case customFields
@@ -148,9 +148,9 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     }
     
     @objc public func setRecipeId(recipeId id: String?) {
-        if !updatedConfigParams.contains(.recepie),!(id ?? "").hasEmptyValue() {
+        if !updatedConfigParams.contains(.recipe),!(id ?? "").hasEmptyValue() {
             recipeId = id
-            updatedConfigParams.append(.recepie)
+            updatedConfigParams.append(.recipe)
         }
     }
     
@@ -191,6 +191,8 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
                 case .USER:
                     customFields.append(CustomField(key: key, value: value, scope: "user"))
                 case .ROOM:
+                    customFields.append(CustomField(key: key, value: value, scope: "room"))
+                default:
                     customFields.append(CustomField(key: key, value: value, scope: "room"))
             }
         }
@@ -340,7 +342,7 @@ extension VLConfig {
     func getNotificationToken() -> String? {
         return notificationToken
     }
-    func getRecepieId() -> String? {
+    func getRecipeId() -> String? {
         return recipeId
     }
     func getCustomFields() -> [CustomField] {

@@ -300,11 +300,11 @@ extension VLWebViewManager {
                             print("set user id error \(error?.localizedDescription ?? "NIL")")
                         }
                     }
-                case .recepie:
-                    if let unwrapped = config.getRecepieId(),!unwrapped.isEmpty {
-                        print("unwrapped recepie \(unwrapped)")
-                        webView.evaluateJavaScript(String.getRecepieEvaluationJS(unwrapped)) { _, error in
-                            print("set recepie error \(error?.localizedDescription ?? "NIL")")
+                case .recipe:
+                    if let unwrapped = config.getRecipeId(),!unwrapped.isEmpty {
+                        print("unwrapped recipe \(unwrapped)")
+                        webView.evaluateJavaScript(String.getRecipeEvaluationJS(unwrapped)) { _, error in
+                            print("set recipe error \(error?.localizedDescription ?? "NIL")")
                         }
                     }
                 case .customFields:
@@ -317,7 +317,7 @@ extension VLWebViewManager {
                     }
                 case .department:
                     if let unwrapped = config.getDepartment(),!unwrapped.isEmpty {
-                        print("unwrapped recepie \(unwrapped)")
+                        print("unwrapped recipe \(unwrapped)")
                         webView.evaluateJavaScript(String.getDepartmentEvaluationJS(dept: unwrapped)) { _, error in
                             print("set department error \(error?.localizedDescription ?? "NIL")")
                         }
