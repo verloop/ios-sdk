@@ -13,7 +13,7 @@ import XCTest
 //    private var _config:VLConfig!
 //    private var _sdk:VerloopSDK!
 //    private let userParamSetExpectation = XCTestExpectation(description: "User Param set completed")
-//    private let recepieSetExpectation = XCTestExpectation(description: "recepie set completed")
+//    private let recipeSetExpectation = XCTestExpectation(description: "recipe set completed")
 //    
 //    override func setUpWithError() throws {
 //        _config = TestConstants.getUserParamConfig()

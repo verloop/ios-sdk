@@ -17,13 +17,10 @@ extension String {
     }
     
     static func getUserIdEvaluationJS(_ userId:String) -> String {
-//        if let _unwrapped = optionArgument {
-//            return "\(Constants.JS_METHOD).setUserId('\(userId)','\(optionArgument ?? "")')"
-//        }
         return "\(Constants.JS_METHOD).setUserId('\(userId)')"
     }
-    static func getRecepieEvaluationJS(_ recepie:String) -> String {
-        return "\(Constants.JS_METHOD).setRecipe('\(recepie)')"
+    static func getRecipeEvaluationJS(_ recipe:String) -> String {
+        return "\(Constants.JS_METHOD).setRecipe('\(recipe)')"
     }
     static func getCustomFieldEvaluationJS(_ field:VLConfig.CustomField) -> String {
            return "\(Constants.JS_METHOD).setCustomField(\"\(field.key)\",\"\(field.value)\",{scope:\"\(field.scope)\"})"

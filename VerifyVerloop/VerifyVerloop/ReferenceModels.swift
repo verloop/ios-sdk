@@ -12,7 +12,7 @@ import VerloopSDK
 enum RowType:String {
     case ClientID
     case UserId
-    case RecepieID
+    case RecipeID
     case UserParams
     case customField
     case Department
@@ -59,7 +59,7 @@ class ViewModel {
     private var inputs:[RowModel] = [
         RowModel(rowType: .ClientID, isInputType: true, titleToBeShown: "Enter Client ID *", valueToBeshown: "",keyPlaceHolder: "Client ID (required)",showRightAccessoryView:false,additionView:false),
         RowModel(rowType: .UserId, isInputType: true, titleToBeShown: "Enter user ID", valueToBeshown: "",keyPlaceHolder: "User ID",showRightAccessoryView:false,additionView:false),
-        RowModel(rowType: .RecepieID, isInputType: true, titleToBeShown: "Enter Recepie ID", valueToBeshown: "",keyPlaceHolder: "Recepie ID",showRightAccessoryView:false,additionView:false),
+        RowModel(rowType: .RecipeID, isInputType: true, titleToBeShown: "Enter Recipe ID", valueToBeshown: "",keyPlaceHolder: "Recipe ID",showRightAccessoryView:false,additionView:false),
         RowModel(rowType: .UserParams, isInputType: true, titleToBeShown: "Enter User params.", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key",showRightAccessoryView:true,additionView:true),
         RowModel(rowType: .customField, isInputType: true, titleToBeShown: "Enter Custom Field", valueToBeshown: "",isMultiInputs:true,keyPlaceHolder:"Name of Key",valuePlaceHolder:"Value of key",showRightAccessoryView:true,additionView:true)
     ]
@@ -167,7 +167,7 @@ class ViewModel {
                     config = VLConfig.init(clientId: fieldInput.valueToBeshown)
                 case .UserId:
                     config?.setUserId(userId: fieldInput.valueToBeshown)
-                case .RecepieID:
+                case .RecipeID:
                     config?.setRecipeId(recipeId: fieldInput.valueToBeshown)
                 case .Department:
                 break
@@ -219,9 +219,9 @@ extension ViewModel {
         return (userID,clientID)
     }
     
-    private func getRecepieiD() -> String {
+    private func getRecipeiD() -> String {
         for ip in defaults.first ?? [] {
-            if ip.rowType == .RecepieID {
+            if ip.rowType == .RecipeID {
                 return ip.valueToBeshown
             }
         }
@@ -301,9 +301,9 @@ extension ViewModel {
                 return
             }
             let config = getInputsConfig()!
-            let recepie = self.getRecepieiD()
-            if !recepie.isEmpty {
-                config.setRecipeId(recipeId: recepie)
+            let recipe = self.getRecipeiD()
+            if !recipe.isEmpty {
+                config.setRecipeId(recipeId: recipe)
             }
             config.setButtonOnClickListener {[weak self] title, type, payload in
                 print("button click listenr called")
