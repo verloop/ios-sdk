@@ -222,23 +222,25 @@ import Foundation
        let str = message as! String
        let data = str.data(using: String.Encoding.utf8)!
        do {
-          let clientInfo =  try JSONDecoder().decode(ClientInfo.self, from: data)
-          title = clientInfo.title
-          bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
-          textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
-          refreshClientInfo()
+            let clientInfo =  try JSONDecoder().decode(ClientInfo.self, from: data)
+            title = clientInfo.title
+            bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
+            textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
+            refreshClientInfo()
+            verloopController?.dismissLoader()
+            manager.updateReadyState(true)
        }catch {
-          print("Problem retreiving client Info")
+           print("Problem retreiving client Info")
        }
        do {
-          let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
-          let title = buttonInfo.title
-          let type = buttonInfo.type
-          let payload = buttonInfo.payload
-          config.getButtonClickListener()?(title,type, payload)
+            let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
+            let title = buttonInfo.title
+            let type = buttonInfo.type
+            let payload = buttonInfo.payload
+            config.getButtonClickListener()?(title,type, payload)
   
        }catch {
-          print("Problem retreiving button Info")
+           print("Problem retreiving button Info")
        }
        do {
           let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
