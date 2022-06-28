@@ -223,44 +223,38 @@ import Foundation
     //where as 'ready' call back is used to identify the color code of the navigation bar and title
     //below method executes when user made a selection on the webview for links / buttons
     func jsCallback(message: Any) {
+       let str = message as! String
+       let data = str.data(using: String.Encoding.utf8)!
+       
+       do {
+          let clientInfo =  try JSONDecoder().decode(ClientInfo.self, from: data)
+          title = clientInfo.title
+          bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
+          textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
 
-            print("jsCallback")
+          refreshClientInfo()
+       }catch {
+          print("Problem retreiving client Info")
+       }
+       do {
+          let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
+          let title = buttonInfo.title
+          let type = buttonInfo.type
+          let payload = buttonInfo.payload
 
-        if message is String,let data = (message as? String)?.data(using: String.Encoding.utf8) {
-            do {
-                let clientInfo = try JSONDecoder().decode(ClientInfo.self, from: data)
-                bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
-                textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
-                title = clientInfo.title
-                verloopController?.dismissLoader()
-                refreshClientInfo()
-                manager.updateReadyState(true)
-            } catch {
-            }
-            
-            do {
-                   let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
-                   let title = buttonInfo.title ?? ""
-                   let type = buttonInfo.type ?? ""
-                   let payload = buttonInfo.payload ?? ""
-                if type.lowercased() == MessageType.MessageButtonClick.rawValue.lowercased() {
-                    config.getButtonClickListener()?(title,type, payload)
-                } else if type.lowercased() == MessageType.MessageURLClick.rawValue.lowercased() {
-                    config.getURLClickListener()?(buttonInfo.payload)
-                }
-                    
-                    
-                  print("buttton click ")
-                }catch {
-                   print("Problem retreiving button Info \(error)")
-                }
-            
-        }
-        
-    
-        }
-    
-
+          config.getButtonClickListener()?(title,type, payload)
+  
+       }catch {
+          print("Problem retreiving button Info")
+       }
+       do {
+          let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
+          let url = urlInfo.url
+          config.getURLClickListener()?(url)
+      }catch {
+          print("Problem retreiving url Info")
+      }
+   }
 
     @objc public func hide() {
         onChatClose {
@@ -292,8 +286,6 @@ import Foundation
     }
     
     private struct OnURLClick: Decodable {
-        public var title:String?
-        public var type:String?
-        public var payload:String?
+        public var url:String?
     }
 }
