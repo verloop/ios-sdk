@@ -226,7 +226,6 @@ import Foundation
           title = clientInfo.title
           bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
           textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
-
           refreshClientInfo()
        }catch {
           print("Problem retreiving client Info")
@@ -236,8 +235,6 @@ import Foundation
           let title = buttonInfo.title
           let type = buttonInfo.type
           let payload = buttonInfo.payload
-
-          print("On Button Click Listener")
           config.getButtonClickListener()?(title,type, payload)
   
        }catch {
@@ -246,7 +243,6 @@ import Foundation
        do {
           let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
           let url = urlInfo.url
-          print("On URL Click Listener")
           config.getURLClickListener()?(url)
       }catch {
           print("Problem retreiving url Info")
