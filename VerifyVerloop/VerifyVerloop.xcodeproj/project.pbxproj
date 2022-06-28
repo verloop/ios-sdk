@@ -12,7 +12,6 @@
 		18C7298828166C81006EF202 /* VerifyVerloopTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C7298728166C81006EF202 /* VerifyVerloopTests.swift */; };
 		18F86EB427F14AE900F3BF25 /* ReferenceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F86EB127F14AE900F3BF25 /* ReferenceModels.swift */; };
 		18F86EB527F14AE900F3BF25 /* VerloopTestTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F86EB327F14AE900F3BF25 /* VerloopTestTableViewController.swift */; };
-		F75D46FA27E3264000B7403A /* ConfigTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75D46F927E3264000B7403A /* ConfigTestViewController.swift */; };
 		F7D13E8C27A3B81F00262E51 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D13E8B27A3B81F00262E51 /* AppDelegate.swift */; };
 		F7D13E8E27A3B81F00262E51 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D13E8D27A3B81F00262E51 /* SceneDelegate.swift */; };
 		F7D13E9327A3B81F00262E51 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F7D13E9127A3B81F00262E51 /* Main.storyboard */; };
@@ -34,6 +33,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = F7D13E8727A3B81F00262E51;
 			remoteInfo = VerifyVerloop;
+		};
+		6B5E79F4286AFFA0001A9DCD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18746D7527F5DCC0002A5CBD /* VerloopSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 18C7299328166CA1006EF202;
+			remoteInfo = VerloopSDKTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -58,7 +64,6 @@
 		18E9E4FE27E982A9007E6B58 /* VerifyVerloop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VerifyVerloop.entitlements; sourceTree = "<group>"; };
 		18F86EB127F14AE900F3BF25 /* ReferenceModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReferenceModels.swift; sourceTree = "<group>"; };
 		18F86EB327F14AE900F3BF25 /* VerloopTestTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerloopTestTableViewController.swift; sourceTree = "<group>"; };
-		F75D46F927E3264000B7403A /* ConfigTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigTestViewController.swift; sourceTree = "<group>"; };
 		F7D13E8827A3B81F00262E51 /* VerifyVerloop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VerifyVerloop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7D13E8B27A3B81F00262E51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F7D13E8D27A3B81F00262E51 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				18746D7A27F5DCC0002A5CBD /* VerloopSDK.framework */,
+				6B5E79F5286AFFA0001A9DCD /* VerloopSDKTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,7 +148,6 @@
 				F7D13E9427A3B82000262E51 /* Assets.xcassets */,
 				F7D13E9627A3B82000262E51 /* LaunchScreen.storyboard */,
 				F7D13E9927A3B82000262E51 /* Info.plist */,
-				F75D46F927E3264000B7403A /* ConfigTestViewController.swift */,
 			);
 			path = VerifyVerloop;
 			sourceTree = "<group>";
@@ -238,6 +243,13 @@
 			remoteRef = 18746D7927F5DCC0002A5CBD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		6B5E79F5286AFFA0001A9DCD /* VerloopSDKTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = VerloopSDKTests.xctest;
+			remoteRef = 6B5E79F4286AFFA0001A9DCD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -275,7 +287,6 @@
 			files = (
 				18F86EB527F14AE900F3BF25 /* VerloopTestTableViewController.swift in Sources */,
 				F7D13E8C27A3B81F00262E51 /* AppDelegate.swift in Sources */,
-				F75D46FA27E3264000B7403A /* ConfigTestViewController.swift in Sources */,
 				F7D13E8E27A3B81F00262E51 /* SceneDelegate.swift in Sources */,
 				18F86EB427F14AE900F3BF25 /* ReferenceModels.swift in Sources */,
 			);

@@ -225,7 +225,7 @@ import Foundation
     func jsCallback(message: Any) {
        let str = message as! String
        let data = str.data(using: String.Encoding.utf8)!
-       
+       print(str)
        do {
           let clientInfo =  try JSONDecoder().decode(ClientInfo.self, from: data)
           title = clientInfo.title
@@ -242,6 +242,7 @@ import Foundation
           let type = buttonInfo.type
           let payload = buttonInfo.payload
 
+          print("On Button Click Listener")
           config.getButtonClickListener()?(title,type, payload)
   
        }catch {
@@ -250,6 +251,7 @@ import Foundation
        do {
           let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
           let url = urlInfo.url
+          print("On URL Click Listener")
           config.getURLClickListener()?(url)
       }catch {
           print("Problem retreiving url Info")
@@ -280,12 +282,12 @@ import Foundation
     }
     
     private struct OnButtonClick: Decodable {
-        public let title: String?
-        public let type: String?
-        public let payload: String?
+        public let title: String
+        public let type: String
+        public let payload: String
     }
     
     private struct OnURLClick: Decodable {
-        public var url:String?
+        public var url:String
     }
 }
