@@ -26,7 +26,6 @@ import Foundation
         config = vlConfig
         //Storing config params in user defaults
         config.save()
-        print("user params \(config.getUserParams()) custom \(config.getCustomFields())")
         bgColor = .clear
         textColor = VerloopSDK.hexStringToUIColor(hex: "#ffffff")
         super.init()
@@ -169,8 +168,6 @@ import Foundation
     
     func refreshClientInfo() {
 
-        print("refreshClientInfo")
-
         verloopController?.title = title
 
         verloopNavigationController?.navigationBar.backgroundColor = bgColor
@@ -213,7 +210,6 @@ import Foundation
     
     //This method executes as part of the n/w state changes and if any n/w inactive tasks to be processed then web view manager make respective functions.
     func refreshwebViewOnNetworkReconnection() {
-        print("refreshwebViewOnNetworkReconnection")
         manager.executeNetworkChangeConfigurations()
     }
 
@@ -223,44 +219,39 @@ import Foundation
     //where as 'ready' call back is used to identify the color code of the navigation bar and title
     //below method executes when user made a selection on the webview for links / buttons
     func jsCallback(message: Any) {
+       let str = message as! String
+       let data = str.data(using: String.Encoding.utf8)!
+       do {
+          let clientInfo =  try JSONDecoder().decode(ClientInfo.self, from: data)
+          title = clientInfo.title
+          bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
+          textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
 
-            print("jsCallback")
+          refreshClientInfo()
+       }catch {
+          print("Problem retreiving client Info")
+       }
+       do {
+          let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
+          let title = buttonInfo.title
+          let type = buttonInfo.type
+          let payload = buttonInfo.payload
 
-        if message is String,let data = (message as? String)?.data(using: String.Encoding.utf8) {
-            do {
-                let clientInfo = try JSONDecoder().decode(ClientInfo.self, from: data)
-                bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
-                textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
-                title = clientInfo.title
-                verloopController?.dismissLoader()
-                refreshClientInfo()
-                manager.updateReadyState(true)
-            } catch {
-            }
-            
-            do {
-                   let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
-                   let title = buttonInfo.title ?? ""
-                   let type = buttonInfo.type ?? ""
-                   let payload = buttonInfo.payload ?? ""
-                if type.lowercased() == MessageType.MessageButtonClick.rawValue.lowercased() {
-                    config.getButtonClickListener()?(title,type, payload)
-                } else if type.lowercased() == MessageType.MessageURLClick.rawValue.lowercased() {
-                    config.getURLClickListener()?(buttonInfo.payload)
-                }
-                    
-                    
-                  print("buttton click ")
-                }catch {
-                   print("Problem retreiving button Info \(error)")
-                }
-            
-        }
-        
-    
-        }
-    
-
+          print("On Button Click Listener")
+          config.getButtonClickListener()?(title,type, payload)
+  
+       }catch {
+          print("Problem retreiving button Info")
+       }
+       do {
+          let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
+          let url = urlInfo.url
+          print("On URL Click Listener")
+          config.getURLClickListener()?(url)
+      }catch {
+          print("Problem retreiving url Info")
+      }
+   }
 
     @objc public func hide() {
         onChatClose {
@@ -286,14 +277,12 @@ import Foundation
     }
     
     private struct OnButtonClick: Decodable {
-        public let title: String?
-        public let type: String?
-        public let payload: String?
+        public let title: String
+        public let type: String
+        public let payload: String
     }
     
     private struct OnURLClick: Decodable {
-        public var title:String?
-        public var type:String?
-        public var payload:String?
+        public var url:String
     }
 }

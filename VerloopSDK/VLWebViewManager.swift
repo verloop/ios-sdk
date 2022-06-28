@@ -335,12 +335,10 @@ extension VLWebViewManager {
 
 extension VLWebViewManager:ScriptMessageDelegate {
     func handler(_ scriptMessageHandler: ScriptMessageHandler, didReceiveMessage message: WKScriptMessage) {
-//        print("message.name and message.body are \(message.name) \(message.body)")
-
         if (message.name == Constants.SCRIPT_MESSAGE_NAME) {
-                if jsInterface != nil {
-                    jsInterface?.jsCallback(message: message.body)
-                }
+            if jsInterface != nil {
+                jsInterface?.jsCallback(message: message.body)
+            }
         } else if (message.name == Constants.SCRIPT_MESSAGE_NAME_V2){
             do {
                 try handleWebPostMessage(message.body)
