@@ -26,7 +26,6 @@ import Foundation
         config = vlConfig
         //Storing config params in user defaults
         config.save()
-        print("user params \(config.getUserParams()) custom \(config.getCustomFields())")
         bgColor = .clear
         textColor = VerloopSDK.hexStringToUIColor(hex: "#ffffff")
         super.init()
@@ -169,8 +168,6 @@ import Foundation
     
     func refreshClientInfo() {
 
-        print("refreshClientInfo")
-
         verloopController?.title = title
 
         verloopNavigationController?.navigationBar.backgroundColor = bgColor
@@ -213,7 +210,6 @@ import Foundation
     
     //This method executes as part of the n/w state changes and if any n/w inactive tasks to be processed then web view manager make respective functions.
     func refreshwebViewOnNetworkReconnection() {
-        print("refreshwebViewOnNetworkReconnection")
         manager.executeNetworkChangeConfigurations()
     }
 
@@ -225,7 +221,6 @@ import Foundation
     func jsCallback(message: Any) {
        let str = message as! String
        let data = str.data(using: String.Encoding.utf8)!
-       print(str)
        do {
           let clientInfo =  try JSONDecoder().decode(ClientInfo.self, from: data)
           title = clientInfo.title
