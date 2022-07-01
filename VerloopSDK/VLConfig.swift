@@ -251,10 +251,6 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
 
       func clear() {
           resetConfigParams()
-          
-          if let bundleID = Bundle.main.bundleIdentifier {
-              UserDefaults.standard.removePersistentDomain(forName: bundleID)
-          }
       }
       
     func clearUserDetails(){
