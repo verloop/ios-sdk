@@ -459,8 +459,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
 
 extension VLWebViewManager:VLViewControllerLifeCycleDelegate {
     func VLViewControllerViewdidLoad() {
-
-
+        //nothing to do for now
     }
     
     func VLViewControllerViewWillAppear() {
@@ -475,9 +474,7 @@ extension VLWebViewManager:VLViewControllerLifeCycleDelegate {
     }
     
     func VLViewControllerViewWillDisappear() {
-        
-     // isReadyForPassConfigs = false
-     // isReady = false
+        //nothing to do for now
     }
     
     func VLViewControllerViewdidDisappeaar() {
