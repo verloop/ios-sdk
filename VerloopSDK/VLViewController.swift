@@ -87,15 +87,20 @@ class VLViewController: UIViewController, WKUIDelegate {
             loader?.removeFromSuperview()
             return
         }
-        loader = UIActivityIndicatorView(frame: CGRect(x: view.center.x, y: view.center.y, width: 30, height: 30))
-        loader?.tintColor = .black
-        if #available(iOS 13.0, *) {
-            loader?.style = .large
+        
+        let ready = webView?.isManagerReady() ?? false
+
+        if !ready {
+            loader = UIActivityIndicatorView(frame: CGRect(x: view.center.x, y: view.center.y, width: 30, height: 30))
+            loader?.tintColor = .black
+            if #available(iOS 13.0, *) {
+                loader?.style = .large
+            }
+            loader?.center = self.view.center
+            loader?.startAnimating()
+            view.addSubview(loader!)
+            self.lifeCycleDelegate?.VLViewControllerViewWillAppear()
         }
-        loader?.center = self.view.center
-        loader?.startAnimating()
-        view.addSubview(loader!)
-        self.lifeCycleDelegate?.VLViewControllerViewWillAppear()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

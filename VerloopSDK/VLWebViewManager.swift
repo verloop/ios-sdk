@@ -74,6 +74,10 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         self.loadWebView()
     }
     
+    func isManagerReady() -> Bool{
+        return self.isReady
+    }
+    
     func setConfig(config: VLConfig){
         self.config = config
         if isReadyForPassConfigs {
@@ -82,6 +86,8 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         //no need to reload entire webview, just pass the modified config params
 //        self.loadWebView()
     }
+    
+
 
     func clearLocalStorageVistorToken(){
         let script = "localStorage.removeItem(\"visitorToken\")"
@@ -457,8 +463,10 @@ extension VLWebViewManager:VLViewControllerLifeCycleDelegate {
     }
     
     func VLViewControllerViewWillAppear() {
-        print("VLViewControllerViewWillAppear")
-        launchWebView()
+        //No updates here
+        if !isReady {
+            launchWebView()
+        }
     }
     
     func VLViewControllerViewDidAppear() {
@@ -466,9 +474,7 @@ extension VLWebViewManager:VLViewControllerLifeCycleDelegate {
     }
     
     func VLViewControllerViewWillDisappear() {
-        
-        isReadyForPassConfigs = false
-        isReady = false
+        //nothing to do for now
     }
     
     func VLViewControllerViewdidDisappeaar() {
