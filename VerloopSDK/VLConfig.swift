@@ -68,7 +68,9 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
    private var widgetColor:String?
    
    private var updatedConfigParams:[APIMethods] = []
-    
+   private var title = Constants.Literals.EMPTY_STRING
+   private var bgColor: UIColor = .black
+   private var textColor: UIColor = .white
     
     func isValidEmail(_ email:String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
@@ -298,6 +300,21 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             URLCache.shared.removeAllCachedResponses()
         }
     }
+    
+    //MARK: - This is updating the navigation bar properties like bgColor, textColor, and title
+    func updateClientInitInfo(response: VLClientInfoSchema?) {
+        if let title = response?.title {
+            self.title = title
+        }
+        
+        if let textColor = response?.textColor {
+            self.textColor = VerloopSDK.hexStringToUIColor(hex: textColor)
+        }
+        
+        if let bgColor = response?.bgColor, !bgColor.isEmpty {
+            self.bgColor = VerloopSDK.hexStringToUIColor(hex: bgColor)
+        }
+    }
 }
 
 extension VLConfig {
@@ -363,4 +380,32 @@ extension VLConfig {
         return self.department
     }
     
+    var getNavTitle: String {
+        return title
+    }
+    
+    var getNavBgColor: UIColor {
+        return bgColor
+    }
+    
+    var getNavTextColor: UIColor {
+        return textColor
+    }
+    
+    func setNavTitle(title: String) {
+        self.title = title
+    }
+    
+    func setNavBgColor(bgColor: UIColor) {
+        self.bgColor = bgColor
+    }
+    
+    func setNavTextColor(textColor: UIColor) {
+        self.textColor = textColor
+    }
+    
+    var getLiveChatInitUrl: String {
+        return Constants.VLUrls.getLiveChatInitEndpoints(clientId: getClientID(), 
+                                                         envUrl: isStagingEnvironment() ? Constants.URL_STAGING : Constants.URL_PROD)
+    }
 }
