@@ -175,7 +175,7 @@ import Foundation
         }
         
         if ((cString.count) != 6) {
-            return UIColor.gray
+            return UIColor.white
         }
         
         var rgbValue:UInt32 = 0
@@ -276,7 +276,7 @@ import Foundation
                 guard let data = responseData else { return }
                 do {
                     let response: VLClientInfoSchema? = try JSONDecoder().decode(VLClientInfoSchema.self, from: data)
-                    config.updateClientInitInfo(response: response)
+                    self.config.updateClientInitInfo(response: response)
                     DispatchQueue.main.async {
                         self.refreshClientInfo()
                     }
