@@ -256,6 +256,7 @@ extension VLWebViewManager {
                     }
                 case .closeWidget:
                     webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
+                        print (self as Any)
                         print("closeWidget error \(error?.localizedDescription ?? "NA")")
                         if error == nil {
 //                            self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
@@ -372,7 +373,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 print("source is not a verloop")
                 throw VLError.InvalidSourceName
             }
-            print("model.fn \(model.fn)")
+            print("model.fn \(String(describing: model.fn))")
             if let  _function = model.fn {
                 print("call back function \(_function)")
                 switch _function {
