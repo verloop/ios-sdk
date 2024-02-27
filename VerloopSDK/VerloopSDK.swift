@@ -16,23 +16,18 @@ import Foundation
     private var verloopController: VLViewController? = nil
     private var verloopNavigationController: UINavigationController? = nil
 
-    
-    private var title = ""
-    private var bgColor: UIColor
-    private var textColor: UIColor
     var reachability: Reachability?
     var lostNetworkConnection = false
     @objc public init(config vlConfig: VLConfig) {
         config = vlConfig
         //Storing config params in user defaults
         config.save()
-        bgColor = .clear
-        textColor = VerloopSDK.hexStringToUIColor(hex: "#ffffff")
         super.init()
         manager = VLWebViewManager(config: config)
         manager.jsDelegate(delegate: self)
         //Part of network reachability
         startHost(host: "verloop.io")
+        getNavigationInfo()
     }
     
     deinit {
@@ -110,22 +105,15 @@ import Foundation
     }
     
     @objc public func getNavController() -> UINavigationController {
-
-            
-
             if verloopNavigationController != nil {
 
                 return verloopNavigationController!
 
             }
 
-            
-
             verloopController = VLViewController.init(webView: manager)
 
-
-
-            verloopController!.title = title
+            verloopController!.title = config.getNavTitle
 
             verloopController!.setSDK(verloopSDK: self)
 
@@ -137,7 +125,6 @@ import Foundation
 
             verloopNavigationController?.navigationItem.backBarButtonItem?.isEnabled = true
 
-
             verloopNavigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
 
             verloopNavigationController?.hidesBarsOnSwipe = false
@@ -146,19 +133,13 @@ import Foundation
 
             verloopNavigationController?.navigationBar.barTintColor = UIColor.white
 
-
-
             UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
 
             UINavigationBar.appearance().shadowImage = UIImage()
 
             UINavigationBar.appearance().isTranslucent = true
 
-
-
             verloopNavigationController?.modalPresentationStyle = .fullScreen
-
-
 
             return verloopNavigationController!
 
@@ -167,21 +148,21 @@ import Foundation
     //called when client information such as color cod eof the bar and title to be displayed on bar received from the live chat script
     
     func refreshClientInfo() {
+        
+        verloopController?.title = config.getNavTitle
 
-        verloopController?.title = title
+        verloopNavigationController?.navigationBar.backgroundColor = config.getNavBgColor
 
-        verloopNavigationController?.navigationBar.backgroundColor = bgColor
-
-        verloopNavigationController?.navigationBar.barTintColor = bgColor
+        verloopNavigationController?.navigationBar.barTintColor = config.getNavBgColor
 
         verloopNavigationController?.navigationBar.isTranslucent = false
 
 
         // TODO: In VLViewController, the leftBarButtonItem is set on controller's navigationItem and here it was being set on verloopNavigationController's navigationItem that was creating issue and leftBarItem's tint color was nil
 
-        verloopController?.navigationItem.leftBarButtonItem?.tintColor = textColor
+        verloopController?.navigationItem.leftBarButtonItem?.tintColor = config.getNavTextColor
 
-        verloopNavigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: textColor]
+        verloopNavigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: config.getNavTextColor]
 
     }
 
@@ -194,7 +175,7 @@ import Foundation
         }
         
         if ((cString.count) != 6) {
-            return UIColor.gray
+            return UIColor.white
         }
         
         var rgbValue:UInt32 = 0
@@ -222,11 +203,12 @@ import Foundation
        let str = message as! String
        let data = str.data(using: String.Encoding.utf8)!
        do {
-            let clientInfo =  try JSONDecoder().decode(ClientInfo.self, from: data)
-            title = clientInfo.title
-            bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
-            textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
-            refreshClientInfo()
+            let _ =  try JSONDecoder().decode(ClientInfo.self, from: data)
+           //We are no longer updating the navigation bar from this location; instead, we are updating it from the getNavigationInfo() method.
+//            title = clientInfo.title
+//            bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
+//            textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
+//            refreshClientInfo()
             verloopController?.dismissLoader()
             manager.updateReadyState(true)
        }catch {
@@ -282,5 +264,35 @@ import Foundation
     
     private struct OnURLClick: Decodable {
         public var url:String
+    }
+    
+    //MARK: - Initiating API request to update the navigation bar's bgColor, text color, and title.
+    private func getNavigationInfo() {
+        let requestComponents: VLNetworkManagerRequestComponents = VLNetworkManagerRequestComponents(method: .get)
+        VLNetworkManager.shared.request(url: config.getLiveChatInitUrl, requestComponents: requestComponents) { [weak self] (result) in
+            guard let self = self else { return }
+            switch result {
+            case .success(let responseData):
+                guard let data = responseData else { return }
+                do {
+                    let response: VLClientInfoSchema? = try JSONDecoder().decode(VLClientInfoSchema.self, from: data)
+                    self.config.updateClientInitInfo(response: response)
+                    DispatchQueue.main.async {
+                        self.refreshClientInfo()
+                    }
+                } catch let error {
+                    print(error)
+                    DispatchQueue.main.async {
+                        self.refreshClientInfo()
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+                DispatchQueue.main.async {
+                    self.refreshClientInfo()
+                }
+            }
+        }
     }
 }
