@@ -33,35 +33,35 @@ struct BotUser : Codable {
 }
 
 struct ColorPalette : Codable {
-    let primary : String?
+    let Primary : String?
 }
 
 struct Header : Codable {
-    let title : Title?
-    let subtitle : Subtitle?
-    let brandLogo : BrandLogo?
+    let Title : Title?
+    let Subtitle : Subtitle?
+    let BrandLogo : BrandLogo?
 }
 
 struct BrandLogo : Codable {
-    let uRL : String?
+    let URL : String?
 }
 
 struct LivechatSettings : Codable {
-    let header : Header?
-    let theme : Theme?
-    let cSSRawString : String?
+    let Header : Header?
+    let Theme : Theme?
+    let CSSRawString : String?
 }
 
 struct Subtitle : Codable {
-    let heading : String?
-    let position : String?
+    let Heading : String?
+    let Position : String?
 }
 
 struct Theme : Codable {
-    let colorPalette : ColorPalette?
+    let ColorPalette : ColorPalette?
 }
 
 struct Title : Codable {
-    let heading : String?
-    let position : String?
+    let Heading : String?
+    let Position : String?
 }

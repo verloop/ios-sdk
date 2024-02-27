@@ -303,16 +303,26 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     
     //MARK: - This is updating the navigation bar properties like bgColor, textColor, and title
     func updateClientInitInfo(response: VLClientInfoSchema?) {
-        if let title = response?.title {
+        
+        if let title = response?.livechatSettings?.Header?.Title?.Heading {
             self.title = title
+        } else {
+            if let title = response?.title {
+                self.title = title
+            }
         }
         
-        if let textColor = response?.textColor {
+        if let textColor = response?.livechatSettings?.Theme?.ColorPalette?.Primary {
             self.textColor = VerloopSDK.hexStringToUIColor(hex: textColor)
-        }
-        
-        if let bgColor = response?.bgColor, !bgColor.isEmpty {
-            self.bgColor = VerloopSDK.hexStringToUIColor(hex: bgColor)
+            self.bgColor = UIColor.white
+        } else {
+            if let textColor = response?.textColor {
+                self.textColor = VerloopSDK.hexStringToUIColor(hex: textColor)
+            }
+            
+            if let bgColor = response?.bgColor, !bgColor.isEmpty {
+                self.bgColor = VerloopSDK.hexStringToUIColor(hex: bgColor)
+            }
         }
     }
 }
