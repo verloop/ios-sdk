@@ -18,4 +18,14 @@ struct Constants {
     static let SCRIPT_MESSAGE_NAME = "VerloopMobile"
     static let SCRIPT_MESSAGE_NAME_V2 = "VerloopMobileV2"
     
+    struct VLUrls {
+        static func getLiveChatInitEndpoints(clientId: String, envUrl: String) -> String {
+            return "https://\(clientId)\(envUrl)/livechatInit"
+        }
+    }
+    
+    struct Literals {
+        static var EMPTY_STRING = ""
+    }
+    
 }
