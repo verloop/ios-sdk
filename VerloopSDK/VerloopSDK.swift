@@ -232,6 +232,23 @@ import Foundation
           print("Problem retreiving url Info")
       }
    }
+    
+    func downloadClickListner(urlString: Any?) {
+        guard let urlString = urlString as? String, let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+        let rootView = verloopNavigationController?.view
+        let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
+        }
+        if let popoverController = activityViewController.popoverPresentationController {
+            popoverController.sourceView = rootView
+            popoverController.sourceRect = CGRect(x: rootView?.bounds.midX ?? 0, y: rootView?.bounds.midY ?? 0, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        self.verloopNavigationController?.present(activityViewController, animated: true)
+    }
 
     @objc public func hide() {
         onChatClose {

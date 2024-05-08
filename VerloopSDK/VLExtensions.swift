@@ -52,4 +52,8 @@ extension String {
     static func getWidgetColorEvaluationJS() -> String {
         return "\(Constants.JS_METHOD).widgetClosed()"
     }
+    
+    static func getShowDownloadButtonJS(_ allowFileDownload: Bool) -> String {
+        return "\(Constants.JS_METHOD).showDownloadButton('\(allowFileDownload)')"
+    }
 }

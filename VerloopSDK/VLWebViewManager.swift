@@ -192,6 +192,12 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         }
     }
     
+    func showDownloadButton(_ allowFileDownload: Bool) {
+        webView.evaluateJavaScript(String.getShowDownloadButtonJS(allowFileDownload)) { _, error in
+            print("logout error \(error?.localizedDescription ?? "NA")")
+        }
+    }
+    
     func executeNetworkChangeConfigurations() {
         print("executeNetworkChangeConfigurations \(networkChangesConfigurations)")
         if !networkChangesConfigurations.isEmpty {
@@ -265,6 +271,7 @@ extension VLWebViewManager {
                 default: break
             }
         }
+        showDownloadButton(config.getAllowFileDownload)
         roomReadyConfigurations = []
     }
     
@@ -388,6 +395,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                     print("FunctionOnRoomReady")
                     isRoomReady = true
                     processRoomReadyConfigurations()
+                    config?.setAllowFileDownload(allowFileDownload: true)
                 case .FunctionCallBack:
                     self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)
                 case .FunctionReady:
@@ -414,6 +422,8 @@ extension VLWebViewManager:ScriptMessageDelegate {
                     //                            _eventDelegate?.didEventOccurOnLiveChat(.onChatStarted)
                 case .FunctionChatMessageReceived:
                     _eventDelegate?.onIncomingMessage?(bodyString)
+                case .FunctionChatShowDownloadButton:
+                    jsInterface?.downloadClickListner(urlString: bodyString)
                 default:break
                 }
             }

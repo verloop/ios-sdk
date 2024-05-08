@@ -38,6 +38,7 @@ internal enum FunctionType:String,Codable {
     case FunctionChatEnded = "chat-ended"
     case FunctionLogOutCompleted = "logout"
     case FunctionChatMessageReceived = "agent-message-received"
+    case FunctionChatShowDownloadButton = "downloadClicked"
 }
 
 enum MessageType:String,Codable {
