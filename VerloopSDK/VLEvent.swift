@@ -11,6 +11,16 @@ import Foundation
     let message:String?
 }
 
+//struct ArgsPayload: Codable {
+//    let args: [Args]?
+//    let src:String?
+//    let fn:FunctionType?
+//}
+//
+//struct Args: Codable {
+//    let url:String?
+//}
+
 struct ExpectedEventPayload:Codable {
     let src:String?
     let title:String?
@@ -38,6 +48,7 @@ internal enum FunctionType:String,Codable {
     case FunctionChatEnded = "chat-ended"
     case FunctionLogOutCompleted = "logout"
     case FunctionChatMessageReceived = "agent-message-received"
+//    case FunctionChatDownloadClicked = "downloadClicked"
 }
 
 enum MessageType:String,Codable {
