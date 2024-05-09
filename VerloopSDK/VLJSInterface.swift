@@ -9,4 +9,5 @@
 import Foundation
 protocol VLJSInterface {
     func jsCallback(message: Any)
+//    func downloadClickListner(urlString: Any?)
 }
