@@ -54,6 +54,6 @@ extension String {
     }
     
     static func getShowDownloadButtonJS(_ allowFileDownload: Bool) -> String {
-        return "\(Constants.JS_METHOD).showDownloadButton('\(allowFileDownload)')"
+        return "\(Constants.JS_METHOD).showDownloadButton(\(allowFileDownload))"
     }
 }

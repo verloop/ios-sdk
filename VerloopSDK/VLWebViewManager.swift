@@ -41,6 +41,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         webView.uiDelegate = self
         webView.navigationDelegate = self
         webView.backgroundColor = .white
+//        webView.configuration.allowsInlineMediaPlayback = false
         subscribeMessageHandler()
 //        webView.configuration.userContentController.add(self, name: "VerloopMobile")
         webView.isOpaque = true
@@ -394,8 +395,8 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 case .FunctionOnRoomReady:
                     print("FunctionOnRoomReady")
                     isRoomReady = true
+                    config?.setAllowFileDownload(allowFileDownload: false)
                     processRoomReadyConfigurations()
-                    config?.setAllowFileDownload(allowFileDownload: true)
                 case .FunctionCallBack:
                     self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)
                 case .FunctionReady:
@@ -422,8 +423,8 @@ extension VLWebViewManager:ScriptMessageDelegate {
                     //                            _eventDelegate?.didEventOccurOnLiveChat(.onChatStarted)
                 case .FunctionChatMessageReceived:
                     _eventDelegate?.onIncomingMessage?(bodyString)
-                case .FunctionChatShowDownloadButton:
-                    jsInterface?.downloadClickListner(urlString: bodyString)
+//                case .FunctionChatDownloadClicked:
+//                    self.downloadAttachments(message: bodyString)
                 default:break
                 }
             }
@@ -466,6 +467,22 @@ extension VLWebViewManager:ScriptMessageDelegate {
             print("didReceiveCallbackEventsOnLivechat parse error \(error)")
         }
     }
+    
+//    private func downloadAttachments(message: String?) {
+//        if let bodyString = message, let bodyData = bodyString.data(using: .utf8) {
+//            var modelObject: ArgsPayload?
+//            do {
+//                let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0))
+//                let expectedData = try JSONSerialization.data(withJSONObject: expectedModelData, options: .prettyPrinted)
+//                modelObject = try JSONDecoder().decode(ArgsPayload.self, from: expectedData)
+//                if let args = modelObject?.args, let url = args.first?.url {
+//                    jsInterface?.downloadClickListner(urlString: url)
+//                }
+//            } catch {
+//                print(" downloadAttachments json parse error \(error)")
+//            }
+//        }
+//    }
 }
 
 extension VLWebViewManager:VLViewControllerLifeCycleDelegate {
