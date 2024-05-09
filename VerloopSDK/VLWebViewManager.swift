@@ -272,7 +272,7 @@ extension VLWebViewManager {
                 default: break
             }
         }
-        showDownloadButton(config.getAllowFileDownload)
+        showDownloadButton(false)
         roomReadyConfigurations = []
     }
     
@@ -395,7 +395,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 case .FunctionOnRoomReady:
                     print("FunctionOnRoomReady")
                     isRoomReady = true
-                    config?.setAllowFileDownload(allowFileDownload: false)
+//                    config?.setAllowFileDownload(allowFileDownload: false)
                     processRoomReadyConfigurations()
                 case .FunctionCallBack:
                     self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)

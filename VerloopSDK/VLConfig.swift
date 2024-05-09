@@ -71,7 +71,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
    private var title = Constants.Literals.EMPTY_STRING
    private var bgColor: UIColor = .black
    private var textColor: UIColor = .white
-   private var allowFileDownload: Bool = false
+//   private var allowFileDownload: Bool = false
     
     func isValidEmail(_ email:String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
@@ -128,9 +128,9 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         }
     }
     
-    @objc public func setAllowFileDownload(allowFileDownload: Bool = false) {
-        self.allowFileDownload = allowFileDownload
-    }
+//    @objc public func setAllowFileDownload(allowFileDownload: Bool = false) {
+//        self.allowFileDownload = allowFileDownload
+//    }
     
     @objc public func setStaging(isStaging staging: Bool) {
         isStaging = staging
@@ -424,7 +424,7 @@ extension VLConfig {
                                                          envUrl: isStagingEnvironment() ? Constants.URL_STAGING : Constants.URL_PROD)
     }
     
-    var getAllowFileDownload: Bool {
-        return allowFileDownload
-    }
+//    var getAllowFileDownload: Bool {
+//        return allowFileDownload
+//    }
 }
