@@ -13,7 +13,7 @@ struct VLClientInfoSchema : Codable {
     let title : String?
     let bgColor : String?
     let textColor : String?
-    let triggers : [String]?
+    let triggers : [Triggers]?
     let csatEnabled : Bool?
     let csatBypassEnabled : Bool?
     let csatType : String?
@@ -64,4 +64,32 @@ struct Theme : Codable {
 struct Title : Codable {
     let Heading : String?
     let Position : String?
+}
+
+struct Triggers: Codable {
+    let _id : String?
+    let enabled : Bool?
+    let name : String?
+    let conditions : [TriggerCondition]
+    let agent : TriggerAgent?
+    let message : TriggerMessage?
+    let recipe : String?
+    let createdAt : String?
+    let _updatedAt : String?
+    let isDeleted : Bool?
+    let _tenantId : String?
+}
+
+struct TriggerCondition : Codable {
+    let name : String?
+    let value: String?
+}
+
+struct TriggerAgent : Codable {
+    let _id : String?
+    let name : String?
+}
+
+struct TriggerMessage : Codable {
+    let msg: String?
 }
