@@ -13,7 +13,6 @@ struct VLClientInfoSchema : Codable {
     let title : String?
     let bgColor : String?
     let textColor : String?
-    let triggers : [Triggers]?
     let csatEnabled : Bool?
     let csatBypassEnabled : Bool?
     let csatType : String?
