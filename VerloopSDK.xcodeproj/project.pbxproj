@@ -44,6 +44,8 @@
 		18C729FB2817DA9C006EF202 /* VLNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */; };
 		18C729FD2817DF0E006EF202 /* TestClickListeners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729FC2817DF0D006EF202 /* TestClickListeners.swift */; };
 		18DE98E627E07A2600B87788 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DE98E327E07A2500B87788 /* NetworkMonitor.swift */; };
+		6B2DBC022C009C0500E9302D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6B2DBC012C009C0500E9302D /* PrivacyInfo.xcprivacy */; };
+		6B2DBC032C009C0500E9302D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6B2DBC012C009C0500E9302D /* PrivacyInfo.xcprivacy */; };
 		EE21DA5E21DF4C17004B8A24 /* VLNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */; };
 		EE300EA021AA89EF00FDEA21 /* VerloopSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = EE300E9E21AA89EF00FDEA21 /* VerloopSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EE300EAB21AA8A2C00FDEA21 /* VLWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE300EA621AA8A2C00FDEA21 /* VLWebViewManager.swift */; };
@@ -88,6 +90,7 @@
 		18C729C328166CE4006EF202 /* VLConfigTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLConfigTest.swift; sourceTree = "<group>"; };
 		18C729FC2817DF0D006EF202 /* TestClickListeners.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestClickListeners.swift; sourceTree = "<group>"; };
 		18DE98E327E07A2500B87788 /* NetworkMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		6B2DBC012C009C0500E9302D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLNavViewController.swift; sourceTree = "<group>"; };
 		EE300E9B21AA89EF00FDEA21 /* VerloopSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VerloopSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE300E9E21AA89EF00FDEA21 /* VerloopSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VerloopSDK.h; sourceTree = "<group>"; };
@@ -177,6 +180,7 @@
 				186AC1ED27DB46890079B027 /* VLEventDelegate.swift */,
 				186AC1EE27DB46890079B027 /* VLExtensions.swift */,
 				EE300EA921AA8A2C00FDEA21 /* VerloopSDK.swift */,
+				6B2DBC012C009C0500E9302D /* PrivacyInfo.xcprivacy */,
 				EE300EAA21AA8A2C00FDEA21 /* VLConfig.swift */,
 				EE300EA721AA8A2C00FDEA21 /* VLJSInterface.swift */,
 				EE300EA821AA8A2C00FDEA21 /* VLViewController.swift */,
@@ -281,6 +285,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B2DBC032C009C0500E9302D /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +293,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B2DBC022C009C0500E9302D /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
