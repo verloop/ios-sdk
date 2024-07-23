@@ -41,6 +41,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         case customFields
         case clearDepartment
         case openWidget
+        case openMenuWidget
         case closeWidget
         case close
         case widgetColor
@@ -172,6 +173,12 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             if !updatedConfigParams.contains(.userParams) {
                 updatedConfigParams.append(.userParams)
             }
+        }
+    }
+    
+    @objc public func openMenuWidget() {
+        if !updatedConfigParams.contains(.openMenuWidget) {
+            updatedConfigParams.append(.openMenuWidget)
         }
     }
 

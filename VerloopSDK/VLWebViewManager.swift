@@ -34,20 +34,20 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     init(config: VLConfig) {
         
         self.config = config
-
+        
         super.init()
         
         webView =  WKWebView()
         webView.uiDelegate = self
         webView.navigationDelegate = self
         webView.backgroundColor = .white
-//        webView.configuration.allowsInlineMediaPlayback = false
+        //        webView.configuration.allowsInlineMediaPlayback = false
         subscribeMessageHandler()
-//        webView.configuration.userContentController.add(self, name: "VerloopMobile")
+        //        webView.configuration.userContentController.add(self, name: "VerloopMobile")
         webView.isOpaque = true
         isRoomReady = false
         isReadyForPassConfigs = false
-//        self.loadWebView()
+        //        self.loadWebView()
     }
     
     deinit {
@@ -85,11 +85,11 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
             self.processConfigurations()
         }
         //no need to reload entire webview, just pass the modified config params
-//        self.loadWebView()
+        //        self.loadWebView()
     }
     
-
-
+    
+    
     func clearLocalStorageVistorToken(){
         let script = "localStorage.removeItem(\"visitorToken\")"
         webView.evaluateJavaScript(script) { (token, error) in
@@ -123,7 +123,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         urlComponents.queryItems = [
             URLQueryItem(name: "sdk", value: Constants.URL_QUERY_SDK),
         ]
-
+        
         if self.config.getNotificationToken() != nil {
             urlComponents.queryItems?.append(URLQueryItem(name: "device_token", value: self.config.getNotificationToken()!))
             urlComponents.queryItems?.append(URLQueryItem(name: "device_type", value: "ios"))
@@ -135,7 +135,7 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         
         webView.load(request)
     }
-        
+    
     func jsDelegate(delegate: VLJSInterface) {
         jsInterface = delegate
     }
@@ -163,14 +163,14 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
             webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
                 print("closeWidget error \(error?.localizedDescription ?? "NA")")
                 if error == nil {
-//                    self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
-//                    self?._eventDelegate?.didReceiveEventChatMinimized?(<#T##message: Any##Any#>)
+                    //                    self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
+                    //                    self?._eventDelegate?.didReceiveEventChatMinimized?(<#T##message: Any##Any#>)
                     self?._eventDelegate?.onChatMinimized?()
                 }
             }
         }
     }
-    
+        
     func openWidget() {
         print("openWidget")
         webView.evaluateJavaScript(String.getWidgetOpenedEvaluationJS()) {[weak self] _, error in
@@ -219,24 +219,24 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
                 UIApplication.shared.openURL(url)
             }
         }
-    
+        
         return nil
     }
-
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-
-//           //you might want to edit the script, with the escape characters
-//           let script = "localStorage.getItem(\"visitorToken\")"
-//           webView.evaluateJavaScript(script) { (token, error) in
-//               if let error = error {
-//                   print ("localStorage.getitem('visitorToken') failed due to \(error)")
-//               }
-//               print("token = \(String(describing: token))")
-//           }
-       }
+        
+        //           //you might want to edit the script, with the escape characters
+        //           let script = "localStorage.getItem(\"visitorToken\")"
+        //           webView.evaluateJavaScript(script) { (token, error) in
+        //               if let error = error {
+        //                   print ("localStorage.getitem('visitorToken') failed due to \(error)")
+        //               }
+        //               print("token = \(String(describing: token))")
+        //           }
+    }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-
+        
         if navigationAction.targetFrame == nil {
             if self.config.isURLRedirection() {
                 decisionHandler(.allow)
@@ -257,19 +257,19 @@ extension VLWebViewManager {
     private func processRoomReadyConfigurations() {
         for config in roomReadyConfigurations {
             switch config {
-                case .close :
-                    webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
-                        print("getCloseEvaluateJS error \(error?.localizedDescription ?? "NA")")
+            case .close :
+                webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
+                    print("getCloseEvaluateJS error \(error?.localizedDescription ?? "NA")")
+                }
+            case .closeWidget:
+                webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
+                    print (self as Any)
+                    print("closeWidget error \(error?.localizedDescription ?? "NA")")
+                    if error == nil {
+                        //                            self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
                     }
-                case .closeWidget:
-                    webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
-                        print (self as Any)
-                        print("closeWidget error \(error?.localizedDescription ?? "NA")")
-                        if error == nil {
-//                            self?._eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
-                        }
-                    }
-                default: break
+                }
+            default: break
             }
         }
         showDownloadButton(false)
@@ -280,69 +280,73 @@ extension VLWebViewManager {
         print("networkChangesConfigurations")
         for config in networkChangesConfigurations {
             switch config {
-                case .close :
-                    webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
-                        print("getCloseEvaluateJS error \(error?.localizedDescription ?? "NA")")
-                    }
-                case .closeWidget:
-                    webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
-                        print("closeWidget error \(error?.localizedDescription ?? "NA")")
-                    }
-                default: break
+            case .close :
+                webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
+                    print("getCloseEvaluateJS error \(error?.localizedDescription ?? "NA")")
+                }
+            case .closeWidget:
+                webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
+                    print("closeWidget error \(error?.localizedDescription ?? "NA")")
+                }
+            default: break
             }
         }
         networkChangesConfigurations = []
     }
     
-
+    
     func processConfigurations() {
         print("processConfigurations \(self.config.getUpdatedConfigParams())")
         for parameter in self.config.getUpdatedConfigParams() {
             print("parameter \(parameter)")
             switch parameter {
-                case .userParams:
+            case .userParams:
                 if !config.getUserParams().isEmpty {
                     for userParam in config.getUserParams() {
                         print("userParam \(userParam)")
                         webView.evaluateJavaScript(String.getUserParamEvaluationJS(key: userParam.key, value: userParam.value)) { _, error in
-                                print("set user param error \(error?.localizedDescription ?? "NIL")")
+                            print("set user param error \(error?.localizedDescription ?? "NIL")")
                         }
                     }
                 }
-                case .userId:
-                    if let unwrapped = config.getUserID() {
-                        webView.evaluateJavaScript(String.getUserIdEvaluationJS(unwrapped)) { _, error in
-                            print("set user id error \(error?.localizedDescription ?? "NIL")")
+            case .userId:
+                if let unwrapped = config.getUserID() {
+                    webView.evaluateJavaScript(String.getUserIdEvaluationJS(unwrapped)) { _, error in
+                        print("set user id error \(error?.localizedDescription ?? "NIL")")
+                    }
+                }
+            case .recipe:
+                if let unwrapped = config.getRecipeId(),!unwrapped.isEmpty {
+                    print("unwrapped recipe \(unwrapped)")
+                    webView.evaluateJavaScript(String.getRecipeEvaluationJS(unwrapped)) { _, error in
+                        print("set recipe error \(error?.localizedDescription ?? "NIL")")
+                    }
+                }
+            case .customFields:
+                if !config.getCustomFields().isEmpty {
+                    for field in config.getCustomFields() {
+                        webView.evaluateJavaScript(String.getCustomFieldEvaluationJS(field)) { _, error in
+                            print("set custom field error \(error?.localizedDescription ?? "NIL")")
                         }
                     }
-                case .recipe:
-                    if let unwrapped = config.getRecipeId(),!unwrapped.isEmpty {
-                        print("unwrapped recipe \(unwrapped)")
-                        webView.evaluateJavaScript(String.getRecipeEvaluationJS(unwrapped)) { _, error in
-                            print("set recipe error \(error?.localizedDescription ?? "NIL")")
-                        }
+                }
+            case .department:
+                if let unwrapped = config.getDepartment(),!unwrapped.isEmpty {
+                    print("unwrapped recipe \(unwrapped)")
+                    webView.evaluateJavaScript(String.getDepartmentEvaluationJS(dept: unwrapped)) { _, error in
+                        print("set department error \(error?.localizedDescription ?? "NIL")")
                     }
-                case .customFields:
-                    if !config.getCustomFields().isEmpty {
-                        for field in config.getCustomFields() {
-                            webView.evaluateJavaScript(String.getCustomFieldEvaluationJS(field)) { _, error in
-                                print("set custom field error \(error?.localizedDescription ?? "NIL")")
-                            }
-                        }
-                    }
-                case .department:
-                    if let unwrapped = config.getDepartment(),!unwrapped.isEmpty {
-                        print("unwrapped recipe \(unwrapped)")
-                        webView.evaluateJavaScript(String.getDepartmentEvaluationJS(dept: unwrapped)) { _, error in
-                            print("set department error \(error?.localizedDescription ?? "NIL")")
-                        }
-                    }
-                case .clearDepartment:
-                    webView.evaluateJavaScript(String.getClearDepartmentEvaluationJS()) { _, error in
-                        print("set clear department error \(error?.localizedDescription ?? "NIL")")
-
-                    }
-                default : break
+                }
+            case .clearDepartment:
+                webView.evaluateJavaScript(String.getClearDepartmentEvaluationJS()) { _, error in
+                    print("set clear department error \(error?.localizedDescription ?? "NIL")")
+                    
+                }
+            case .openMenuWidget:
+                webView.evaluateJavaScript(String.getWidgetMenuOpenEvaluationJS()) { _, error in
+                    print("set clear department error \(error?.localizedDescription ?? "NIL")")
+                }
+            default : break
             }
         }
     }
@@ -376,7 +380,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 print(" handleWebPostMessage json parse error \(error)")
                 throw VLError.JSONParseError
             }
-//                print("model \(model)")
+            //                print("model \(model)")
             guard let model = modelObject,let src = model.src,src.lowercased() == Constants.JS_MESSAGE_NAME.lowercased() else {
                 print("source is not a verloop")
                 throw VLError.InvalidSourceName
@@ -395,7 +399,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 case .FunctionOnRoomReady:
                     print("FunctionOnRoomReady")
                     isRoomReady = true
-//                    config?.setAllowFileDownload(allowFileDownload: false)
+                    //                    config?.setAllowFileDownload(allowFileDownload: false)
                     processRoomReadyConfigurations()
                 case .FunctionCallBack:
                     self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)
@@ -423,8 +427,8 @@ extension VLWebViewManager:ScriptMessageDelegate {
                     //                            _eventDelegate?.didEventOccurOnLiveChat(.onChatStarted)
                 case .FunctionChatMessageReceived:
                     _eventDelegate?.onIncomingMessage?(bodyString)
-//                case .FunctionChatDownloadClicked:
-//                    self.downloadAttachments(message: bodyString)
+                    //                case .FunctionChatDownloadClicked:
+                    //                    self.downloadAttachments(message: bodyString)
                 default:break
                 }
             }
@@ -434,55 +438,55 @@ extension VLWebViewManager:ScriptMessageDelegate {
     private func didReceiveCallbackEventsOnLivechat(message:String,data:Data) {
         do {
             if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String:Any] {
-                    var firstArg = ""
-                    if let args = json["args"] as? [Any],let first = args.first as? String {
-                        firstArg = first
-                    } else if let args = json["args"] as? String {
-                        firstArg = args
-                    }
-                    print("firstArg \(firstArg)")
-                    switch firstArg {
-                        case FunctionType.FunctionChatMessageReceived.rawValue:
-                        if let args = json["args"] as? [Any] {
-                            for arg in args {
-                                if arg is [String:Any],(arg as! [String:Any]).keys.first ?? "" == "message",
-                                   let messagedict = (arg as! [String:Any])["message"] as? [String:Any],
-                                   let message = messagedict["msg"] as? String {
-                                    print("chat message \(message)")
-                                    _eventDelegate?.onIncomingMessage?(message)
-                                    break
-                                }
+                var firstArg = ""
+                if let args = json["args"] as? [Any],let first = args.first as? String {
+                    firstArg = first
+                } else if let args = json["args"] as? String {
+                    firstArg = args
+                }
+                print("firstArg \(firstArg)")
+                switch firstArg {
+                case FunctionType.FunctionChatMessageReceived.rawValue:
+                    if let args = json["args"] as? [Any] {
+                        for arg in args {
+                            if arg is [String:Any],(arg as! [String:Any]).keys.first ?? "" == "message",
+                               let messagedict = (arg as! [String:Any])["message"] as? [String:Any],
+                               let message = messagedict["msg"] as? String {
+                                print("chat message \(message)")
+                                _eventDelegate?.onIncomingMessage?(message)
+                                break
                             }
                         }
-                        case FunctionType.FunctionChatEnded.rawValue:
-                            _eventDelegate?.onChatEnded?()
-                        case FunctionType.FunctionChatStarted.rawValue:
-                            _eventDelegate?.onChatStarted?()
-                        case FunctionType.FunctionLogOutCompleted.rawValue:
-                            _eventDelegate?.onLogoutComplete?()
-                        default:break
                     }
+                case FunctionType.FunctionChatEnded.rawValue:
+                    _eventDelegate?.onChatEnded?()
+                case FunctionType.FunctionChatStarted.rawValue:
+                    _eventDelegate?.onChatStarted?()
+                case FunctionType.FunctionLogOutCompleted.rawValue:
+                    _eventDelegate?.onLogoutComplete?()
+                default:break
+                }
             }
         } catch {
             print("didReceiveCallbackEventsOnLivechat parse error \(error)")
         }
     }
     
-//    private func downloadAttachments(message: String?) {
-//        if let bodyString = message, let bodyData = bodyString.data(using: .utf8) {
-//            var modelObject: ArgsPayload?
-//            do {
-//                let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0))
-//                let expectedData = try JSONSerialization.data(withJSONObject: expectedModelData, options: .prettyPrinted)
-//                modelObject = try JSONDecoder().decode(ArgsPayload.self, from: expectedData)
-//                if let args = modelObject?.args, let url = args.first?.url {
-//                    jsInterface?.downloadClickListner(urlString: url)
-//                }
-//            } catch {
-//                print(" downloadAttachments json parse error \(error)")
-//            }
-//        }
-//    }
+    //    private func downloadAttachments(message: String?) {
+    //        if let bodyString = message, let bodyData = bodyString.data(using: .utf8) {
+    //            var modelObject: ArgsPayload?
+    //            do {
+    //                let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0))
+    //                let expectedData = try JSONSerialization.data(withJSONObject: expectedModelData, options: .prettyPrinted)
+    //                modelObject = try JSONDecoder().decode(ArgsPayload.self, from: expectedData)
+    //                if let args = modelObject?.args, let url = args.first?.url {
+    //                    jsInterface?.downloadClickListner(urlString: url)
+    //                }
+    //            } catch {
+    //                print(" downloadAttachments json parse error \(error)")
+    //            }
+    //        }
+    //    }
 }
 
 extension VLWebViewManager:VLViewControllerLifeCycleDelegate {
@@ -506,6 +510,6 @@ extension VLWebViewManager:VLViewControllerLifeCycleDelegate {
     }
     
     func VLViewControllerViewdidDisappeaar() {
-//        webView.stopLoading()
+        //        webView.stopLoading()
     }
 }
