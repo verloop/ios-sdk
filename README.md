@@ -28,16 +28,85 @@ Two ways to install
 Kindly refer to our change log for the added features and deprecated APIs on every release. You'll find it here -> [change log](https://github.com/verloop/ios-sdk/wiki/Change-log) 
 
 
-## **SDK Usage - Swift** 
+## **SDK Usage - SwiftUI** 
 
- 
-Import the library with the following command: 
+## **Integrate with SwiftUI** 
+
+To use the VerloopSDK in SwiftUI apps, we need to use the UIViewControllerRepresentable to represent an UIKit view controller. Let’s go over all the steps required in doing that.
+
+## **Setting up the UIKit view controller**
+
+UIViewControllerRepresentable is a protocol and requires to implement two methods:
+
+makeUIViewController - create and configure the view controller;
+updateUIViewControoler - update the state of the view controller.
+
+We are going to create and configure the VerloopSDK in the makeUIViewController method. We don’t need to update it, so we can leave the updateUIViewControoler empty.
+
+## **Coordinator**
+Coordinator class that implements the VLEventDelegate protocol. It is a thoughtful approach to how the SwiftUI can communicate with the UIKit delegation pattern idea.
 
 ```
+import SwiftUI
 import VerloopSDK
-```
 
-Initialise the configuration object `VLConfig`. You could pass an identifier to uniquely indentify a user  - `userId`. Will be useful to manage logged in user sessions. 
+struct VerifyVerloopRepresentable: UIViewControllerRepresentable {
+    
+    func makeUIViewController(context: Context) -> some UIViewController {
+        var mSDK:VerloopSDK?
+        
+        //Initialise the configuration object `VLConfig`. You could pass an identifier to uniquely indentify a user  - `userId`. Will be useful to manage logged in user sessions. 
+        var config = VLConfig(clientId: "tarun") 
+        
+        //config.setRecipeId(recipeId id: String?)
+        //config.setNotificationToken(notificationToken: string)
+        //config.setUserName(username name:String)
+        //config.setUserEmail(userEmail email:String)
+        //config.setUserPhone(userPhone phone:String)
+        //config.setUserParam(key:String, value:String)
+        
+        verloop = VerloopSDK(config: config)
+        let chatController = verloop!.getNavController()
+        verloop?.observeLiveChatEventsOn(vlEventDelegate: context.coordinator)
+        return chatController
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: VLEventDelegate {
+        private let parent: VerifyVerloopRepresentable
+        
+        init(_ parent: VerifyVerloopRepresentable) {
+            self.parent = parent
+        }
+        func onChatMaximized() {
+            print("ref onChatMaximized")
+        }
+        func onChatMinimized() {
+            print("ref onChatMinimized")
+        }
+        func onChatStarted() {
+            print("ref onChatStarted")
+        }
+        func onChatEnded() {
+            print("ref onChatEnded")
+        }
+        func onLogoutComplete() {
+            print("ref onLogoutComplete")
+        }
+        func onWidgetLoaded() {
+            print("ref onWidgetLoaded")
+        }
+        func onIncomingMessage(_ message:Any) {
+            print("ref onIncomingMessage \(message)")
+        }
+    }
+}
+```
 
 ```
 let config = VLConfig(clientId: String)
@@ -138,9 +207,10 @@ let verloop = VerloopSDK(config: config)
 - To prsent the chat, you'll need to get the root view controller of the chat and present it modally from your controller. This will launch the converstation too. Use `getNavController` method of the `VerloopSDK` to create an instance of the SDK's root view controller. 
 
 ```
-let chatController = verloop.getNavController()
+let chatController = verloop!.getNavController()
+verloop?.observeLiveChatEventsOn(vlEventDelegate: context.coordinator)
+return chatController
 
-yourViewController.present(chatController, animated: true)
 ```
 
 - To manage user session, use the login and logout methods. You could login with a user identifier. 
@@ -163,33 +233,5 @@ Note: Set the device token on the configuration object, before initialising the 
 json { "_by": "verloop", "aps": { "alert": { "body": "notification message body" } } }
 ```
 
-
-## **SDK Usage - Objective C** 
-
-
-After importing the Framework, add the following line in your controller:
-
-```
-import <VerloopSDK/VerloopSDK-Swift.h>
-```
-
-Create the `VLConfig` object. Configure the object. Then initialise `VerloopSDK` with the configuration object. Few of the APIs are listed below. 
-
-```
-VLConfig *config = [[VLConfig alloc] initWithClientId:@"clientId" userId:@"userId"];
-
-[config setUserName:@"Name"]; [config setUserEmail:@"hello@verloop.io"]; [config setUserPhone:@"+919xxxxxxxx"];
-[config setNotificationTokenWithNotificationToken:@"token"]; 
-[config setStagingWithIsStaging:YES]; 
-[config putCustomFieldWithKey:@"key" value:@"value" scope:SCOPEUSER];
-
-VerloopSDK *verloop = [[VerloopSDK alloc] initWithConfig:config]; 
-```
-
-After this, when user want to open the chat, you can simply ask for the UINavigationController and present it on your viewcontroller. 
-
-```
-[[self navigationController] presentViewController:[verloop getNavController] animated:YES completion:NULL];
-```
 
 Note: Kindly go through the swift's documentation for further APIs and appropriately call corresponding methods. 
