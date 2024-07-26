@@ -58,10 +58,12 @@ class VLViewController: UIViewController, WKUIDelegate {
 
            webView?.webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
 
-       }
+    }
+    
     func setViewControllerLifeCycleDelegate(_ delegate:VLViewControllerLifeCycleDelegate?) {
         self.lifeCycleDelegate = delegate
     }
+    
     func setSDK(verloopSDK sdk: VerloopSDK) {
         verloopSDK = sdk
     }
