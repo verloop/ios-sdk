@@ -59,12 +59,12 @@
 
 /* Begin PBXFileReference section */
 		18746D7527F5DCC0002A5CBD /* VerloopSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = VerloopSDK.xcodeproj; path = ../VerloopSDK.xcodeproj; sourceTree = "<group>"; };
-		18C7298528166C81006EF202 /* VerifyVerloopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VerifyVerloopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		18C7298528166C81006EF202 /* VerloopSwiftUIExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VerloopSwiftUIExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		18C7298728166C81006EF202 /* VerifyVerloopTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyVerloopTests.swift; sourceTree = "<group>"; };
 		18E9E4FE27E982A9007E6B58 /* VerifyVerloop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VerifyVerloop.entitlements; sourceTree = "<group>"; };
 		18F86EB127F14AE900F3BF25 /* ReferenceModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReferenceModels.swift; sourceTree = "<group>"; };
 		18F86EB327F14AE900F3BF25 /* VerloopTestTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerloopTestTableViewController.swift; sourceTree = "<group>"; };
-		F7D13E8827A3B81F00262E51 /* VerifyVerloop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VerifyVerloop.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7D13E8827A3B81F00262E51 /* VerloopSwiftUIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VerloopSwiftUIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7D13E8B27A3B81F00262E51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F7D13E8D27A3B81F00262E51 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F7D13E9227A3B81F00262E51 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -120,7 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				18746D7527F5DCC0002A5CBD /* VerloopSDK.xcodeproj */,
-				F7D13E8A27A3B81F00262E51 /* VerifyVerloop */,
+				F7D13E8A27A3B81F00262E51 /* VerloopSwiftUIExample */,
 				18C7298628166C81006EF202 /* VerifyVerloopTests */,
 				F7D13E8927A3B81F00262E51 /* Products */,
 				F7BE11EE27AAEA2200D1DDFD /* Frameworks */,
@@ -130,13 +130,13 @@
 		F7D13E8927A3B81F00262E51 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F7D13E8827A3B81F00262E51 /* VerifyVerloop.app */,
-				18C7298528166C81006EF202 /* VerifyVerloopTests.xctest */,
+				F7D13E8827A3B81F00262E51 /* VerloopSwiftUIExample.app */,
+				18C7298528166C81006EF202 /* VerloopSwiftUIExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F7D13E8A27A3B81F00262E51 /* VerifyVerloop */ = {
+		F7D13E8A27A3B81F00262E51 /* VerloopSwiftUIExample */ = {
 			isa = PBXGroup;
 			children = (
 				18F86EB127F14AE900F3BF25 /* ReferenceModels.swift */,
@@ -149,15 +149,15 @@
 				F7D13E9627A3B82000262E51 /* LaunchScreen.storyboard */,
 				F7D13E9927A3B82000262E51 /* Info.plist */,
 			);
-			path = VerifyVerloop;
+			path = VerloopSwiftUIExample;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		18C7298428166C81006EF202 /* VerifyVerloopTests */ = {
+		18C7298428166C81006EF202 /* VerloopSwiftUIExampleTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 18C7298E28166C81006EF202 /* Build configuration list for PBXNativeTarget "VerifyVerloopTests" */;
+			buildConfigurationList = 18C7298E28166C81006EF202 /* Build configuration list for PBXNativeTarget "VerloopSwiftUIExampleTests" */;
 			buildPhases = (
 				18C7298128166C81006EF202 /* Sources */,
 				18C7298228166C81006EF202 /* Frameworks */,
@@ -168,14 +168,14 @@
 			dependencies = (
 				18C7298A28166C81006EF202 /* PBXTargetDependency */,
 			);
-			name = VerifyVerloopTests;
+			name = VerloopSwiftUIExampleTests;
 			productName = VerifyVerloopTests;
-			productReference = 18C7298528166C81006EF202 /* VerifyVerloopTests.xctest */;
+			productReference = 18C7298528166C81006EF202 /* VerloopSwiftUIExampleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F7D13E8727A3B81F00262E51 /* VerifyVerloop */ = {
+		F7D13E8727A3B81F00262E51 /* VerloopSwiftUIExample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F7D13E9C27A3B82000262E51 /* Build configuration list for PBXNativeTarget "VerifyVerloop" */;
+			buildConfigurationList = F7D13E9C27A3B82000262E51 /* Build configuration list for PBXNativeTarget "VerloopSwiftUIExample" */;
 			buildPhases = (
 				F7D13E8427A3B81F00262E51 /* Sources */,
 				F7D13E8527A3B81F00262E51 /* Frameworks */,
@@ -186,9 +186,9 @@
 			);
 			dependencies = (
 			);
-			name = VerifyVerloop;
+			name = VerloopSwiftUIExample;
 			productName = VerifyVerloop;
-			productReference = F7D13E8827A3B81F00262E51 /* VerifyVerloop.app */;
+			productReference = F7D13E8827A3B81F00262E51 /* VerloopSwiftUIExample.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -210,7 +210,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F7D13E8327A3B81F00262E51 /* Build configuration list for PBXProject "VerifyVerloop" */;
+			buildConfigurationList = F7D13E8327A3B81F00262E51 /* Build configuration list for PBXProject "VerloopSwiftUIExample" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -229,8 +229,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				F7D13E8727A3B81F00262E51 /* VerifyVerloop */,
-				18C7298428166C81006EF202 /* VerifyVerloopTests */,
+				F7D13E8727A3B81F00262E51 /* VerloopSwiftUIExample */,
+				18C7298428166C81006EF202 /* VerloopSwiftUIExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -297,7 +297,7 @@
 /* Begin PBXTargetDependency section */
 		18C7298A28166C81006EF202 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F7D13E8727A3B81F00262E51 /* VerifyVerloop */;
+			target = F7D13E8727A3B81F00262E51 /* VerloopSwiftUIExample */;
 			targetProxy = 18C7298928166C81006EF202 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -341,7 +341,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VerifyVerloop.app/VerifyVerloop";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VerloopSwiftUIExample.app/VerloopSwiftUIExample";
 			};
 			name = Debug;
 		};
@@ -364,7 +364,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VerifyVerloop.app/VerifyVerloop";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VerloopSwiftUIExample.app/VerloopSwiftUIExample";
 			};
 			name = Release;
 		};
@@ -559,7 +559,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		18C7298E28166C81006EF202 /* Build configuration list for PBXNativeTarget "VerifyVerloopTests" */ = {
+		18C7298E28166C81006EF202 /* Build configuration list for PBXNativeTarget "VerloopSwiftUIExampleTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				18C7298B28166C81006EF202 /* Debug */,
@@ -568,7 +568,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F7D13E8327A3B81F00262E51 /* Build configuration list for PBXProject "VerifyVerloop" */ = {
+		F7D13E8327A3B81F00262E51 /* Build configuration list for PBXProject "VerloopSwiftUIExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F7D13E9A27A3B82000262E51 /* Debug */,
@@ -577,7 +577,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F7D13E9C27A3B82000262E51 /* Build configuration list for PBXNativeTarget "VerifyVerloop" */ = {
+		F7D13E9C27A3B82000262E51 /* Build configuration list for PBXNativeTarget "VerloopSwiftUIExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F7D13E9D27A3B82000262E51 /* Debug */,

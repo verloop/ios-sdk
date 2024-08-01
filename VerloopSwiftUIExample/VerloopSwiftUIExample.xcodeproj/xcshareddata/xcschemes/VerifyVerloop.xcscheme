@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F7D13E8727A3B81F00262E51"
-               BuildableName = "VerifyVerloop.app"
-               BlueprintName = "VerifyVerloop"
-               ReferencedContainer = "container:VerifyVerloop.xcodeproj">
+               BuildableName = "VerloopSwiftUIExample.app"
+               BlueprintName = "VerloopSwiftUIExample"
+               ReferencedContainer = "container:VerloopSwiftUIExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "18C7298428166C81006EF202"
-               BuildableName = "VerifyVerloopTests.xctest"
-               BlueprintName = "VerifyVerloopTests"
-               ReferencedContainer = "container:VerifyVerloop.xcodeproj">
+               BuildableName = "VerloopSwiftUIExampleTests.xctest"
+               BlueprintName = "VerloopSwiftUIExampleTests"
+               ReferencedContainer = "container:VerloopSwiftUIExample.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F7D13E8727A3B81F00262E51"
-            BuildableName = "VerifyVerloop.app"
-            BlueprintName = "VerifyVerloop"
-            ReferencedContainer = "container:VerifyVerloop.xcodeproj">
+            BuildableName = "VerloopSwiftUIExample.app"
+            BlueprintName = "VerloopSwiftUIExample"
+            ReferencedContainer = "container:VerloopSwiftUIExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F7D13E8727A3B81F00262E51"
-            BuildableName = "VerifyVerloop.app"
-            BlueprintName = "VerifyVerloop"
-            ReferencedContainer = "container:VerifyVerloop.xcodeproj">
+            BuildableName = "VerloopSwiftUIExample.app"
+            BlueprintName = "VerloopSwiftUIExample"
+            ReferencedContainer = "container:VerloopSwiftUIExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
