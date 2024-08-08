@@ -272,7 +272,6 @@ extension VLWebViewManager {
             default: break
             }
         }
-        showDownloadButton(false)
         roomReadyConfigurations = []
     }
     
@@ -345,6 +344,10 @@ extension VLWebViewManager {
             case .openMenuWidget:
                 webView.evaluateJavaScript(String.getWidgetMenuOpenEvaluationJS()) { _, error in
                     print("set clear department error \(error?.localizedDescription ?? "NIL")")
+                }
+            case .showDownloadButton:
+                webView.evaluateJavaScript(String.getShowDownloadButtonJS(config.isAllowFileDownload())) { _, error in
+                    print("set recipe error \(error?.localizedDescription ?? "NIL")")
                 }
             default : break
             }

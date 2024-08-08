@@ -232,6 +232,7 @@ extension ViewModel {
     func launchChatOn(controller:UIViewController,config:VLConfig) {
         config.setUrlRedirectionFlag(canRedirect: false)
         config.openMenuWidget()
+        config.showDownloadButton(true)
         createSDK(config: config)
         controller.present(getSDKController(), animated: true, completion: nil)
     }
