@@ -285,4 +285,20 @@ let config = VLConfig(clientId: String)
 
 config.setUserId(userId: String)
 ```
+- Listeners: You could set two listenrs when an end user taps on a button or url in the recipe. 
+```
+//Button Click Listener
 
+Example: 
+
+config.setButtonOnClickListener { title, type, payload in
+    print("button click listenr called")
+}
+
+// URL Click Listener
+
+config.setUrlClickListener { title, type, payload in
+    print("button click listenr called")
+}
+
+```

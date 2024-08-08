@@ -20,6 +20,16 @@ struct VerifyVerloopRepresentable: UIViewControllerRepresentable {
         //config.setUserEmail(userEmail email:String)
         //config.setUserPhone(userPhone phone:String)
         //config.setUserParam(key:String, value:String)
+        config.setButtonOnClickListener { title, type, payload in
+            print("button click listenr called")
+        }
+        
+        config.setUrlRedirectionFlag(canRedirect: false)
+  
+        config.setUrlClickListener { url in
+            print("URL click listener called")
+        }
+        
         verloop = VerloopSDK(config: config)
         let chatController = verloop!.getNavController()
         verloop?.observeLiveChatEventsOn(vlEventDelegate: context.coordinator)
