@@ -32,42 +32,8 @@ struct VerifyVerloopRepresentable: UIViewControllerRepresentable {
         
         verloop = VerloopSDK(config: config)
         let chatController = verloop!.getNavController()
-        verloop?.observeLiveChatEventsOn(vlEventDelegate: context.coordinator)
         return chatController
     }
     
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    class Coordinator: VLEventDelegate {
-        private let parent: VerifyVerloopRepresentable
-        
-        init(_ parent: VerifyVerloopRepresentable) {
-            self.parent = parent
-        }
-        func onChatMaximized() {
-            print("ref onChatMaximized")
-        }
-        func onChatMinimized() {
-            print("ref onChatMinimized")
-        }
-        func onChatStarted() {
-            print("ref onChatStarted")
-        }
-        func onChatEnded() {
-            print("ref onChatEnded")
-        }
-        func onLogoutComplete() {
-            print("ref onLogoutComplete")
-        }
-        func onWidgetLoaded() {
-            print("ref onWidgetLoaded")
-        }
-        func onIncomingMessage(_ message:Any) {
-            print("ref onIncomingMessage \(message)")
-        }
-    }
 }
