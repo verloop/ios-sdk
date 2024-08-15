@@ -199,7 +199,7 @@ Note: Kindly go through the swift's documentation for further APIs and appropria
 
 To use the VerloopSDK in SwiftUI apps, we need to use the UIViewControllerRepresentable to represent an UIKit view controller. Let’s go over all the steps required in doing that.
 
-## **Setting up the UIKit view controller**
+### **Setting up the UIKit view controller**
 
 UIViewControllerRepresentable is a protocol and requires to implement two methods:
 
@@ -208,7 +208,7 @@ updateUIViewControoler - update the state of the view controller.
 
 We are going to create and configure the VerloopSDK in the makeUIViewController method. We don’t need to update it, so we can leave the updateUIViewControoler empty.
 
-## **Coordinator**
+### **Coordinator**
 Coordinator class that implements the VLEventDelegate protocol. It is a thoughtful approach to how the SwiftUI can communicate with the UIKit delegation pattern idea.
 
 ```
