@@ -51,14 +51,9 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         webView.isOpaque = true
         isRoomReady = false
         isReadyForPassConfigs = false
-        
-        //Supported Mime Type
-        let mimeTypes = ["image/svg+xml",
-                         "image/png",
-                         "image/jpeg",
-                         "application/pdf"]
+
         downloadManager = WKDownloadManager(delegate: self,
-                                            supportedMimeTypes: mimeTypes)
+                                            supportedMimeTypes: mimeTypesSupported)
         if #available(iOS 13.0.0, *) {
             webView.navigationDelegate = downloadManager
         } else {
