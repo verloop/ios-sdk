@@ -231,6 +231,7 @@ extension ViewModel {
     //called when click on "launch chat" button in tableview section 1
     func launchChatOn(controller:UIViewController,config:VLConfig) {
         config.setUrlRedirectionFlag(canRedirect: false)
+        config.openMenuWidget()
         createSDK(config: config)
         controller.present(getSDKController(), animated: true, completion: nil)
     }
