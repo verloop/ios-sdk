@@ -124,7 +124,14 @@ config.setButtonOnClickListener(onButtonClicked:{ (title, type, payload) in
 setUrlClickListener(onUrlClicked urlClicked: LiveChatUrlClickListener?)
 
 ```
+- Menu Widget: If you're recipe has a menu list, it can be set to auto open state using the following api.
 
+```
+//Button Click Listener
+
+config.openMenuWidget()
+
+```
 
 ### APIs on `VerloopSDK`
 

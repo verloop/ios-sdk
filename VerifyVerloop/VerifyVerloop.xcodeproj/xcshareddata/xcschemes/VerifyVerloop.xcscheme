@@ -14,20 +14,30 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EE300E9A21AA89EF00FDEA21"
-               BuildableName = "VerloopSDK.framework"
-               BlueprintName = "VerloopSDK"
-               ReferencedContainer = "container:VerloopSDK.xcodeproj">
+               BlueprintIdentifier = "F7D13E8727A3B81F00262E51"
+               BuildableName = "VerifyVerloop.app"
+               BlueprintName = "VerifyVerloop"
+               ReferencedContainer = "container:VerifyVerloop.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "18C7298428166C81006EF202"
+               BuildableName = "VerifyVerloopTests.xctest"
+               BlueprintName = "VerifyVerloopTests"
+               ReferencedContainer = "container:VerifyVerloop.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -40,15 +50,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EE300E9A21AA89EF00FDEA21"
-            BuildableName = "VerloopSDK.framework"
-            BlueprintName = "VerloopSDK"
-            ReferencedContainer = "container:VerloopSDK.xcodeproj">
+            BlueprintIdentifier = "F7D13E8727A3B81F00262E51"
+            BuildableName = "VerifyVerloop.app"
+            BlueprintName = "VerifyVerloop"
+            ReferencedContainer = "container:VerifyVerloop.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -56,15 +67,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EE300E9A21AA89EF00FDEA21"
-            BuildableName = "VerloopSDK.framework"
-            BlueprintName = "VerloopSDK"
-            ReferencedContainer = "container:VerloopSDK.xcodeproj">
+            BlueprintIdentifier = "F7D13E8727A3B81F00262E51"
+            BuildableName = "VerifyVerloop.app"
+            BlueprintName = "VerifyVerloop"
+            ReferencedContainer = "container:VerifyVerloop.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

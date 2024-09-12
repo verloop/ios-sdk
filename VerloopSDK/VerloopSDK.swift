@@ -47,6 +47,7 @@ import Foundation
             }
         }
     }
+   
     
     @objc public func closeWidget() {
         onChatClose {
