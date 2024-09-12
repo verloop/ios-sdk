@@ -1,0 +1,70 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.5.1 (swiftlang-1300.0.31.4 clang-1300.0.29.6)
+// swift-module-flags: -target x86_64-apple-ios15.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name Verloop
+import Foundation
+import Swift
+import UIKit
+@_exported import Verloop
+import WebKit
+import _Concurrency
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class VLChatViewController : UIKit.UIViewController {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) public init(configuration config: Verloop.VLConfiguration, callBackListener: Verloop.VLEventDelegate?)
+  @objc deinit
+}
+public struct VLConfiguration : Verloop.VLOptionalConfiguration {
+  public init(urlPath: Swift.String, userId uid: Swift.String) throws
+  public mutating func setUserParams(_ params: Verloop.ConfigUserParams)
+  public mutating func setCustomField(_ fields: Verloop.ConfigCustomFields)
+  public mutating func setDepartment(_ dept: Swift.String)
+  public mutating func clearDepartment(_ dept: Swift.String)
+  public mutating func setRecipe(_ recepie: Swift.String)
+  public func openWidget()
+  public func closeWidget()
+  public func logout()
+  public func setWidgetColor(_ color: UIKit.UIColor)
+}
+public protocol VLOptionalConfiguration {
+  func setUserParams(_ params: Verloop.ConfigUserParams)
+  func setCustomField(_ fields: Verloop.ConfigCustomFields)
+  func setDepartment(_ dept: Swift.String)
+  func clearDepartment(_ dept: Swift.String)
+  func setRecipe(_ recepie: Swift.String)
+  func openWidget()
+  func closeWidget()
+  func logout()
+  func setWidgetColor()
+}
+extension Verloop.VLOptionalConfiguration {
+  public func setUserParams(_ params: Verloop.ConfigUserParams)
+  public func setCustomField(_ field: Verloop.ConfigCustomFields)
+  public func setDepartment(_ dept: Swift.String)
+  public func clearDepartment(_ dept: Swift.String)
+  public func setRecipe(_ recepie: Swift.String)
+  public func setWidgetColor()
+}
+public struct VLMessage : Swift.Codable {
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public enum VLEvent {
+  case onButtonClick
+  case onChatMaximized
+  case onChatMinimized
+  case onChatStarted
+  case onChatEnded
+  case onLogoutComplete
+  case onWidgetLoaded
+  case onIncomingMessage(_: Verloop.VLMessage)
+}
+public protocol VLEventDelegate {
+  func didEventOccurOnLiveChat(_ event: Verloop.VLEvent)
+}
+public struct ConfigUserParams : Swift.Codable {
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct ConfigCustomFields : Swift.Codable {
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
