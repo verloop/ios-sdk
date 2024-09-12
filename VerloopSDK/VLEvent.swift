@@ -33,6 +33,9 @@ struct ExpectedEventPayload:Codable {
     }
 }
 
+struct ExpectedEvent:Codable {
+    let url:String?
+}
 
 internal enum FunctionType:String,Codable {
     case FunctionSetUserIdComplete = "setUserIdComplete"

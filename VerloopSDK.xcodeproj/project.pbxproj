@@ -44,6 +44,8 @@
 		18C729FB2817DA9C006EF202 /* VLNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */; };
 		18C729FD2817DF0E006EF202 /* TestClickListeners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C729FC2817DF0D006EF202 /* TestClickListeners.swift */; };
 		18DE98E627E07A2600B87788 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DE98E327E07A2500B87788 /* NetworkMonitor.swift */; };
+		5065345E2C78591D009E74F4 /* WKDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5065345D2C78591D009E74F4 /* WKDownloadManager.swift */; };
+		50FD735B2C76FC8E00557D6C /* MimeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FD735A2C76FC8E00557D6C /* MimeType.swift */; };
 		6B2DBC022C009C0500E9302D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6B2DBC012C009C0500E9302D /* PrivacyInfo.xcprivacy */; };
 		6B2DBC032C009C0500E9302D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6B2DBC012C009C0500E9302D /* PrivacyInfo.xcprivacy */; };
 		EE21DA5E21DF4C17004B8A24 /* VLNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */; };
@@ -90,6 +92,8 @@
 		18C729C328166CE4006EF202 /* VLConfigTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLConfigTest.swift; sourceTree = "<group>"; };
 		18C729FC2817DF0D006EF202 /* TestClickListeners.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestClickListeners.swift; sourceTree = "<group>"; };
 		18DE98E327E07A2500B87788 /* NetworkMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		5065345D2C78591D009E74F4 /* WKDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKDownloadManager.swift; sourceTree = "<group>"; };
+		50FD735A2C76FC8E00557D6C /* MimeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MimeType.swift; sourceTree = "<group>"; };
 		6B2DBC012C009C0500E9302D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLNavViewController.swift; sourceTree = "<group>"; };
 		EE300E9B21AA89EF00FDEA21 /* VerloopSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VerloopSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,6 +178,7 @@
 				003732A12B869E190031A78B /* NetworkManager */,
 				186CB75A280EE60B00BE1658 /* VLEvent.swift */,
 				18746D6727F5C9AA002A5CBD /* Reachability.swift */,
+				50FD735A2C76FC8E00557D6C /* MimeType.swift */,
 				18DE98E327E07A2500B87788 /* NetworkMonitor.swift */,
 				186AC1EC27DB46890079B027 /* Constants.swift */,
 				186AC1EF27DB46890079B027 /* ScriptMessageHandler.swift */,
@@ -185,6 +190,7 @@
 				EE300EA721AA8A2C00FDEA21 /* VLJSInterface.swift */,
 				EE300EA821AA8A2C00FDEA21 /* VLViewController.swift */,
 				EE300EA621AA8A2C00FDEA21 /* VLWebViewManager.swift */,
+				5065345D2C78591D009E74F4 /* WKDownloadManager.swift */,
 				EE300E9E21AA89EF00FDEA21 /* VerloopSDK.h */,
 				EE300E9F21AA89EF00FDEA21 /* Info.plist */,
 				EE21DA5D21DF4C17004B8A24 /* VLNavViewController.swift */,
@@ -341,6 +347,7 @@
 				EE300EAF21AA8A2C00FDEA21 /* VLConfig.swift in Sources */,
 				003732AB2B873D9D0031A78B /* VLClientInfoSchema.swift in Sources */,
 				186CB75B280EE60B00BE1658 /* VLEvent.swift in Sources */,
+				50FD735B2C76FC8E00557D6C /* MimeType.swift in Sources */,
 				18DE98E627E07A2600B87788 /* NetworkMonitor.swift in Sources */,
 				18746D6827F5C9AA002A5CBD /* Reachability.swift in Sources */,
 				EE300EAE21AA8A2C00FDEA21 /* VerloopSDK.swift in Sources */,
@@ -351,6 +358,7 @@
 				186AC1F027DB46890079B027 /* Constants.swift in Sources */,
 				003732A42B869E4A0031A78B /* VLNetworkManager.swift in Sources */,
 				EE21DA5E21DF4C17004B8A24 /* VLNavViewController.swift in Sources */,
+				5065345E2C78591D009E74F4 /* WKDownloadManager.swift in Sources */,
 				EE300EAB21AA8A2C00FDEA21 /* VLWebViewManager.swift in Sources */,
 				186AC1F127DB46890079B027 /* VLEventDelegate.swift in Sources */,
 			);
