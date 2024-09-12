@@ -24,6 +24,10 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     private var config: VLConfig!
     private var roomReadyConfigurations:[VLConfig.APIMethods] = []
     private var networkChangesConfigurations:[VLConfig.APIMethods] = []
+    
+    fileprivate var downloadManager: WKDownloadManager!
+
+    
     private lazy var contentController: WKUserContentController = {
         return webView.configuration.userContentController
     }()
@@ -41,13 +45,27 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         webView.uiDelegate = self
         webView.navigationDelegate = self
         webView.backgroundColor = .white
-        //        webView.configuration.allowsInlineMediaPlayback = false
+        //webView.configuration.allowsInlineMediaPlayback = false
         subscribeMessageHandler()
-        //        webView.configuration.userContentController.add(self, name: "VerloopMobile")
+        //webView.configuration.userContentController.add(self, name: "VerloopMobile")
         webView.isOpaque = true
         isRoomReady = false
         isReadyForPassConfigs = false
-        //        self.loadWebView()
+        
+        //Supported Mime Type
+        let mimeTypes = ["image/svg+xml",
+                         "image/png",
+                         "image/jpeg",
+                         "application/pdf"]
+        downloadManager = WKDownloadManager(delegate: self,
+                                            supportedMimeTypes: mimeTypes)
+        if #available(iOS 13.0.0, *) {
+            webView.navigationDelegate = downloadManager
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        //self.loadWebView()
     }
     
     deinit {
@@ -236,7 +254,6 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        
         if navigationAction.targetFrame == nil {
             if self.config.isURLRedirection() {
                 decisionHandler(.allow)
@@ -248,6 +265,32 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
         else {
             decisionHandler(.allow)
         }
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        if navigationResponse.canShowMIMEType {
+            decisionHandler(.allow)
+        } else {
+            if #available(iOS 14.5, *) {
+                decisionHandler(.download)
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+    }
+}
+
+extension VLWebViewManager : WKDownloadManagerDelegate {
+    
+    func downloadDidFinish(location url: URL) {
+        DispatchQueue.main.async {
+            let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            self.getTopViewController()?.present(activityVC, animated: true)
+        }
+    }
+    
+    func downloadDidFailed(withError error: Error) {
+        print("File Downlaod : \(error.localizedDescription)")
     }
 }
 
@@ -272,7 +315,6 @@ extension VLWebViewManager {
             default: break
             }
         }
-        showDownloadButton(false)
         roomReadyConfigurations = []
     }
     
@@ -346,6 +388,10 @@ extension VLWebViewManager {
                 webView.evaluateJavaScript(String.getWidgetMenuOpenEvaluationJS()) { _, error in
                     print("set clear department error \(error?.localizedDescription ?? "NIL")")
                 }
+            case .showDownloadButton:
+                webView.evaluateJavaScript(String.getShowDownloadButtonJS(config.isAllowFileDownload())) { _, error in
+                    print("set recipe error \(error?.localizedDescription ?? "NIL")")
+                }
             default : break
             }
         }
@@ -356,7 +402,16 @@ extension VLWebViewManager:ScriptMessageDelegate {
     func handler(_ scriptMessageHandler: ScriptMessageHandler, didReceiveMessage message: WKScriptMessage) {
         if (message.name == Constants.SCRIPT_MESSAGE_NAME) {
             if jsInterface != nil {
-                jsInterface?.jsCallback(message: message.body)
+                print("message.body -> \(message.body)")
+//                if let fileUrl = handleUploadFile(message.body) {
+//                    guard let url = URL(string: fileUrl)else {
+//                        print("source is not a verloop")
+//                        return
+//                    }
+//                    openActivityController(url: url)
+//                } else {
+                    jsInterface?.jsCallback(message: message.body)
+                //}
             }
         } else if (message.name == Constants.SCRIPT_MESSAGE_NAME_V2){
             do {
@@ -367,6 +422,36 @@ extension VLWebViewManager:ScriptMessageDelegate {
         } else{
             print("unrecognized callback")
         }
+    }
+    
+    func handleUploadFile(_ msg:Any) -> String? {
+        if let bodyString = msg as? String,let bodyData = bodyString.data(using: .utf8) {
+            var modelObject:ExpectedEvent?
+            do {
+                let expectedModelData = try JSONSerialization.jsonObject(with: bodyData, options: .init(rawValue: 0))
+                let expectedData = try JSONSerialization.data(withJSONObject: expectedModelData, options: .prettyPrinted)
+                modelObject = try JSONDecoder().decode(ExpectedEvent.self, from: expectedData)
+            } catch {
+                print(" handleWebPostMessage json parse error \(error)")
+            }
+            return modelObject?.url
+        }else {
+            return nil
+        }
+    }
+    
+    func openActivityController(url:URL) {
+        let text = "Some text that you want shared"
+        let activity = UIActivityViewController(activityItems: [url, text], applicationActivities: nil)
+        getTopViewController()?.present(activity, animated: true)
+    }
+    
+    func getTopViewController() -> UIViewController? {
+        var topController: UIViewController? = UIApplication.shared.keyWindow?.rootViewController
+        while topController?.presentedViewController != nil {
+            topController = topController?.presentedViewController
+        }
+        return topController
     }
     
     func handleWebPostMessage(_ msg:Any) throws {
@@ -380,7 +465,6 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 print(" handleWebPostMessage json parse error \(error)")
                 throw VLError.JSONParseError
             }
-            //                print("model \(model)")
             guard let model = modelObject,let src = model.src,src.lowercased() == Constants.JS_MESSAGE_NAME.lowercased() else {
                 print("source is not a verloop")
                 throw VLError.InvalidSourceName
