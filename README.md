@@ -133,6 +133,15 @@ config.openMenuWidget()
 
 ```
 
+- Show Download for Media Messages: You can enable download of media message be calling the below API with value true.
+  
+```
+//Show Download Button on Media Messages 
+
+config.showDownloadButton(true)
+
+```
+
 ### APIs on `VerloopSDK`
 
 VerloopSDK class is the SDK class which expects a `VLConfig` instance as an initialisation parameter. An instance of VerloopSDK is used to present or close the chat. You could manage user session with the login and logout APIs on this class. Here we'll walk you through the APIs with the scenarios.  
