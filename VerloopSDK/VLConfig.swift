@@ -45,6 +45,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         case closeWidget
         case close
         case widgetColor
+        case showDownloadButton
     }
     //Scope for custom fields
     @objc public enum SCOPE : Int {
@@ -72,6 +73,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
    private var title = Constants.Literals.EMPTY_STRING
    private var bgColor: UIColor = .black
    private var textColor: UIColor = .white
+   private var allowFileDownload: Bool = false //File download by default "false"
 //   private var allowFileDownload: Bool = false
     
     func isValidEmail(_ email:String) -> Bool {
@@ -181,7 +183,14 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
             updatedConfigParams.append(.openMenuWidget)
         }
     }
-
+    
+    @objc public func showDownloadButton(_ isAllowFileDownload: Bool) {
+        if !updatedConfigParams.contains(.showDownloadButton) {
+            allowFileDownload = isAllowFileDownload
+            updatedConfigParams.append(.showDownloadButton)
+        }
+    }
+    
 //    @objc public func setOnEventChangeListener(_ delegate:VLEventDelegate?) {
 //        mEventChangeDelegate = delegate
 //    }
@@ -258,6 +267,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
           recipeId = nil
           onButtonClicked = nil
           onUrlClicked = nil
+          allowFileDownload = false
           customFields.removeAll()
           userParams.removeAll()
           updatedConfigParams = []
@@ -380,6 +390,11 @@ extension VLConfig {
     func getRecipeId() -> String? {
         return recipeId
     }
+    
+    func isAllowFileDownload() -> Bool {
+        return allowFileDownload
+    }
+
     func getCustomFields() -> [CustomField] {
         return customFields
     }
