@@ -201,38 +201,42 @@ import Foundation
     //where as 'ready' call back is used to identify the color code of the navigation bar and title
     //below method executes when user made a selection on the webview for links / buttons
     func jsCallback(message: Any) {
-       let str = message as! String
-       let data = str.data(using: String.Encoding.utf8)!
-       do {
+        let str = message as! String
+        let data = str.data(using: String.Encoding.utf8)!
+        do {
             let _ =  try JSONDecoder().decode(ClientInfo.self, from: data)
-           //We are no longer updating the navigation bar from this location; instead, we are updating it from the getNavigationInfo() method.
-//            title = clientInfo.title
-//            bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
-//            textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
-//            refreshClientInfo()
+            //We are no longer updating the navigation bar from this location; instead, we are updating it from the getNavigationInfo() method.
+            //            title = clientInfo.title
+            //            bgColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.bgColor)
+            //            textColor = VerloopSDK.hexStringToUIColor(hex: clientInfo.textColor)
+            //            refreshClientInfo()
             verloopController?.dismissLoader()
             manager.updateReadyState(true)
-       }catch {
-           print("Problem retreiving client Info")
-       }
-       do {
+        }catch {
+            print("Problem retreiving client Info")
+        }
+        do {
             let buttonInfo =  try JSONDecoder().decode(OnButtonClick.self, from: data)
             let title = buttonInfo.title
             let type = buttonInfo.type
             let payload = buttonInfo.payload
             config.getButtonClickListener()?(title,type, payload)
-  
-       }catch {
-           print("Problem retreiving button Info")
-       }
-       do {
-          let urlInfo =  try JSONDecoder().decode(OnURLClick.self, from: data)
-          let url = urlInfo.url
-          config.getURLClickListener()?(url)
-      }catch {
-          print("Problem retreiving url Info")
-      }
-   }
+            
+        }catch {
+            print("Problem retreiving button Info")
+        }
+        do {
+            
+            let outerPayload = try JSONDecoder().decode(OuterPayload.self, from: data)
+            // Now decode the inner payload from the payload string
+            if let innerPayloadData = outerPayload.payload.data(using: .utf8) {
+                let innerPayload = try JSONDecoder().decode(Payload.self, from: innerPayloadData)
+                config.getURLClickListener()?(innerPayload.url)
+            }
+        }catch {
+            print("Problem retreiving url Info")
+        }
+    }
 //    
 //    func downloadClickListner(urlString: Any?) {
 //        guard let urlString = urlString as? String, let url = URL(string: urlString) else {
@@ -280,8 +284,21 @@ import Foundation
         public let payload: String
     }
     
+    struct OuterPayload: Decodable {
+        let payload: String
+    }
+
+    // Define the inner structure (the actual payload)
+    struct Payload: Decodable {
+        let url: String
+    }
+    
     private struct OnURLClick: Decodable {
-        public var url:String
+        public let payload:ExpectedPayload?
+        struct ExpectedPayload:Codable {
+            let url: String
+        }
+       
     }
     
     //MARK: - Initiating API request to update the navigation bar's bgColor, text color, and title.
