@@ -142,7 +142,7 @@ config.showDownloadButton(true)
 
 ```
 
-- Set title on the widget.
+- Title: Set title on the widget.
   
 ```
 //Setting title on the widget 
@@ -152,7 +152,7 @@ config.setTitle(widgetTitle: "Title")
 
 ```
 
-- Set branding color on the widget.
+- Branding Color: Set branding color on the widget.
   
 ```
 //Setting branding color on the widget 
