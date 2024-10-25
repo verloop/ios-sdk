@@ -46,6 +46,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         case close
         case widgetColor
         case showDownloadButton
+        case title
     }
     //Scope for custom fields
     @objc public enum SCOPE : Int {
@@ -71,8 +72,8 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
    
    private var updatedConfigParams:[APIMethods] = []
    private var title = Constants.Literals.EMPTY_STRING
-   private var bgColor: UIColor = .black
-   private var textColor: UIColor = .white
+   private var bgColor: UIColor = .white
+   private var textColor: UIColor = .black
    private var allowFileDownload: Bool = false //File download by default "false"
 //   private var allowFileDownload: Bool = false
     
@@ -225,6 +226,17 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         let ret = UserDefaults.standard.string(forKey: "VERLOOP_CUSTOM_FIELDS")
         return ret
     }
+    
+    @objc public func setTitle(widgetTitle title: String){
+        self.title = title
+    }
+    
+    @objc public func setWidgetColor(widgetColor color : UIColor) {
+        self.textColor = color
+    }
+    
+    
+
 
     func save() {
         let defaults = UserDefaults.standard
@@ -346,6 +358,10 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
                 self.bgColor = VerloopSDK.hexStringToUIColor(hex: bgColor)
             }
         }
+    }
+    
+    func updateTitle(title: String){
+        
     }
 }
 

@@ -230,6 +230,8 @@ extension ViewModel {
     
     //called when click on "launch chat" button in tableview section 1
     func launchChatOn(controller:UIViewController,config:VLConfig) {
+        config.setTitle(widgetTitle: "Woolaa")
+        config.setWidgetColor(widgetColor: UIColor.systemPink)
         config.setUrlRedirectionFlag(canRedirect: false)
         config.openMenuWidget()
         config.showDownloadButton(true)
@@ -308,6 +310,9 @@ extension ViewModel {
             if !recipe.isEmpty {
                 config.setRecipeId(recipeId: recipe)
             }
+            
+            config.setUrlRedirectionFlag(canRedirect: true)
+            
             config.setButtonOnClickListener {[weak self] title, type, payload in
                 print("button click listenr called")
                 
@@ -324,7 +329,7 @@ extension ViewModel {
             }
             let config = getInputsConfig()!
 
-            config.setUrlRedirectionFlag(canRedirect: false)
+            config.setUrlRedirectionFlag(canRedirect: true)
       
             config.setUrlClickListener {[weak self] url in
                 print("URL click listener called")
