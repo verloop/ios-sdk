@@ -391,7 +391,7 @@ extension VLWebViewManager {
             case .showDownloadButton:
                 webView.evaluateJavaScript(String.getShowDownloadButtonJS(config.isAllowFileDownload())) { _, error in
                     print("set recipe error \(error?.localizedDescription ?? "NIL")")
-                }                
+                }
             default : break
             }
         }

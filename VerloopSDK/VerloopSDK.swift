@@ -286,7 +286,6 @@ import Foundation
     
     //MARK: - Initiating API request to update the navigation bar's bgColor, text color, and title.
     private func getNavigationInfo() {
-        
         let requestComponents: VLNetworkManagerRequestComponents = VLNetworkManagerRequestComponents(method: .get)
         VLNetworkManager.shared.request(url: config.getLiveChatInitUrl, requestComponents: requestComponents) { [weak self] (result) in
             guard let self = self else { return }
@@ -294,7 +293,6 @@ import Foundation
             case .success(let responseData):
                 guard let data = responseData else { return }
                 do {
-                    print("livechat init response")
                     let response: VLClientInfoSchema? = try JSONDecoder().decode(VLClientInfoSchema.self, from: data)
                     self.config.updateClientInitInfo(response: response)
                     DispatchQueue.main.async {

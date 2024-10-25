@@ -360,9 +360,6 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         }
     }
     
-    func updateTitle(title: String){
-        
-    }
 }
 
 extension VLConfig {
