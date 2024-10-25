@@ -230,8 +230,8 @@ extension ViewModel {
     
     //called when click on "launch chat" button in tableview section 1
     func launchChatOn(controller:UIViewController,config:VLConfig) {
-        config.setTitle(widgetTitle: "Woolaa")
-        config.setWidgetColor(widgetColor: UIColor.systemPink)
+        config.setTitle(widgetTitle: "Scapia")
+        config.setWidgetColor(widgetColor: UIColor.label)
         config.setUrlRedirectionFlag(canRedirect: false)
         config.openMenuWidget()
         config.showDownloadButton(true)
