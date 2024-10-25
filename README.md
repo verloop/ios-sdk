@@ -142,6 +142,30 @@ config.showDownloadButton(true)
 
 ```
 
+- Title: Set title on the widget.
+  
+```
+//Setting title on the widget 
+
+config.setTitle(widgetTitle: "Title")
+
+
+```
+
+- Branding Color: Set branding color on the widget.
+  
+```
+//Setting branding color on the widget 
+
+config.setWidgetColor(widgetColor: UIColor.label)
+
+
+```
+
+
+
+
+
 ### APIs on `VerloopSDK`
 
 VerloopSDK class is the SDK class which expects a `VLConfig` instance as an initialisation parameter. An instance of VerloopSDK is used to present or close the chat. You could manage user session with the login and logout APIs on this class. Here we'll walk you through the APIs with the scenarios.  
