@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "VerloopSDKiOS"
-  spec.version      = "0.2.14"
+  spec.version      = "0.2.15"
   spec.summary      = "VerloopSDKiOS - client side iOS livechat"
 
   # This description is used to generate tags and improve search results.
