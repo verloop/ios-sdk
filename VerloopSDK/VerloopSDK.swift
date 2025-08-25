@@ -149,25 +149,150 @@ import Foundation
     //called when client information such as color cod eof the bar and title to be displayed on bar received from the live chat script
     
     func refreshClientInfo() {
+        // Clear any existing title view
+        verloopController?.navigationItem.titleView = nil
         
-        verloopController?.title = config.getNavTitle
-
-        verloopNavigationController?.navigationBar.backgroundColor = config.getNavBgColor
-
-        verloopNavigationController?.navigationBar.barTintColor = config.getNavBgColor
-
-        verloopNavigationController?.navigationBar.isTranslucent = false
-
-
-        // TODO: In VLViewController, the leftBarButtonItem is set on controller's navigationItem and here it was being set on verloopNavigationController's navigationItem that was creating issue and leftBarItem's tint color was nil
-
-        verloopController?.navigationItem.leftBarButtonItem?.tintColor = config.getNavTextColor
-
-        verloopNavigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: config.getNavTextColor]
-
+        // Create a custom title view that will expand properly
+        let titleView = createExpandingTitleView()
+        
+        // Set the title view
+        verloopController?.navigationItem.titleView = titleView
+        
+        // Configure navigation bar appearance
+        configureNavigationBarAppearance()
+        
+        // Force layout update
+        DispatchQueue.main.async { [weak self] in
+            self?.verloopController?.navigationController?.navigationBar.layoutIfNeeded()
+        }
     }
 
-    
+    private func createExpandingTitleView() -> UIView {
+        let containerView = UIView()
+        
+        // Create horizontal stack for logo and text content
+        let horizontalStack = UIStackView()
+        horizontalStack.axis = .horizontal
+        horizontalStack.alignment = .center
+        horizontalStack.distribution = .fill
+        horizontalStack.spacing = 8
+        horizontalStack.translatesAutoresizingMaskIntoConstraints = false
+
+        // Add brand logo if available
+        if let logoUrl = URL(string: config.getBrandLogoUrl), !config.getBrandLogoUrl.isEmpty {
+            let logoImageView = UIImageView()
+            logoImageView.translatesAutoresizingMaskIntoConstraints = false
+            logoImageView.contentMode = .scaleAspectFill
+            logoImageView.clipsToBounds = true
+            // Set fixed size for logo
+            NSLayoutConstraint.activate([
+                logoImageView.widthAnchor.constraint(equalToConstant: 32),
+                logoImageView.heightAnchor.constraint(equalToConstant: 32)
+            ])
+            // Make image view round
+            logoImageView.layer.cornerRadius = 16
+            logoImageView.layer.masksToBounds = true
+
+            // Load image asynchronously
+            URLSession.shared.dataTask(with: logoUrl) { data, _, _ in
+                if let data = data, let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        logoImageView.image = image
+                    }
+                }
+            }.resume()
+            
+            horizontalStack.addArrangedSubview(logoImageView)
+        }
+        
+        // Create vertical stack for title and subtitle
+        let verticalStack = UIStackView()
+        verticalStack.axis = .vertical
+        verticalStack.alignment = .leading
+        verticalStack.distribution = .fill
+        verticalStack.spacing = 2
+        verticalStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Title label
+        let titleLabel = UILabel()
+        titleLabel.text = config.getNavTitle
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
+        titleLabel.textColor = config.getNavTextColor
+        titleLabel.numberOfLines = 1
+        titleLabel.lineBreakMode = .byTruncatingTail
+        titleLabel.textAlignment = config.getNavTitleAlignment
+        verticalStack.addArrangedSubview(titleLabel)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.widthAnchor.constraint(equalTo: verticalStack.widthAnchor).isActive = true
+
+        // Subtitle label (if available)
+        let subtitleText = config.getNavSubtitle
+        if !subtitleText.isEmpty {
+            let subtitleLabel = UILabel()
+            subtitleLabel.text = subtitleText
+            subtitleLabel.font = UIFont.systemFont(ofSize: 13)
+            subtitleLabel.textColor = config.getNavTextColor.withAlphaComponent(0.8)
+            subtitleLabel.numberOfLines = 1
+            subtitleLabel.lineBreakMode = .byTruncatingTail
+            subtitleLabel.textAlignment = config.getNavSubtitleAlignment
+            verticalStack.addArrangedSubview(subtitleLabel)
+            subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+            subtitleLabel.widthAnchor.constraint(equalTo: verticalStack.widthAnchor).isActive = true
+        }
+        
+        horizontalStack.addArrangedSubview(verticalStack)
+        containerView.addSubview(horizontalStack)
+        
+        // Key: Pin the horizontal stack to fill the entire container
+        NSLayoutConstraint.activate([
+            horizontalStack.topAnchor.constraint(equalTo: containerView.topAnchor),
+            horizontalStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            horizontalStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            horizontalStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            
+            // Set container height to match navigation bar
+            containerView.heightAnchor.constraint(equalToConstant: 44)
+        ])
+        
+        // Calculate the required width based on screen size and safe margins
+        let screenWidth = UIScreen.main.bounds.width
+        let availableWidth = screenWidth - 120 // Leave space for back button and margins
+        
+        // Set the container width to fill available space
+        NSLayoutConstraint.activate([
+            containerView.widthAnchor.constraint(equalToConstant: availableWidth)
+        ])
+        
+        return containerView
+    }
+
+    private func configureNavigationBarAppearance() {
+        guard let navigationController = verloopNavigationController else { return }
+        
+        let navigationBar = navigationController.navigationBar
+        
+        // Set navigation bar colors
+        navigationBar.backgroundColor = config.getNavBgColor
+        navigationBar.barTintColor = config.getNavBgColor
+        navigationBar.isTranslucent = false
+        
+        // Configure back button color
+        verloopController?.navigationItem.leftBarButtonItem?.tintColor = config.getNavTextColor
+        navigationBar.tintColor = config.getNavTextColor
+        
+        // Set title text attributes (fallback for when titleView is not used)
+        navigationBar.titleTextAttributes = [
+            .foregroundColor: config.getNavTextColor,
+            .font: UIFont.boldSystemFont(ofSize: 17)
+        ]
+        
+        // Ensure the navigation bar is visible and properly styled
+        navigationBar.setBackgroundImage(nil, for: .default)
+        navigationBar.shadowImage = nil
+}
+
+
+
     static func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
@@ -294,6 +419,12 @@ import Foundation
                 guard let data = responseData else { return }
                 do {
                     let response: VLClientInfoSchema? = try JSONDecoder().decode(VLClientInfoSchema.self, from: data)
+                    // Print the full response for debugging
+                    if let response = response {
+                        print("[VerloopSDK] Full VLClientInfoSchema response:\n", response)
+                    } else {
+                        print("[VerloopSDK] Decoded response is nil")
+                    }
                     self.config.updateClientInitInfo(response: response)
                     DispatchQueue.main.async {
                         self.refreshClientInfo()
@@ -304,7 +435,6 @@ import Foundation
                         self.refreshClientInfo()
                     }
                 }
-                
             case .failure(let error):
                 print(error)
                 DispatchQueue.main.async {

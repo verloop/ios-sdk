@@ -71,7 +71,11 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
    private var widgetColor:String?
    
    private var updatedConfigParams:[APIMethods] = []
-   private var title = Constants.Literals.EMPTY_STRING
+    private var title = Constants.Literals.EMPTY_STRING
+    private var subtitle = Constants.Literals.EMPTY_STRING
+    private var brandLogoUrl: String = ""
+    private(set) var titleAlignment: NSTextAlignment = .left
+    private(set) var subtitleAlignment: NSTextAlignment = .left
    private var bgColor: UIColor = .white
    private var textColor: UIColor = .black
    private var allowFileDownload: Bool = false //File download by default "false"
@@ -345,7 +349,37 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
                 self.title = title
             }
         }
-        
+
+        // Parse brand logo URL if present
+        if let logoUrl = response?.livechatSettings?.Header?.BrandLogo?.URL {
+            self.brandLogoUrl = logoUrl
+        } else {
+            self.brandLogoUrl = ""
+        }
+
+        if let titlePosition = response?.livechatSettings?.Header?.Title?.Position {
+            switch titlePosition.uppercased() {
+            case "LEFT": self.titleAlignment = .left
+            case "RIGHT": self.titleAlignment = .right
+            default: self.titleAlignment = .center
+            }
+        } else {
+            self.titleAlignment = .center
+        }
+
+        if let subtitle = response?.livechatSettings?.Header?.Subtitle?.Heading {
+            self.subtitle = subtitle
+        }
+        if let subtitlePosition = response?.livechatSettings?.Header?.Subtitle?.Position {
+            switch subtitlePosition.uppercased() {
+            case "LEFT": self.subtitleAlignment = .left
+            case "RIGHT": self.subtitleAlignment = .right
+            default: self.subtitleAlignment = .center
+            }
+        } else {
+            self.subtitleAlignment = .center
+        }
+
         if let textColor = response?.livechatSettings?.Theme?.ColorPalette?.Primary {
             self.textColor = VerloopSDK.hexStringToUIColor(hex: textColor)
             self.bgColor = UIColor.white
@@ -433,7 +467,22 @@ extension VLConfig {
     var getNavTitle: String {
         return title
     }
-    
+
+    var getBrandLogoUrl: String {
+        return brandLogoUrl
+    }
+
+    var getNavTitleAlignment: NSTextAlignment {
+        return titleAlignment
+    }
+
+    var getNavSubtitle: String {
+        return subtitle
+    }
+    var getNavSubtitleAlignment: NSTextAlignment {
+        return subtitleAlignment
+    }
+
     var getNavBgColor: UIColor {
         return bgColor
     }
