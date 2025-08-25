@@ -419,12 +419,6 @@ import Foundation
                 guard let data = responseData else { return }
                 do {
                     let response: VLClientInfoSchema? = try JSONDecoder().decode(VLClientInfoSchema.self, from: data)
-                    // Print the full response for debugging
-                    if let response = response {
-                        print("[VerloopSDK] Full VLClientInfoSchema response:\n", response)
-                    } else {
-                        print("[VerloopSDK] Decoded response is nil")
-                    }
                     self.config.updateClientInitInfo(response: response)
                     DispatchQueue.main.async {
                         self.refreshClientInfo()
