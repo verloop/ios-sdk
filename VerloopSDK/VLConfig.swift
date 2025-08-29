@@ -343,10 +343,10 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
     func updateClientInitInfo(response: VLClientInfoSchema?) {
         
         if let title = response?.livechatSettings?.Header?.Title?.Heading {
-            self.title = title
+            setNavTitle(title: title)
         } else {
             if let title = response?.title {
-                self.title = title
+                setNavTitle(title: title)
             }
         }
 
@@ -381,15 +381,15 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         }
 
         if let textColor = response?.livechatSettings?.Theme?.ColorPalette?.Primary {
-            self.textColor = VerloopSDK.hexStringToUIColor(hex: textColor)
-            self.bgColor = UIColor.white
+            setNavTextColor(textColor: VerloopSDK.hexStringToUIColor(hex: textColor))
+            setNavBgColor(bgColor:  UIColor.white)
         } else {
             if let textColor = response?.textColor {
-                self.textColor = VerloopSDK.hexStringToUIColor(hex: textColor)
+                setNavTextColor(textColor: VerloopSDK.hexStringToUIColor(hex: textColor))
             }
             
             if let bgColor = response?.bgColor, !bgColor.isEmpty {
-                self.bgColor = VerloopSDK.hexStringToUIColor(hex: bgColor)
+                setNavBgColor(bgColor:  VerloopSDK.hexStringToUIColor(hex: bgColor))
             }
         }
     }
