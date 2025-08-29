@@ -10,6 +10,14 @@ import Foundation
 import UIKit
 
 class VLNavViewController: UINavigationController {
+    // forcing portrait orientation
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
     
     
     override var shouldAutorotate : Bool {
