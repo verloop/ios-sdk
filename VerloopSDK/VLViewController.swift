@@ -69,7 +69,19 @@ class VLViewController: UIViewController, WKUIDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "×", style: .done, target: self, action: #selector(back(_:)))
+        
+        // adding custom element to get more control over button size and position
+        let button = UIButton(type: .system)
+        button.setTitle("×", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold) // Increased font size
+        button.addTarget(self, action: #selector(back(_:)), for: .touchUpInside)
+        button.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
+        
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: 24, height: 32))
+        button.frame = CGRect(x: 0, y: 0, width: 24, height: 32) 
+        container.addSubview(button)
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: container)
         self.lifeCycleDelegate?.VLViewControllerViewdidLoad()
     }
 
