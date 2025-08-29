@@ -73,6 +73,7 @@ class VLViewController: UIViewController, WKUIDelegate {
         // adding custom element to get more control over button size and position
         let button = UIButton(type: .system)
         button.setTitle("×", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold) // Increased font size
         button.addTarget(self, action: #selector(back(_:)), for: .touchUpInside)
         button.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
         
