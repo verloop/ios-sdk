@@ -209,14 +209,13 @@ import Foundation
         let verticalStack = UIStackView()
         verticalStack.axis = .vertical
         verticalStack.alignment = .leading
-        verticalStack.distribution = .fill
-        verticalStack.spacing = 2
+        verticalStack.distribution = .fillEqually
         verticalStack.translatesAutoresizingMaskIntoConstraints = false
         
         // Title label
         let titleLabel = UILabel()
         titleLabel.text = config.getNavTitle
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
         titleLabel.textColor = config.getNavTextColor
         titleLabel.numberOfLines = 1
         titleLabel.lineBreakMode = .byTruncatingTail
@@ -230,7 +229,7 @@ import Foundation
         if !subtitleText.isEmpty {
             let subtitleLabel = UILabel()
             subtitleLabel.text = subtitleText
-            subtitleLabel.font = UIFont.systemFont(ofSize: 13)
+            subtitleLabel.font = UIFont.systemFont(ofSize: 12)
             subtitleLabel.textColor = config.getNavTextColor.withAlphaComponent(0.8)
             subtitleLabel.numberOfLines = 1
             subtitleLabel.lineBreakMode = .byTruncatingTail
@@ -243,22 +242,17 @@ import Foundation
         horizontalStack.addArrangedSubview(verticalStack)
         containerView.addSubview(horizontalStack)
         
-        // Key: Pin the horizontal stack to fill the entire container
         NSLayoutConstraint.activate([
             horizontalStack.topAnchor.constraint(equalTo: containerView.topAnchor),
             horizontalStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            horizontalStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            horizontalStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            
-            // Set container height to match navigation bar
+            horizontalStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            horizontalStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             containerView.heightAnchor.constraint(equalToConstant: 44)
         ])
         
-        // Calculate the required width based on screen size and safe margins
         let screenWidth = UIScreen.main.bounds.width
-        let availableWidth = screenWidth - 120 // Leave space for back button and margins
-        
-        // Set the container width to fill available space
+        let availableWidth = screenWidth - 50
+
         NSLayoutConstraint.activate([
             containerView.widthAnchor.constraint(equalToConstant: availableWidth)
         ])
@@ -283,7 +277,7 @@ import Foundation
         // Set title text attributes (fallback for when titleView is not used)
         navigationBar.titleTextAttributes = [
             .foregroundColor: config.getNavTextColor,
-            .font: UIFont.boldSystemFont(ofSize: 17)
+            .font: UIFont.boldSystemFont(ofSize: 16)
         ]
         
         // Ensure the navigation bar is visible and properly styled
