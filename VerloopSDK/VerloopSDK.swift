@@ -245,16 +245,7 @@ import Foundation
         NSLayoutConstraint.activate([
             horizontalStack.topAnchor.constraint(equalTo: containerView.topAnchor),
             horizontalStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            horizontalStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            horizontalStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             containerView.heightAnchor.constraint(equalToConstant: 44)
-        ])
-        
-        let screenWidth = UIScreen.main.bounds.width
-        let availableWidth = screenWidth - 50
-
-        NSLayoutConstraint.activate([
-            containerView.widthAnchor.constraint(equalToConstant: availableWidth)
         ])
         
         return containerView
