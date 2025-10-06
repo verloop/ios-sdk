@@ -233,3 +233,79 @@ After this, when user want to open the chat, you can simply ask for the UINaviga
 ```
 
 Note: Kindly go through the swift's documentation for further APIs and appropriately call corresponding methods. 
+
+
+## **Integrate with SwiftUI** 
+
+To use the VerloopSDK in SwiftUI apps, we need to use the UIViewControllerRepresentable to represent an UIKit view controller. Let’s go over all the steps required in doing that.
+
+### **Setting up the UIKit view controller**
+
+UIViewControllerRepresentable is a protocol and requires to implement two methods:
+
+makeUIViewController - create and configure the view controller;
+updateUIViewControoler - update the state of the view controller.
+
+We are going to create and configure the VerloopSDK in the makeUIViewController method. We don’t need to update it, so we can leave the updateUIViewControoler empty.
+
+### **Coordinator**
+Coordinator class that implements the VLEventDelegate protocol. It is a thoughtful approach to how the SwiftUI can communicate with the UIKit delegation pattern idea.
+
+```
+import SwiftUI
+import VerloopSDK
+
+struct VerifyVerloopRepresentable: UIViewControllerRepresentable {
+    
+    func makeUIViewController(context: Context) -> some UIViewController {
+        var mSDK:VerloopSDK?
+        
+        //Initialise the configuration object `VLConfig`. You could pass an identifier to uniquely indentify a user  - `userId`. Will be useful to manage logged in user sessions. 
+        var config = VLConfig(clientId: "tarun") 
+        
+        //config.setRecipeId(recipeId id: String?)
+        //config.setNotificationToken(notificationToken: string)
+        //config.setUserName(username name:String)
+        //config.setUserEmail(userEmail email:String)
+        //config.setUserPhone(userPhone phone:String)
+        //config.setUserParam(key:String, value:String)
+        
+        verloop = VerloopSDK(config: config)
+        let chatController = verloop!.getNavController()
+        return chatController
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
+
+}
+```
+
+```
+let config = VLConfig(clientId: String)
+
+let config = VLConfig(clientId: String, userId: String?)    //clientId is required parameter while userId.
+```
+You could otherwise update the userId using the method `setUserId` on an instance of `VLConfig`.  
+
+```
+let config = VLConfig(clientId: String)
+
+config.setUserId(userId: String)
+```
+- Listeners: You could set two listenrs when an end user taps on a button or url in the recipe. 
+```
+//Button Click Listener
+
+Example: 
+
+config.setButtonOnClickListener { title, type, payload in
+    print("button click listenr called")
+}
+
+// URL Click Listener
+
+config.setUrlClickListener { title, type, payload in
+    print("button click listenr called")
+}
+
+```
