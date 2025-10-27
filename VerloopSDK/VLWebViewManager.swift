@@ -163,6 +163,14 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     }
     
     func logoutSession() {
+        // If webview not ready, queue logout to execute when room is ready
+        if !isRoomReady {
+            if !roomReadyConfigurations.contains(.logout) {
+                roomReadyConfigurations.append(.logout)
+            }
+            return
+        }
+
         webView.evaluateJavaScript(String.getLogoutEvaluationJS()) {[weak self] _, error in
             print("logout error \(error?.localizedDescription ?? "NA")")
             if error == nil {// when user is logged out, clear the local cookies
@@ -303,6 +311,13 @@ extension VLWebViewManager {
             case .close :
                 webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
                     print("getCloseEvaluateJS error \(error?.localizedDescription ?? "NA")")
+                }
+            case .logout:
+                webView.evaluateJavaScript(String.getLogoutEvaluationJS()) {[weak self] _, error in
+                    print("processRoomReadyConfigurations logout error \(error?.localizedDescription ?? "NA")")
+                    if error == nil {
+                        self?.clearLocalStorageVistorToken()
+                    }
                 }
             case .closeWidget:
                 webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
