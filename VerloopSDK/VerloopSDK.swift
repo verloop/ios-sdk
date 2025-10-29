@@ -61,6 +61,10 @@ import Foundation
     @objc public func close() {
         self.manager.close()
     }
+
+    @objc public func closeChat() {
+        self.manager.close()
+    }
     
     @objc public func observeLiveChatEventsOn(vlEventDelegate delegate:VLEventDelegate) {
         if manager != nil {
