@@ -57,6 +57,22 @@ import Foundation
             }
         }
     }
+
+    @objc private func recreateWebView() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            self.manager.webView = nil
+            self.manager = VLWebViewManager(config: self.config)
+            self.manager.jsDelegate(delegate: self)
+
+            // If controller already exists, attach the new webview into its view
+            if let controller = self.verloopController {
+                controller.setWebView(webView: self.manager)
+                controller.setSDK(verloopSDK: self)
+            }
+        }
+    }
     
     @objc public func close() {
         self.manager.close()
@@ -64,6 +80,7 @@ import Foundation
 
     @objc public func closeChat() {
         self.manager.close()
+        self.recreateWebView()
     }
     
     @objc public func observeLiveChatEventsOn(vlEventDelegate delegate:VLEventDelegate) {
@@ -91,8 +108,10 @@ import Foundation
     
     @objc public func logout() {
         manager.logoutSession()
-        clearConfig()
+        config.clear()
         config.clearUserDetails()
+        self.clearLocalStorage()
+        self.recreateWebView()
     }
     
     @objc public func clearConfig(){
