@@ -62,9 +62,21 @@ import Foundation
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
 
-            self.manager.webView = nil
+            // extract old configurations and delegates
+            let oldManager = self.manager
+            let queued = oldManager?.getRoomReadyConfigurations() ?? []
+            let eventDelegate = oldManager?._eventDelegate
+
+            // kill old webview
+            oldManager?.webView = nil
+
+            // create new webview
             self.manager = VLWebViewManager(config: self.config)
             self.manager.jsDelegate(delegate: self)
+            self.manager.setRoomReadyConfigurations(queued)
+            if let ed = eventDelegate {
+                self.manager.addEventChangeDelegate(ed)
+            }
 
             // If controller already exists, attach the new webview into its view
             if let controller = self.verloopController {
@@ -80,7 +92,6 @@ import Foundation
 
     @objc public func closeChat() {
         self.manager.close()
-        self.recreateWebView()
     }
     
     @objc public func observeLiveChatEventsOn(vlEventDelegate delegate:VLEventDelegate) {
