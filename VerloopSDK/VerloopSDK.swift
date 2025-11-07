@@ -57,8 +57,40 @@ import Foundation
             }
         }
     }
+
+    @objc private func recreateWebView() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            // extract old configurations and delegates
+            let oldManager = self.manager
+            let queued = oldManager?.getRoomReadyConfigurations() ?? []
+            let eventDelegate = oldManager?._eventDelegate
+
+            // kill old webview
+            oldManager?.webView = nil
+
+            // create new webview
+            self.manager = VLWebViewManager(config: self.config)
+            self.manager.jsDelegate(delegate: self)
+            self.manager.setRoomReadyConfigurations(queued)
+            if let ed = eventDelegate {
+                self.manager.addEventChangeDelegate(ed)
+            }
+
+            // If controller already exists, attach the new webview into its view
+            if let controller = self.verloopController {
+                controller.setWebView(webView: self.manager)
+                controller.setSDK(verloopSDK: self)
+            }
+        }
+    }
     
     @objc public func close() {
+        self.manager.close()
+    }
+
+    @objc public func closeChat() {
         self.manager.close()
     }
     
@@ -87,8 +119,10 @@ import Foundation
     
     @objc public func logout() {
         manager.logoutSession()
-        clearConfig()
+        config.clear()
         config.clearUserDetails()
+        self.clearLocalStorage()
+        self.recreateWebView()
     }
     
     @objc public func clearConfig(){
