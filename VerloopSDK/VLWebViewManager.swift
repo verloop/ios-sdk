@@ -34,6 +34,14 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     var _eventDelegate:VLEventDelegate?
     private var configParams:[VLConfig.APIMethods] = []
     var onMessageReceived:(() -> Void)?
+
+    func getRoomReadyConfigurations() -> [VLConfig.APIMethods] {
+        return roomReadyConfigurations
+    }
+
+    func setRoomReadyConfigurations(_ configs: [VLConfig.APIMethods]) {
+        roomReadyConfigurations = configs
+    }
     
     init(config: VLConfig) {
         
@@ -163,6 +171,14 @@ class VLWebViewManager: NSObject,WKUIDelegate, WKNavigationDelegate {
     }
     
     func logoutSession() {
+        // If webview not ready, queue logout to execute when room is ready
+        if !isRoomReady {
+            if !roomReadyConfigurations.contains(.logout) {
+                roomReadyConfigurations.append(.logout)
+            }
+            return
+        }
+
         webView.evaluateJavaScript(String.getLogoutEvaluationJS()) {[weak self] _, error in
             print("logout error \(error?.localizedDescription ?? "NA")")
             if error == nil {// when user is logged out, clear the local cookies
@@ -303,6 +319,15 @@ extension VLWebViewManager {
             case .close :
                 webView.evaluateJavaScript(String.getCloseEvaluateJS()) { _, error in
                     print("getCloseEvaluateJS error \(error?.localizedDescription ?? "NA")")
+                    self.loadWebView()
+                }
+            case .logout:
+                webView.evaluateJavaScript(String.getLogoutEvaluationJS()) {[weak self] _, error in
+                    print("processRoomReadyConfigurations logout error \(error?.localizedDescription ?? "NA")")
+                    if error == nil {
+                        self?.clearLocalStorageVistorToken()
+                        self?.loadWebView()
+                    }
                 }
             case .closeWidget:
                 webView.evaluateJavaScript(String.getWidgetClosedEvaluationJS()) {[weak self] _, error in
@@ -496,6 +521,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 case .FunctionCloseComplete:
                     clearLocalStorageVistorToken()
                     self.didReceiveCallbackEventsOnLivechat(message: bodyString, data: bodyData)
+                    self.loadWebView()
                 case .FunctionChatMinimized:
                     _eventDelegate?.onChatMinimized?()
                     //                            _eventDelegate?.didEventOccurOnLiveChat(.onChatMinimized)
@@ -548,6 +574,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                     _eventDelegate?.onChatStarted?()
                 case FunctionType.FunctionLogOutCompleted.rawValue:
                     _eventDelegate?.onLogoutComplete?()
+                    self.loadWebView()
                 default:break
                 }
             }

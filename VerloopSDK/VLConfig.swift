@@ -43,6 +43,7 @@ public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
         case openWidget
         case openMenuWidget
         case closeWidget
+        case logout
         case close
         case widgetColor
         case showDownloadButton
