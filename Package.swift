@@ -12,19 +12,10 @@ let package = Package(
             targets: ["VerloopSDKiOS"]
         )
     ],
-    dependencies: [],
     targets: [
-        .target(
+        .binaryTarget(
             name: "VerloopSDKiOS",
-            path: "VerloopSDK",
-            publicHeadersPath: ".",
-            resources: [
-                .process("Info.plist"),
-                .process("PrivacyInfo.xcprivacy")
-            ],
-            swiftSettings: [
-                .define("SWIFT_PACKAGE")
-            ]
+            path: "VerloopSDK.xcframework"
         )
     ],
     swiftLanguageVersions: [.v5]

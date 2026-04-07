@@ -1,0 +1,11 @@
+framework module VerloopSDK {
+  umbrella header "VerloopSDK.h"
+  export *
+
+  module * { export * }
+}
+
+module VerloopSDK.Swift {
+  header "VerloopSDK-Swift.h"
+  requires objc
+}
