@@ -6,7 +6,8 @@
 //
 
 import Foundation
-import VerloopSDK
+import VerloopSDKiOS
+import UIKit
 
 //enum with different categories to be handled
 enum RowType:String {
