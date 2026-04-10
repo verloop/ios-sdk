@@ -21,7 +21,29 @@ Two ways to install
 <img width="700" alt="Screenshot 2022-03-15 at 3 08 56 PM" src="https://user-images.githubusercontent.com/98142458/158394191-f40ef1b5-89eb-41cb-8110-dfcd54b700be.png">
 </p>
 
+## Install Verloop iOS SDK via Swift Package Manager
 
+### 1. Add the Package
+
+1. Open your project in **Xcode**
+2. Go to **Project → Package Dependencies → +**
+3. Enter the repository URL: https://github.com/verloop/ios-sdk.git
+4. Choose **Dependency Rule → Exact Version**
+5. Enter the version: example: 0.2.21-rc.3
+6. Click **Add Package**
+<img width="1089" height="608" alt="Screenshot 2026-04-10 at 17 45 24" src="https://github.com/user-attachments/assets/1c9261bb-51da-4b50-84e4-5696a622629e" />
+
+
+### 2. Add Package to Your Target
+
+1. Select your **App Target**
+2. Go to **General → Frameworks, Libraries & Embedded Content**
+3. Click **+**
+4. Search and add: VerloopSDKiOS
+<img width="1009" height="427" alt="Screenshot 2026-04-10 at 17 45 41" src="https://github.com/user-attachments/assets/7f119c1a-c468-4c71-b201-1e232f02b07a" />
+
+
+---
 
 ## **Change Log**
 
