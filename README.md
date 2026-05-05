@@ -13,11 +13,12 @@ This framework helps you configure and launch Verloop's chat. Inorder to integra
 
 1. Open your project in **Xcode**
 2. Go to **Project → Package Dependencies → +**
-3. Enter the repository URL: https://github.com/verloop/ios-sdk.git
+3. Enter the repository URL: https://github.com/verloop/verloop-ios-sdk.git
 4. Choose **Dependency Rule → Exact Version**
 5. Enter the version: example: 0.2.21-rc.3
 6. Click **Add Package**
-<img width="1089" height="608" alt="Screenshot 2026-04-10 at 17 45 24" src="https://github.com/user-attachments/assets/1c9261bb-51da-4b50-84e4-5696a622629e" />
+<img width="1389" height="598" alt="Screenshot 2026-05-04 at 17 42 13" src="https://github.com/user-attachments/assets/d7dfaf4c-4234-4a22-966a-634e9ce3dd1c" />
+
 
 
 ### 2. Add Package to Your Target
