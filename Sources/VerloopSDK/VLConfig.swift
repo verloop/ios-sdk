@@ -11,8 +11,6 @@ import WebKit
 
 public typealias LiveChatButtonClickListener = (_ title : String?, _ type : String?, _ payload : String?)  -> Void
 public typealias LiveChatUrlClickListener = (_ url : String?)  -> Void
-public typealias LiveChatStartedListener = (_ roomId: String?) -> Void
-public typealias LiveChatRoomReadyListener = (_ roomId: String?) -> Void
 
 @objc public class VLConfig : NSObject {
     
@@ -67,8 +65,6 @@ public typealias LiveChatRoomReadyListener = (_ roomId: String?) -> Void
    private var recipeId: String? = nil
    private var onButtonClicked: LiveChatButtonClickListener? = nil
    private var onUrlClicked: LiveChatUrlClickListener? = nil
-   private var onChatStarted: LiveChatStartedListener? = nil
-   private var onRoomReady: LiveChatRoomReadyListener? = nil
    private var urlRedirection : Bool = true
    private var mEventChangeDelegate:VLEventDelegate?
    private var customFields: [CustomField] = []
@@ -207,14 +203,6 @@ public typealias LiveChatRoomReadyListener = (_ roomId: String?) -> Void
     
     @objc public func setButtonOnClickListener(onButtonClicked buttonClicked: LiveChatButtonClickListener?) {
         onButtonClicked = buttonClicked
-    }
-    
-    @objc public func setChatStartedListener(onChatStarted listener: LiveChatStartedListener?) {
-        onChatStarted = listener
-    }
-    
-    @objc public func setRoomReadyListener(onRoomReady listener: LiveChatRoomReadyListener?) {
-        onRoomReady = listener
     }
     
     @objc public func setUrlClickListener(onUrlClicked urlClicked: LiveChatUrlClickListener?) {
@@ -470,13 +458,6 @@ extension VLConfig {
     func getURLClickListener() -> LiveChatUrlClickListener? {
         return onUrlClicked
     }
-    func getChatStartedListener() -> LiveChatStartedListener? {
-        return onChatStarted
-    }
-    func getRoomReadyListener() -> LiveChatRoomReadyListener? {
-        return onRoomReady
-    }
-     
     func getUpdatedConfigParams() -> [APIMethods] {
         return updatedConfigParams
     }

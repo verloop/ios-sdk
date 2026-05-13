@@ -229,7 +229,6 @@ extension ViewModel {
         return ""
     }
     
-    
     //called when click on "launch chat" button in tableview section 1
     func launchChatOn(controller:UIViewController,config:VLConfig) {
         config.setTitle(widgetTitle: "Scapia")
@@ -237,15 +236,6 @@ extension ViewModel {
         config.setUrlRedirectionFlag(canRedirect: false)
         config.openMenuWidget()
         config.showDownloadButton(true)
-        config.setChatStartedListener { roomId in
-            print("Chat Started - roomId: \(roomId ?? "")")
-            // extra logic
-        }
-    
-        config.setRoomReadyListener { roomId in
-            print("Room ready - roomId: \(roomId ?? "")")
-            // extra logic
-        }
         createSDK(config: config)
         controller.present(getSDKController(), animated: true, completion: nil)
     }

@@ -510,10 +510,6 @@ extension VLWebViewManager:ScriptMessageDelegate {
                     isRoomReady = true
                     //                    config?.setAllowFileDownload(allowFileDownload: false)
                     processRoomReadyConfigurations()
-                case .FunctionRoomReady:
-                    print("FunctionRoomReady")
-                    isRoomReady = true
-                    config.getRoomReadyListener()?(nil)
                 case .FunctionCallBack:
                     self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)
                 case .FunctionReady:
@@ -538,7 +534,6 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 case .FunctionChatStarted:
                     //                            onMessageReceived?()
                     _eventDelegate?.onChatStarted?()
-                    config.getChatStartedListener()?(nil)
                     //                            _eventDelegate?.didEventOccurOnLiveChat(.onChatStarted)
                 case .FunctionChatMessageReceived:
                     _eventDelegate?.onIncomingMessage?(bodyString)
@@ -576,14 +571,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 case FunctionType.FunctionChatEnded.rawValue:
                     _eventDelegate?.onChatEnded?()
                 case FunctionType.FunctionChatStarted.rawValue:
-                    let roomId = (json["args"] as? [Any])
-                        .flatMap { $0.indices.contains(1) ? $0[1] as? [String: Any] : nil }?["roomId"] as? String
                     _eventDelegate?.onChatStarted?()
-                    config.getChatStartedListener()?(roomId)
-                case FunctionType.FunctionRoomReady.rawValue:
-                    let roomId = (json["args"] as? [Any])
-                        .flatMap { $0.indices.contains(1) ? $0[1] as? [String: Any] : nil }?["roomId"] as? String
-                    config.getRoomReadyListener()?(roomId)
                 case FunctionType.FunctionLogOutCompleted.rawValue:
                     _eventDelegate?.onLogoutComplete?()
                     self.loadWebView()
