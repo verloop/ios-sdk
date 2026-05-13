@@ -17,5 +17,6 @@ import Foundation
     @objc optional func onLogoutComplete()
     @objc optional func onWidgetLoaded()
     @objc optional func onIncomingMessage(_ message:Any)
+    @objc optional func onRoomReady(_ roomId: String?)  
     
 }
