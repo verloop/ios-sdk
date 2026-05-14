@@ -48,6 +48,7 @@ internal enum FunctionType:String,Codable {
     case FunctionChatMaximized = "chat-maximized"
     case FunctionChatMinimized = "chat-minimized"
     case FunctionChatStarted = "chat-started"
+    case FunctionRoomReady = "room-ready"
     case FunctionChatEnded = "chat-ended"
     case FunctionLogOutCompleted = "logout"
     case FunctionChatMessageReceived = "agent-message-received"
@@ -65,6 +66,7 @@ enum MessageType:String,Codable {
     case onChatMaximized
     case onChatMinimized
     case onChatStarted
+    case onRoomReady
     case onChatEnded
     case onLogoutComplete
     case onWidgetLoaded
