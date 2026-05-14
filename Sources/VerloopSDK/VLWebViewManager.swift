@@ -496,7 +496,6 @@ extension VLWebViewManager:ScriptMessageDelegate {
             }
             print("model.fn \(String(describing: model.fn))")
             if let  _function = model.fn {
-                print("call back function \(_function)")
                 switch _function {
                 case .FunctionSetUserIdComplete:
                     break
@@ -506,18 +505,15 @@ extension VLWebViewManager:ScriptMessageDelegate {
                     clearLocalStorageVistorToken()
                     self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)
                 case .FunctionOnRoomReady:
-                    print("FunctionOnRoomReady")
                     isRoomReady = true
                     //                    config?.setAllowFileDownload(allowFileDownload: false)
                     processRoomReadyConfigurations()
                 case .FunctionRoomReady:
-                    print("FunctionRoomReady")
                     isRoomReady = true
                     config.getRoomReadyListener()?(nil)
                 case .FunctionCallBack:
                     self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)
                 case .FunctionReady:
-                    print("FunctionReady")
                     isReadyForPassConfigs = true
                     processConfigurations()
                     webView.evaluateJavaScript("VerloopLivechat.widgetOpened()")

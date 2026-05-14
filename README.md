@@ -124,6 +124,20 @@ config.setButtonOnClickListener(onButtonClicked:{ (title, type, payload) in
 setUrlClickListener(onUrlClicked urlClicked: LiveChatUrlClickListener?)
 
 ```
+
+- Chat Started Listener
+
+Receive a callback when a new chat conversation has been started for the user.
+This fires once the chat has been initiated and the backend has assigned a
+`roomId` for the conversation. Use it to log analytics, persist the room
+reference, or trigger any in-app behaviour that depends on a chat being live.
+
+  ```
+    config.setChatStartedListener { roomId in
+        print("Chat Started - roomId: \(roomId ?? "")")
+        <your custom app logic goes here>
+    }
+```
 - Menu Widget: If you're recipe has a menu list, it can be set to auto open state using the following api.
 
 ```
