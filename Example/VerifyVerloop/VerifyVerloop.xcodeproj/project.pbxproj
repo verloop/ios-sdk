@@ -3,12 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		18746D7B27F5DD45002A5CBD /* VerloopSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18746D7A27F5DCC0002A5CBD /* VerloopSDK.framework */; };
-		18746D7C27F5DD45002A5CBD /* VerloopSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 18746D7A27F5DCC0002A5CBD /* VerloopSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05FF1A5B2F88FA6D00B25649 /* VerloopSDKiOS in Frameworks */ = {isa = PBXBuildFile; productRef = 05FF1A5A2F88FA6D00B25649 /* VerloopSDKiOS */; };
 		18C7298828166C81006EF202 /* VerifyVerloopTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C7298728166C81006EF202 /* VerifyVerloopTests.swift */; };
 		18F86EB427F14AE900F3BF25 /* ReferenceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F86EB127F14AE900F3BF25 /* ReferenceModels.swift */; };
 		18F86EB527F14AE900F3BF25 /* VerloopTestTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F86EB327F14AE900F3BF25 /* VerloopTestTableViewController.swift */; };
@@ -50,7 +49,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				18746D7C27F5DD45002A5CBD /* VerloopSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,7 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18746D7B27F5DD45002A5CBD /* VerloopSDK.framework in Frameworks */,
+				05FF1A5B2F88FA6D00B25649 /* VerloopSDKiOS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +217,9 @@
 				Base,
 			);
 			mainGroup = F7D13E7F27A3B81F00262E51;
+			packageReferences = (
+				05FF1A582F88F9EE00B25649 /* XCLocalSwiftPackageReference "../../../ios-sdk" */,
+			);
 			productRefGroup = F7D13E8927A3B81F00262E51 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -597,6 +598,21 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		05FF1A582F88F9EE00B25649 /* XCLocalSwiftPackageReference "../../../ios-sdk" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../../ios-sdk";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		05FF1A5A2F88FA6D00B25649 /* VerloopSDKiOS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05FF1A582F88F9EE00B25649 /* XCLocalSwiftPackageReference "../../../ios-sdk" */;
+			productName = VerloopSDKiOS;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F7D13E8027A3B81F00262E51 /* Project object */;
 }

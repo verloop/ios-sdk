@@ -1,10 +1,10 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.9
 import PackageDescription
 
 let package = Package(
     name: "VerloopSDKiOS",
     platforms: [
-        .iOS(.v11)
+        .iOS(.v12)
     ],
     products: [
         .library(
@@ -12,20 +12,12 @@ let package = Package(
             targets: ["VerloopSDKiOS"]
         )
     ],
-    dependencies: [],
     targets: [
         .target(
             name: "VerloopSDKiOS",
-            path: "VerloopSDK",
-            publicHeadersPath: ".",
-            resources: [
-                .process("Info.plist"),
-                .process("PrivacyInfo.xcprivacy")
-            ],
-            swiftSettings: [
-                .define("SWIFT_PACKAGE")
-            ]
+            dependencies: [],
+            path: "Sources/VerloopSDK",
+            publicHeadersPath: "."
         )
-    ],
-    swiftLanguageVersions: [.v5]
+    ]
 )

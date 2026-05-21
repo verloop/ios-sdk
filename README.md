@@ -7,21 +7,30 @@ This framework helps you configure and launch Verloop's chat. Inorder to integra
 - XCode 13.1+
 - Min IOS version support IOS10
 
-## **Installation**
+## Install Verloop iOS SDK via Swift Package Manager
 
-Two ways to install
+### 1. Add the Package
 
-- CocoaPods is a dependency manager for Cocoa projects. For usage and installation instructions, visit their website. To integrate Verloop into your Xcode project using CocoaPods, add the following line in your Podfile:
-  ```
-  pod 'VerloopSDKiOS'
-  ```
-  
-- Manually build the repo and generate the VerloopSDK framework and embed the framework in Linked Binaries in your project as shown below. 
-<p align="center">
-<img width="700" alt="Screenshot 2022-03-15 at 3 08 56 PM" src="https://user-images.githubusercontent.com/98142458/158394191-f40ef1b5-89eb-41cb-8110-dfcd54b700be.png">
-</p>
+1. Open your project in **Xcode**
+2. Go to **Project → Package Dependencies → +**
+3. Enter the repository URL: https://github.com/verloop/verloop-ios-sdk.git
+4. Choose **Dependency Rule → Exact Version**
+5. Enter the version: example: 0.2.21-rc.3
+6. Click **Add Package**
+<img width="1389" height="598" alt="Screenshot 2026-05-04 at 17 42 13" src="https://github.com/user-attachments/assets/d7dfaf4c-4234-4a22-966a-634e9ce3dd1c" />
 
 
+
+### 2. Add Package to Your Target
+
+1. Select your **App Target**
+2. Go to **General → Frameworks, Libraries & Embedded Content**
+3. Click **+**
+4. Search and add: VerloopSDKiOS
+<img width="1009" height="427" alt="Screenshot 2026-04-10 at 17 45 41" src="https://github.com/user-attachments/assets/7f119c1a-c468-4c71-b201-1e232f02b07a" />
+
+
+---
 
 ## **Change Log**
 
@@ -123,6 +132,20 @@ config.setButtonOnClickListener(onButtonClicked:{ (title, type, payload) in
 
 setUrlClickListener(onUrlClicked urlClicked: LiveChatUrlClickListener?)
 
+```
+
+- Chat Started Listener
+
+Receive a callback when a new chat conversation has been started for the user.
+This fires once the chat has been initiated and the backend has assigned a
+`roomId` for the conversation. Use it to log analytics, persist the room
+reference, or trigger any in-app behaviour that depends on a chat being live.
+
+  ```
+    config.setChatStartedListener { roomId in
+        print("Chat Started - roomId: \(roomId ?? "")")
+        <your custom app logic goes here>
+    }
 ```
 - Menu Widget: If you're recipe has a menu list, it can be set to auto open state using the following api.
 
