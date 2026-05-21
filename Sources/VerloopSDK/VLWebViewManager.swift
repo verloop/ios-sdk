@@ -496,7 +496,6 @@ extension VLWebViewManager:ScriptMessageDelegate {
             }
             print("model.fn \(String(describing: model.fn))")
             if let  _function = model.fn {
-                print("call back function \(_function)")
                 switch _function {
                 case .FunctionSetUserIdComplete:
                     break
@@ -506,14 +505,15 @@ extension VLWebViewManager:ScriptMessageDelegate {
                     clearLocalStorageVistorToken()
                     self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)
                 case .FunctionOnRoomReady:
-                    print("FunctionOnRoomReady")
                     isRoomReady = true
                     //                    config?.setAllowFileDownload(allowFileDownload: false)
                     processRoomReadyConfigurations()
+                case .FunctionRoomReady:
+                    isRoomReady = true
+                    config.getRoomReadyListener()?(nil)
                 case .FunctionCallBack:
                     self.didReceiveCallbackEventsOnLivechat(message: bodyString,data: bodyData)
                 case .FunctionReady:
-                    print("FunctionReady")
                     isReadyForPassConfigs = true
                     processConfigurations()
                     webView.evaluateJavaScript("VerloopLivechat.widgetOpened()")
@@ -534,6 +534,7 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 case .FunctionChatStarted:
                     //                            onMessageReceived?()
                     _eventDelegate?.onChatStarted?()
+                    config.getChatStartedListener()?(nil)
                     //                            _eventDelegate?.didEventOccurOnLiveChat(.onChatStarted)
                 case .FunctionChatMessageReceived:
                     _eventDelegate?.onIncomingMessage?(bodyString)
@@ -571,7 +572,14 @@ extension VLWebViewManager:ScriptMessageDelegate {
                 case FunctionType.FunctionChatEnded.rawValue:
                     _eventDelegate?.onChatEnded?()
                 case FunctionType.FunctionChatStarted.rawValue:
+                    let roomId = (json["args"] as? [Any])
+                        .flatMap { $0.indices.contains(1) ? $0[1] as? [String: Any] : nil }?["roomId"] as? String
                     _eventDelegate?.onChatStarted?()
+                    config.getChatStartedListener()?(roomId)
+                case FunctionType.FunctionRoomReady.rawValue:
+                    let roomId = (json["args"] as? [Any])
+                        .flatMap { $0.indices.contains(1) ? $0[1] as? [String: Any] : nil }?["roomId"] as? String
+                    config.getRoomReadyListener()?(roomId)
                 case FunctionType.FunctionLogOutCompleted.rawValue:
                     _eventDelegate?.onLogoutComplete?()
                     self.loadWebView()
